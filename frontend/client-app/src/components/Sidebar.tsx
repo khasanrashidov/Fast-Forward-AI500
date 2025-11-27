@@ -23,7 +23,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
 
     return (
         <aside
-            className={`fixed left-0 top-0 h-full bg-white border-r border-gray-100 transition-all duration-300 z-50 flex flex-col ${isCollapsed ? "w-20" : "w-64"
+            className={`hidden md:flex fixed left-0 top-0 h-full bg-white border-r border-gray-100 transition-all duration-300 z-50 flex flex-col ${isCollapsed ? "w-20" : "w-64"
                 }`}
         >
             <div className="p-6 flex items-center gap-3">
@@ -45,11 +45,11 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
                             key={item.href}
                             href={item.href}
                             className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group ${isActive
-                                    ? "bg-emerald-50 text-emerald-600 shadow-sm"
-                                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                                ? "bg-emerald-50 text-emerald-600 shadow-sm"
+                                : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                                 }`}
                         >
-                            <item.icon size={20} className={isActive ? "text-emerald-600" : "text-gray-400 group-hover:text-gray-600"} />
+                            <item.icon size={20} className={isActive ? "text-emerald-600 ml-[2px]" : "text-gray-400 group-hover:text-gray-600 ml-[2px]"} />
                             {!isCollapsed && <span className="font-medium">{item.label}</span>}
                         </Link>
                     );
