@@ -1,6 +1,8 @@
-import { ArrowUpRight, ArrowDownLeft, Wallet, CreditCard, Bell } from "lucide-react";
+import { ArrowUpRight, ArrowDownLeft, Wallet, CreditCard, Bell, Utensils, Car, ShoppingBag, TrendingUp, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import ExpensesChart from "@/components/ExpensesChart";
+import ExchangeRates from "@/components/ExchangeRates";
+import InflationChart from "@/components/InflationChart";
 
 export default function Home() {
   return (
@@ -68,46 +70,66 @@ export default function Home() {
 
       {/* Categories Chart */}
       <section>
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Expenses by Category</h3>
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <ExpensesChart />
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 relative h-full">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-bold text-gray-900">Expenses by Category</h3>
+            <button className="text-primary text-sm font-medium bg-primary/10 px-3 py-1 rounded-full hover:bg-primary/20 transition-colors">See All</button>
+          </div>
+          <div className="flex items-center">
+            <button className="p-1 text-gray-400 hover:text-gray-600"><ChevronLeft size={20} /></button>
+            <div className="flex-1">
+              <ExpensesChart />
+            </div>
+            <button className="p-1 text-gray-400 hover:text-gray-600"><ChevronRight size={20} /></button>
+          </div>
         </div>
       </section>
 
       {/* Recent Transactions Preview */}
       <section>
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-bold text-gray-900">Recent Transactions</h3>
-          <button className="text-primary text-sm font-medium">See All</button>
-        </div>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          {[
-            { name: "Korzinka Market", date: "Today", amount: "-145,000 UZS", type: "expense", category: "Food & Dining", color: "bg-emerald-100 text-emerald-700" },
-            { name: "Upwork Earnings", date: "Yesterday", amount: "+8,500,000 UZS", type: "income", category: "Income", color: "bg-blue-100 text-blue-700" },
-            { name: "Yandex Taxi", date: "Yesterday", amount: "-24,000 UZS", type: "expense", category: "Transportation", color: "bg-blue-100 text-blue-700" },
-            { name: "Zara", date: "2 days ago", amount: "-850,000 UZS", type: "expense", category: "Shopping", color: "bg-amber-100 text-amber-700" },
-          ].map((tx, i) => (
-            <div key={i} className="flex justify-between items-center p-4 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
-              <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${tx.type === 'income' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>
-                  {tx.type === 'income' ? <ArrowDownLeft size={18} /> : <ArrowUpRight size={18} />}
-                </div>
-                <div>
-                  <p className="font-medium text-gray-900">{tx.name}</p>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${tx.color}`}>
-                      {tx.category}
-                    </span>
-                    <span className="text-xs text-gray-500">• {tx.date}</span>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-bold text-gray-900">Recent Transactions</h3>
+            <button className="text-primary text-sm font-medium">See All</button>
+          </div>
+          <div className="-mx-6">
+            {[
+              { name: "Korzinka Market", date: "Today", amount: "-145,000 UZS", type: "expense", category: "Food & Dining", color: "bg-emerald-100 text-emerald-600", icon: Utensils, percentage: "25%" },
+              { name: "Upwork Earnings", date: "Yesterday", amount: "+8,500,000 UZS", type: "income", category: "Income", color: "bg-blue-100 text-blue-600", icon: TrendingUp, percentage: "100%" },
+              { name: "Yandex Taxi", date: "Yesterday", amount: "-24,000 UZS", type: "expense", category: "Transportation", color: "bg-blue-100 text-blue-600", icon: Car, percentage: "15%" },
+              { name: "Zara", date: "2 days ago", amount: "-850,000 UZS", type: "expense", category: "Shopping", color: "bg-amber-100 text-amber-600", icon: ShoppingBag, percentage: "45%" },
+            ].map((tx, i) => (
+              <div key={i} className="flex justify-between items-center px-6 py-4 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${tx.color}`}>
+                    <tx.icon size={18} />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">{tx.name}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${tx.color.replace('text-', 'text-opacity-80 text-').replace('bg-', 'bg-opacity-50 bg-')}`}>
+                        {tx.category}
+                      </span>
+                      <span className="text-xs text-gray-500">• {tx.date}</span>
+                    </div>
                   </div>
                 </div>
+                <div className="text-right">
+                  <p className={`font-medium ${tx.type === 'income' ? 'text-emerald-600' : 'text-gray-900'}`}>
+                    {tx.amount}
+                  </p>
+                  <p className="text-xs text-gray-400 font-medium">{tx.percentage}</p>
+                </div>
               </div>
-              <span className={`font-medium ${tx.type === 'income' ? 'text-emerald-600' : 'text-gray-900'}`}>
-                {tx.amount}
-              </span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+      </section>
+
+      {/* Financial Widgets */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <ExchangeRates />
+        <InflationChart />
       </section>
     </div>
   );
