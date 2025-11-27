@@ -1,8 +1,9 @@
-import { ArrowUpRight, ArrowDownLeft, Wallet, CreditCard, Bell, Utensils, Car, ShoppingBag, TrendingUp, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpRight, ArrowDownLeft, Wallet, CreditCard as CreditCardIcon, Bell, Utensils, Car, ShoppingBag, TrendingUp, ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import Image from "next/image";
 import ExpensesChart from "@/components/ExpensesChart";
 import ExchangeRates from "@/components/ExchangeRates";
 import InflationChart from "@/components/InflationChart";
+import CreditCard from "@/components/CreditCard";
 
 export default function Home() {
   return (
@@ -51,12 +52,45 @@ export default function Home() {
         </div>
       </section>
 
+      {/* My Cards */}
+      <section>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-bold text-gray-900">My Cards</h3>
+          <button className="flex items-center gap-1 text-primary text-sm font-medium hover:bg-primary/5 px-2 py-1 rounded-lg transition-colors">
+            <Plus size={16} /> Add New
+          </button>
+        </div>
+        <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+          <CreditCard
+            type="Uzcard"
+            balance="4,250,000 UZS"
+            number="8600 •••• •••• 1234"
+            expiry="12/28"
+            color="bg-gradient-to-br from-emerald-500 to-teal-700"
+          />
+          <CreditCard
+            type="Humo"
+            balance="8,100,000 UZS"
+            number="9860 •••• •••• 5678"
+            expiry="09/27"
+            color="bg-gradient-to-br from-blue-500 to-indigo-700"
+          />
+          <CreditCard
+            type="Visa"
+            balance="$ 1,240.50"
+            number="4000 •••• •••• 9012"
+            expiry="05/29"
+            color="bg-gradient-to-br from-purple-500 to-pink-700"
+          />
+        </div>
+      </section>
+
       {/* Quick Actions */}
       <section className="grid grid-cols-4 gap-4">
         {[
           { icon: ArrowUpRight, label: "Send", color: "bg-blue-100 text-blue-600" },
           { icon: ArrowDownLeft, label: "Request", color: "bg-purple-100 text-purple-600" },
-          { icon: CreditCard, label: "Cards", color: "bg-orange-100 text-orange-600" },
+          { icon: CreditCardIcon, label: "Cards", color: "bg-orange-100 text-orange-600" },
           { icon: Wallet, label: "Top Up", color: "bg-emerald-100 text-emerald-600" },
         ].map((action, index) => (
           <button key={index} className="flex flex-col items-center gap-2">
@@ -90,7 +124,7 @@ export default function Home() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden p-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-bold text-gray-900">Recent Transactions</h3>
-            <button className="text-primary text-sm font-medium">See All</button>
+            <button className="text-primary text-sm font-medium bg-primary/10 px-3 py-1 rounded-full hover:bg-primary/20 transition-colors">See All</button>
           </div>
           <div className="-mx-6">
             {[
