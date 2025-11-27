@@ -1,65 +1,114 @@
+import { ArrowUpRight, ArrowDownLeft, Wallet, CreditCard, Bell } from "lucide-react";
 import Image from "next/image";
+import ExpensesChart from "@/components/ExpensesChart";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+    <div className="p-4 md:p-8 space-y-6 max-w-4xl mx-auto">
+      {/* Header */}
+      <header className="flex justify-between items-center mb-6">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src="/user_avatar.png"
+              alt="User Avatar"
+              width={48}
+              height={48}
+              className="object-cover"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">Hello, Khasan Rashidov</h1>
+            <p className="text-sm text-gray-500">Welcome back!</p>
+          </div>
         </div>
-      </main>
+        <button className="p-2 rounded-full bg-white text-gray-600 hover:bg-gray-50 border border-gray-100 shadow-sm relative">
+          <Bell size={20} />
+          <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+        </button>
+      </header>
+
+      {/* Total Balance Card */}
+      <section className="bg-gradient-to-br from-primary to-emerald-600 rounded-2xl p-6 text-white shadow-lg">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <p className="text-emerald-100 text-sm font-medium">Total Balance</p>
+            <h2 className="text-3xl font-bold mt-1">12,450,000 UZS</h2>
+          </div>
+          <Wallet className="text-emerald-100 opacity-80" size={24} />
+        </div>
+        <div className="flex gap-4 mt-4">
+          <div className="flex items-center gap-2 bg-white/20 rounded-lg px-3 py-1.5 backdrop-blur-sm">
+            <ArrowUpRight size={16} className="text-emerald-100" />
+            <span className="text-sm font-medium">+2,300,000</span>
+          </div>
+          <div className="flex items-center gap-2 bg-white/20 rounded-lg px-3 py-1.5 backdrop-blur-sm">
+            <ArrowDownLeft size={16} className="text-red-200" />
+            <span className="text-sm font-medium">-850,000</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Actions */}
+      <section className="grid grid-cols-4 gap-4">
+        {[
+          { icon: ArrowUpRight, label: "Send", color: "bg-blue-100 text-blue-600" },
+          { icon: ArrowDownLeft, label: "Request", color: "bg-purple-100 text-purple-600" },
+          { icon: CreditCard, label: "Cards", color: "bg-orange-100 text-orange-600" },
+          { icon: Wallet, label: "Top Up", color: "bg-emerald-100 text-emerald-600" },
+        ].map((action, index) => (
+          <button key={index} className="flex flex-col items-center gap-2">
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center ${action.color}`}>
+              <action.icon size={20} />
+            </div>
+            <span className="text-xs font-medium text-gray-600">{action.label}</span>
+          </button>
+        ))}
+      </section>
+
+      {/* Categories Chart */}
+      <section>
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Expenses by Category</h3>
+        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+          <ExpensesChart />
+        </div>
+      </section>
+
+      {/* Recent Transactions Preview */}
+      <section>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-bold text-gray-900">Recent Transactions</h3>
+          <button className="text-primary text-sm font-medium">See All</button>
+        </div>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          {[
+            { name: "Korzinka Market", date: "Today", amount: "-145,000 UZS", type: "expense", category: "Food & Dining", color: "bg-emerald-100 text-emerald-700" },
+            { name: "Upwork Earnings", date: "Yesterday", amount: "+8,500,000 UZS", type: "income", category: "Income", color: "bg-blue-100 text-blue-700" },
+            { name: "Yandex Taxi", date: "Yesterday", amount: "-24,000 UZS", type: "expense", category: "Transportation", color: "bg-blue-100 text-blue-700" },
+            { name: "Zara", date: "2 days ago", amount: "-850,000 UZS", type: "expense", category: "Shopping", color: "bg-amber-100 text-amber-700" },
+          ].map((tx, i) => (
+            <div key={i} className="flex justify-between items-center p-4 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors">
+              <div className="flex items-center gap-3">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${tx.type === 'income' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>
+                  {tx.type === 'income' ? <ArrowDownLeft size={18} /> : <ArrowUpRight size={18} />}
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900">{tx.name}</p>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${tx.color}`}>
+                      {tx.category}
+                    </span>
+                    <span className="text-xs text-gray-500">• {tx.date}</span>
+                  </div>
+                </div>
+              </div>
+              <span className={`font-medium ${tx.type === 'income' ? 'text-emerald-600' : 'text-gray-900'}`}>
+                {tx.amount}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
