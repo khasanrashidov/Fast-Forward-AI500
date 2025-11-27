@@ -13,7 +13,7 @@ const data = [
 
 export default function InflationChart() {
     return (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 h-full">
+        <div className="bg-white/70 backdrop-blur-xl border border-white/40 rounded-2xl p-6 shadow-sm h-full">
             <h3 className="text-lg font-bold text-gray-900 mb-4">Inflation Rate</h3>
             <div className="h-32 w-full">
                 <ResponsiveContainer width="100%" height="100%">

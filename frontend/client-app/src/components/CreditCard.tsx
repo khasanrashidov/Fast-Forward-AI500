@@ -10,7 +10,7 @@ interface CreditCardProps {
 
 export default function CreditCard({ type, balance, number, expiry, color }: CreditCardProps) {
     return (
-        <div className={`relative w-72 h-44 rounded-2xl p-6 text-white shadow-lg flex-shrink-0 overflow-hidden ${color}`}>
+        <div className={`relative w-72 h-44 rounded-2xl p-6 text-white shadow-lg flex-shrink-0 overflow-hidden ${color} backdrop-blur-md border border-white/20`}>
             {/* Background Pattern/Glass effect */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl"></div>
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-black/10 rounded-full -ml-12 -mb-12 blur-xl"></div>

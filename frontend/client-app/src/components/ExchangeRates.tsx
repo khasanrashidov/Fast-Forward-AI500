@@ -12,7 +12,7 @@ export default function ExchangeRates() {
     return (
         <div className="grid grid-cols-3 gap-4">
             {rates.map((rate) => (
-                <div key={rate.currency} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
+                <div key={rate.currency} className="bg-white/70 backdrop-blur-xl border border-white/40 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center text-center">
                     <div className="flex items-center gap-2 mb-1">
                         <span className="font-bold text-gray-900">{rate.currency}</span>
                         {rate.isUp ? <TrendingUp size={14} className="text-emerald-500" /> : <TrendingDown size={14} className="text-red-500" />}
