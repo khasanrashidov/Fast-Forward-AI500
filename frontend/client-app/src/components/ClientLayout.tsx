@@ -15,7 +15,7 @@ export default function ClientLayout({
         <>
             <Sidebar
                 isCollapsed={isSidebarCollapsed}
-                toggleSidebar={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+                setIsCollapsed={setIsSidebarCollapsed}
             />
             <main
                 className={`min-h-screen pb-20 md:pb-0 transition-all duration-300 ${isSidebarCollapsed ? "md:ml-20" : "md:ml-64"
