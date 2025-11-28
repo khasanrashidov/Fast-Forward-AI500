@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import { Github, Linkedin } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
 
 const team = [
     {
@@ -11,6 +13,7 @@ const team = [
         desc: "Product strategy, UX thinking, financial behavior.",
         linkedin: "https://www.linkedin.com/in/azizullo",
         github: "https://github.com/azakapro",
+        image: "/azizulloh.jpeg",
     },
     {
         name: "Khasan Rashidov",
@@ -18,6 +21,7 @@ const team = [
         desc: "Python, AI Integrations, .NET, System Design.",
         linkedin: "https://www.linkedin.com/in/khasanr",
         github: "https://github.com/khasanrashidov",
+        image: "/khasan.jpeg",
     },
     {
         name: "Khusan Rashidov",
@@ -25,6 +29,7 @@ const team = [
         desc: "Python, ML, .NET, Azure/AWS, PostgreSQL.",
         linkedin: "https://www.linkedin.com/in/xkhusan",
         github: "https://github.com/xkhusan",
+        image: "/khusan.jpeg",
     },
     {
         name: "Burxonjon Solihjonov",
@@ -32,6 +37,7 @@ const team = [
         desc: "Next.js, Vue.js, UI/UX, Data Visualization.",
         linkedin: "https://www.linkedin.com/in/burkhonjon-solihjonov",
         github: "https://github.com/black-belt-engineer",
+        image: "/burxonjon.jpeg",
     },
     {
         name: "Bakhtiyorjon Bokhodirov",
@@ -39,10 +45,13 @@ const team = [
         desc: "Python, LangChain, ML, AI analytics.",
         linkedin: "https://www.linkedin.com/in/bakhtiyorjon-bokhodirov",
         github: "https://github.com/Fasttyper",
+        image: "/bakhtiyorjon.jpeg",
     },
 ];
 
 export default function Team() {
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
     return (
         <section className="py-24 bg-white">
             <div className="container mx-auto px-4">
@@ -61,25 +70,40 @@ export default function Team() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.1 }}
-                            className="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-emerald-200 transition-colors group"
+                            onMouseEnter={() => setHoveredIndex(index)}
+                            onMouseLeave={() => setHoveredIndex(null)}
+                            className={`bg-gray-50 rounded-2xl p-6 border border-gray-100 transition-all duration-300 group ${hoveredIndex !== null && hoveredIndex !== index
+                                ? "opacity-40 scale-95 grayscale"
+                                : "hover:border-emerald-200 hover:shadow-lg hover:-translate-y-1"
+                                }`}
                         >
-                            <div className="flex justify-between items-start mb-4">
+                            <div className="flex items-center gap-4 mb-4">
+                                <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
+                                    <Image
+                                        src={member.image}
+                                        alt={member.name}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
+                                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
                                         {member.name}
                                     </h3>
                                     <p className="text-emerald-600 font-medium text-sm">{member.role}</p>
                                 </div>
-                                <div className="flex gap-2">
-                                    <Link href={member.linkedin} target="_blank" className="text-gray-400 hover:text-blue-600 transition-colors">
-                                        <Linkedin size={20} />
-                                    </Link>
-                                    <Link href={member.github} target="_blank" className="text-gray-400 hover:text-gray-900 transition-colors">
-                                        <Github size={20} />
-                                    </Link>
-                                </div>
                             </div>
-                            <p className="text-gray-600 text-sm">{member.desc}</p>
+
+                            <p className="text-gray-600 text-sm mb-4 leading-relaxed">{member.desc}</p>
+
+                            <div className="flex gap-3 pt-4 border-t border-gray-100">
+                                <Link href={member.linkedin} target="_blank" className="text-gray-400 hover:text-blue-600 transition-colors">
+                                    <Linkedin size={18} />
+                                </Link>
+                                <Link href={member.github} target="_blank" className="text-gray-400 hover:text-gray-900 transition-colors">
+                                    <Github size={18} />
+                                </Link>
+                            </div>
                         </motion.div>
                     ))}
                 </div>
