@@ -14,7 +14,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "AgroSense AI",
+  title: "Moliyachi",
   description: "Modern Mobile-First Fintech Application",
   icons: {
     icon: "/logo.png",
