@@ -112,10 +112,10 @@ export default function Methodology() {
     }, [isPaused, steps.length]); // Added steps.length to dependency array for completeness
 
     const stack = [
-        { category: "Frontend", items: ["Next.js", "Tailwind CSS", "Recharts", "Lucide React"] },
-        { category: "Backend", items: ["Python (Flask)", "PostgreSQL", "LangChain", "REST API"] },
-        { category: "AI Layer", items: ["OpenAI GPT-4o", "Custom Rules", "Prompt Engineering"] },
-        { category: "Hosting", items: ["Vercel", "Supabase", "Render"] },
+        { category: "Frontend", items: ["Next.js", "Tailwind CSS", "Recharts", "Lucide React", "TypeScript", "Mobile First"] },
+        { category: "Backend", items: ["Python (Flask, SQLAlchemy)", "PostgreSQL", "REST API"] },
+        { category: "AI Layer", items: ["LangChain", "OpenAI GPT-5.1/4.1/4o", "Custom Rules and Instructions", "Machine Learning"] },
+        { category: "Hosting", items: ["Vercel (Frontend)", "Supabase (Infrastructure)", "Render (Backend)"] },
     ];
 
     return (
@@ -144,8 +144,8 @@ export default function Methodology() {
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.05 }}
                                     className={`rounded-xl border transition-all duration-300 overflow-hidden ${openStep === index
-                                            ? 'bg-emerald-50 border-emerald-200 shadow-sm'
-                                            : 'bg-white border-gray-100 hover:border-emerald-100'
+                                        ? 'bg-emerald-50 border-emerald-200 shadow-sm'
+                                        : 'bg-white border-gray-100 hover:border-emerald-100'
                                         }`}
                                 >
                                     <button
@@ -153,8 +153,8 @@ export default function Methodology() {
                                         className="w-full flex items-center gap-4 p-4 text-left transition-colors"
                                     >
                                         <span className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm transition-all duration-500 ${openStep === index
-                                                ? 'bg-emerald-600 text-white scale-110'
-                                                : 'bg-gray-100 text-gray-500'
+                                            ? 'bg-emerald-600 text-white scale-110'
+                                            : 'bg-gray-100 text-gray-500'
                                             }`}>
                                             {index + 1}
                                         </span>
