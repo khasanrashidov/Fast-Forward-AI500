@@ -14,6 +14,7 @@ export interface Translations {
         problemDesc: string;
         problems: string[];
         solutionBadge: string;
+        meet: string;
         solutionTitle: string;
         solutionDesc: string;
         solutions: Array<{
@@ -90,6 +91,7 @@ export const translations: Record<Language, Translations> = {
                 'Users need a way to understand their financial behavior—not just view their balance',
             ],
             solutionBadge: 'The Solution',
+            meet: 'Meet',
             solutionTitle: 'Moliyachi',
             solutionDesc: 'A smart financial assistant fully embedded into AgrobankMobile that transforms it from a transaction tool into a financial partner.',
             solutions: [
@@ -333,6 +335,7 @@ export const translations: Record<Language, Translations> = {
                 'Foydalanuvchilar moliyaviy xatti-harakatlarini tushunish usulini talab qiladi — faqat balansni ko\'rish emas',
             ],
             solutionBadge: 'Yechim',
+            meet: 'Tanishing',
             solutionTitle: 'Moliyachi',
             solutionDesc: 'AgrobankMobile ilovasiga to\'liq integratsiyalashgan aqlli moliyaviy yordamchi, uni tranzaksiya vositasidan moliyaviy hamkorga aylantiradi.',
             solutions: [
@@ -576,6 +579,7 @@ export const translations: Record<Language, Translations> = {
                 'Пользователям нужен способ понять свое финансовое поведение — не просто посмотреть баланс',
             ],
             solutionBadge: 'Решение',
+            meet: 'Знакомьтесь',
             solutionTitle: 'Moliyachi',
             solutionDesc: 'Умный финансовый помощник, полностью встроенный в AgrobankMobile, который превращает его из инструмента транзакций в финансового партнера.',
             solutions: [

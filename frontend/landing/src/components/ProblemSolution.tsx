@@ -49,7 +49,7 @@ export default function ProblemSolution() {
                         <div className="mb-8">
                             <span className="text-emerald-600 font-semibold tracking-wide uppercase text-sm">{t.problemSolution.solutionBadge}</span>
                             <h2 className="text-4xl font-bold font-display text-gray-900 mt-2 mb-4">
-                                Meet <span className="text-emerald-600">{t.problemSolution.solutionTitle}</span>
+                                {t.problemSolution.meet} <span className="text-emerald-600">{t.problemSolution.solutionTitle}</span>
                             </h2>
                             <p className="text-gray-600 text-lg leading-relaxed">
                                 {t.problemSolution.solutionDesc}
