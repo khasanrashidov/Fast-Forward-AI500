@@ -22,6 +22,7 @@ const team = [
         linkedin: "https://www.linkedin.com/in/khasanr",
         github: "https://github.com/khasanrashidov",
         image: "/khasan.jpeg",
+        isTeamLead: true,
     },
     {
         name: "Khusan Rashidov",
@@ -87,9 +88,17 @@ export default function Team() {
                                     />
                                 </div>
                                 <div>
-                                    <h3 className="text-lg font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
-                                        {member.name}
-                                    </h3>
+                                    <div className="flex items-center gap-2">
+                                        <h3 className="text-lg font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
+                                            {member.name}
+                                        </h3>
+                                        {/* @ts-ignore */}
+                                        {member.isTeamLead && (
+                                            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full border border-emerald-200 mb-[2px]">
+                                                Team Lead
+                                            </span>
+                                        )}
+                                    </div>
                                     <p className="text-emerald-600 font-medium text-sm">{member.role}</p>
                                 </div>
                             </div>
