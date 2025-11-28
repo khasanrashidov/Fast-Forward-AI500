@@ -16,6 +16,9 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Moliyachi AI - Smart Financial Assistant",
   description: "Your AI-powered personal finance assistant inside Agrobank Mobile.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
