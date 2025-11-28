@@ -21,7 +21,7 @@ const team = [
         desc: "Python, Next.js, PostgreSQL, AI Integrations, .NET, Angular, Systems Design, Cloud Computing",
         linkedin: "https://www.linkedin.com/in/khasanr",
         github: "https://github.com/khasanrashidov",
-        image: "/khasan.jpeg",
+        image: "/khasanr.jpg",
         isTeamLead: true,
     },
     {
