@@ -28,11 +28,11 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
         >
             <div className="p-6 flex items-center gap-3">
                 <div className="relative w-8 h-8 flex-shrink-0">
-                    <Image src="/logo.png" alt="Moliyachi AI Logo" fill className="object-contain" />
+                    <Image src="/logo.png" alt="Moliyachi Logo" fill className="object-contain" />
                 </div>
                 {!isCollapsed && (
                     <span className="font-outfit font-bold text-xl text-emerald-600 whitespace-nowrap">
-                        Moliyachi AI
+                        Moliyachi
                     </span>
                 )}
             </div>
