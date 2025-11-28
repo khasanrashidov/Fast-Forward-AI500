@@ -2,49 +2,10 @@
 
 import { motion } from "framer-motion";
 import { AlertCircle, TrendingUp, Brain, ShieldCheck, Clock, Sparkles, Landmark } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function ProblemSolution() {
-    const problems = [
-        "Aggressive spending after salary arrival",
-        "Mid-month financial stress & uncertainty",
-        "No visibility into spending behavior",
-        "Lack of personalized budgeting guidance",
-        "Current banking apps provide transactions, not intelligence",
-        "Users need a way to understand their financial behavior—not just view their balance"
-    ];
-
-    const solutions = [
-        {
-            icon: Brain,
-            title: "AI Spending Insights",
-            desc: "Short, actionable explanations of where your money goes.",
-        },
-        {
-            icon: TrendingUp,
-            title: "Smart Monthly Planning",
-            desc: "Warnings when spending is too fast & balance predictions.",
-        },
-        {
-            icon: ShieldCheck,
-            title: "Financial Health Score",
-            desc: "One simple score (0–100) explaining your stability.",
-        },
-        {
-            icon: Clock,
-            title: "Goal Planning",
-            desc: "AI calculates timelines and suggests improvements.",
-        },
-        {
-            icon: Sparkles,
-            title: "Personalized Recommendations",
-            desc: "Based on spending patterns, habits, income, and goals.",
-        },
-        {
-            icon: Landmark,
-            title: "Agrobank Product Matching",
-            desc: "AI suggests Microloans, Deposits, Savings, and Installment options.",
-        },
-    ];
+    const { t } = useLanguage();
 
     return (
         <section id="solution" className="py-24 bg-gray-50">
@@ -62,13 +23,13 @@ export default function ProblemSolution() {
                                 <div className="p-3 bg-red-50 rounded-xl text-red-500">
                                     <AlertCircle size={24} />
                                 </div>
-                                <h2 className="text-3xl font-bold font-display text-gray-900">The Problem</h2>
+                                <h2 className="text-3xl font-bold font-display text-gray-900">{t.problemSolution.problemTitle}</h2>
                             </div>
                             <p className="text-gray-600 mb-8 text-lg">
-                                A significant number of Agrobank’s customers live on a strict salary cycle, facing stress and uncertainty every month.
+                                {t.problemSolution.problemDesc}
                             </p>
                             <ul className="space-y-4">
-                                {problems.map((item, index) => (
+                                {t.problemSolution.problems.map((item, index) => (
                                     <li key={index} className="flex items-start gap-3 text-gray-700">
                                         <span className="mt-[9px] w-2 h-2 rounded-full bg-red-400 flex-shrink-0" />
                                         {item}
@@ -86,27 +47,31 @@ export default function ProblemSolution() {
                         transition={{ duration: 0.8 }}
                     >
                         <div className="mb-8">
-                            <span className="text-emerald-600 font-semibold tracking-wide uppercase text-sm">The Solution</span>
+                            <span className="text-emerald-600 font-semibold tracking-wide uppercase text-sm">{t.problemSolution.solutionBadge}</span>
                             <h2 className="text-4xl font-bold font-display text-gray-900 mt-2 mb-4">
-                                Meet <span className="text-emerald-600">Moliyachi</span>
+                                Meet <span className="text-emerald-600">{t.problemSolution.solutionTitle}</span>
                             </h2>
                             <p className="text-gray-600 text-lg leading-relaxed">
-                                A smart financial assistant fully embedded into AgrobankMobile that transforms it from a transaction tool into a financial partner.
+                                {t.problemSolution.solutionDesc}
                             </p>
                         </div>
 
                         <div className="grid sm:grid-cols-2 gap-4">
-                            {solutions.map((item, index) => (
-                                <div key={index} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600 w-fit mb-2">
-                                            <item.icon size={20} />
+                            {t.problemSolution.solutions.map((item, index) => {
+                                const icons = [Brain, TrendingUp, ShieldCheck, Clock, Sparkles, Landmark];
+                                const Icon = icons[index];
+                                return (
+                                    <div key={index} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600 w-fit mb-2">
+                                                <Icon size={20} />
+                                            </div>
+                                            <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
                                         </div>
-                                        <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
+                                        <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                                     </div>
-                                    <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </motion.div>
                 </div>

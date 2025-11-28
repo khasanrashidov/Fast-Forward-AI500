@@ -3,6 +3,8 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { ReactLenis } from "lenis/react";
 import CursorFollower from "@/components/CursorFollower";
+import { LanguageProvider } from "@/contexts/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,10 +32,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
       <body className="antialiased">
-        <ReactLenis root>
-          <CursorFollower />
-          {children}
-        </ReactLenis>
+        <LanguageProvider>
+          <ReactLenis root>
+            <CursorFollower />
+            <LanguageSwitcher />
+            {children}
+          </ReactLenis>
+        </LanguageProvider>
       </body>
     </html>
   );
