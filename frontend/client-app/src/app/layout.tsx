@@ -14,7 +14,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Moliyachi",
+  title: "Moliyachi AI",
   description: "Modern Mobile-First Fintech Application",
   icons: {
     icon: "/logo.png",
