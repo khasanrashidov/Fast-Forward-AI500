@@ -1,805 +1,949 @@
-export type Language = 'en' | 'uz' | 'ru';
+export type Language = "en" | "uz" | "ru";
 
 export interface Translations {
-    hero: {
-        badge: string;
-        title: string;
-        subtitle: string;
-        viewDemo: string;
-        learnMore: string;
-        demoTooltip: string;
-    };
-    problemSolution: {
-        problemTitle: string;
-        problemDesc: string;
-        problems: string[];
-        solutionBadge: string;
-        meet: string;
-        solutionTitle: string;
-        solutionDesc: string;
-        solutions: Array<{
-            title: string;
-            desc: string;
-        }>;
-    };
-    whyUs: {
-        title: string;
-        subtitle: string;
-        reasons: Array<{
-            title: string;
-            desc: string;
-        }>;
-    };
-    roadmap: {
-        badge: string;
-        title: string;
-        phases: Array<{
-            date: string;
-            title: string;
-            items: string[];
-        }>;
-    };
-    methodology: {
-        title: string;
-        subtitle: string;
-        stepsTitle: string;
-        techStackTitle: string;
-        steps: Array<{
-            title: string;
-            details: string[];
-        }>;
-        stack: Array<{
-            category: string;
-            items: string[];
-        }>;
-    };
-    team: {
-        title: string;
-        subtitle: string;
-        teamLead: string;
-        members: Array<{
-            name: string;
-            role: string;
-            desc: string;
-        }>;
-    };
-    footer: {
-        copyright: string;
-        githubLink: string;
-    };
+  hero: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    viewDemo: string;
+    learnMore: string;
+    demoTooltip: string;
+  };
+  problemSolution: {
+    problemTitle: string;
+    problemDesc: string;
+    problems: string[];
+    solutionBadge: string;
+    meet: string;
+    solutionTitle: string;
+    solutionDesc: string;
+    solutions: Array<{
+      title: string;
+      desc: string;
+    }>;
+  };
+  whyUs: {
+    title: string;
+    subtitle: string;
+    reasons: Array<{
+      title: string;
+      desc: string;
+    }>;
+  };
+  roadmap: {
+    badge: string;
+    title: string;
+    phases: Array<{
+      date: string;
+      title: string;
+      items: string[];
+    }>;
+  };
+  methodology: {
+    title: string;
+    subtitle: string;
+    stepsTitle: string;
+    techStackTitle: string;
+    steps: Array<{
+      title: string;
+      details: string[];
+    }>;
+    stack: Array<{
+      category: string;
+      items: string[];
+    }>;
+  };
+  team: {
+    title: string;
+    subtitle: string;
+    teamLead: string;
+    members: Array<{
+      name: string;
+      role: string;
+      desc: string;
+    }>;
+  };
+  footer: {
+    copyright: string;
+    githubLink: string;
+  };
 }
 
 export const translations: Record<Language, Translations> = {
-    en: {
-        hero: {
-            badge: 'Powered with Artificial Intelligence',
-            title: 'Moliyachi',
-            subtitle: 'Your AI-powered personal finance assistant inside Agrobank Mobile.',
-            viewDemo: 'View Demo',
-            learnMore: 'Learn More',
-            demoTooltip: 'Development in progress',
-        },
-        problemSolution: {
-            problemTitle: 'The Problem',
-            problemDesc: "A significant number of Agrobank's customers live on a strict salary cycle, facing stress and uncertainty every month.",
-            problems: [
-                'Aggressive spending after salary arrival',
-                'Mid-month financial stress & uncertainty',
-                'No visibility into spending behavior',
-                'Lack of personalized budgeting guidance',
-                'Current banking apps provide transactions, not intelligence',
-                'Users need a way to understand their financial behavior—not just view their balance',
-            ],
-            solutionBadge: 'The Solution',
-            meet: 'Meet',
-            solutionTitle: 'Moliyachi',
-            solutionDesc: 'A smart financial assistant fully embedded into AgrobankMobile that transforms it from a transaction tool into a financial partner.',
-            solutions: [
-                {
-                    title: 'AI Spending Insights',
-                    desc: 'Short, actionable explanations of where your money goes.',
-                },
-                {
-                    title: 'Smart Monthly Planning',
-                    desc: 'Warnings when spending is too fast & balance predictions.',
-                },
-                {
-                    title: 'Financial Health Score',
-                    desc: 'One simple score (0–100) explaining your stability.',
-                },
-                {
-                    title: 'Goal Planning',
-                    desc: 'AI calculates timelines and suggests improvements.',
-                },
-                {
-                    title: 'Personalized Recommendations',
-                    desc: 'Based on spending patterns, habits, income, and goals.',
-                },
-                {
-                    title: 'Agrobank Product Matching',
-                    desc: 'AI suggests Microloans, Deposits, Savings, and Installment options.',
-                },
-            ],
-        },
-        whyUs: {
-            title: 'Why Our Team?',
-            subtitle: 'We are not just building features — we are building a financial intelligence layer for Agrobank.',
-            reasons: [
-                {
-                    title: 'We move extremely fast',
-                    desc: 'All members are Lead and Senior level engineers capable of shipping an MVP within days.',
-                },
-                {
-                    title: 'We know the problem',
-                    desc: 'Most of us live on a salary cycle and personally experience the challenges we are solving.',
-                },
-                {
-                    title: 'Strong technical background',
-                    desc: 'We cover ML/AI, Backend, Fintech logic, and Modern UI/UX.',
-                },
-            ],
-        },
-        roadmap: {
-            badge: 'Roadmap',
-            title: 'Development Plan',
-            phases: [
-                {
-                    date: 'Nov 26 – Nov 30',
-                    title: 'Stage 1: Demo Website',
-                    items: ['Landing website', 'Problem & Solution', 'Architecture planning', 'Initial AI insights'],
-                },
-                {
-                    date: 'Dec 1 – Dec 5',
-                    title: 'Functional MVP Shell',
-                    items: ['Next.js frontend base', 'Visual dashboard layout', 'Mock profile setup', 'Frontend-Backend pipeline'],
-                },
-                {
-                    date: 'Dec 5 – Dec 10',
-                    title: 'Core MVP Functionality',
-                    items: ['AI recommendation engine', 'Goal calculator', 'Financial Health Score', 'Salary-cycle warning'],
-                },
-                {
-                    date: 'Dec 10 – Dec 13',
-                    title: 'Polish & Submission',
-                    items: ['Supabase integration', 'LangChain pipeline', 'Final UI polishing', 'Deployment (Vercel/Render)'],
-                },
-            ],
-        },
-        methodology: {
-            title: 'How We Plan to Solve It',
-            subtitle: 'We build a thin, intelligent AI layer on top of Agrobank\'s financial infrastructure.',
-            stepsTitle: 'Key Implementation Steps',
-            techStackTitle: 'Tech Stack',
-            steps: [
-                {
-                    title: 'User Financial Profile Ingestion & Normalization',
-                    details: [
-                        'Collect structured data: salary, age, family size, occupation, financial goals, currency preferences.',
-                        'Extract dynamic data: income streams, spending history, recurring payments, loans, assets, liabilities.',
-                        'Normalize & store in secure DB (PII-safe).',
-                        'Build continuous profile updates using transaction streams + AI-based document parsing (e.g., salary slips).',
-                    ],
-                },
-                {
-                    title: 'Transaction Categorization & Behavioral Modeling',
-                    details: [
-                        'Hybrid engine: Rule-based keyword detection for high-precision categories.',
-                        'AI classifier (GPT or finetuned model) for ambiguous transactions.',
-                        'Track monthly volatility per category (µ, σ).',
-                        'Build behavioral signatures: spending cycles, salary cycles, weekend spikes, seasonality.',
-                        'Detect anomalies: sudden overspending, large one-offs, emerging recurring charges.',
-                    ],
-                },
-                {
-                    title: 'Financial Analytics Dashboard',
-                    details: [
-                        'Built with Next.js + Tailwind + charts (bar, pie, trend lines).',
-                        'Shows: Category breakdown, Month-over-month trends, Essential vs discretionary spend.',
-                        'Income stability index & Cashflow heatmap.',
-                        'AI auto-highlights unusual trends (e.g., "Dining Out +32% vs last month").',
-                    ],
-                },
-                {
-                    title: 'AI Insight Engine (Core Intelligence Layer)',
-                    details: [
-                        'Powered by GPT-5/4.1/4o + LangChain.',
-                        'Generates: Spending insights, Trend explanations, Micro-advice (short, actionable 1–2 sentence tips).',
-                        'Predictive alerts (e.g., "Balance may fall below safe threshold in 9 days").',
-                        'Uses chain-of-thought hidden reasoning + deterministic guardrails for consistency.',
-                    ],
-                },
-                {
-                    title: 'Salary-Cycle & Cashflow Predictor',
-                    details: [
-                        'Predicts when user will run out of money using: Historical spending velocity, Upcoming bills, Category-level volatility.',
-                        'Produces: "Days until zero", Confidence interval (AI-enhanced).',
-                        'Recommended interventions (cut X% in discretionary → +5 days buffer).',
-                    ],
-                },
-                {
-                    title: 'Advanced Goal Timeline Calculator',
-                    details: [
-                        'Replaces the old formula with full financial modeling.',
-                        'Real contributions = income – spending – installments – taxes – volatility buffer.',
-                        'Monte Carlo simulation (2k–10k runs) for realistic scenarios.',
-                        'Outputs: Deterministic months to target, Monte Carlo percentiles (10th, 50th, 90th), Success probability.',
-                    ],
-                },
-                {
-                    title: 'Financial Health Score (Composite Index)',
-                    details: [
-                        'Factors: Savings rate stability, Income consistency, Spending volatility, Debt ratio, Emergency buffer coverage.',
-                        'AI-derived risk assessment.',
-                        'Score recalculated monthly with clear breakdowns ("Your score improved due to reduced volatility in Utilities spending").',
-                    ],
-                },
-                {
-                    title: 'Agrobank Product Recommendation Engine',
-                    details: [
-                        'Uses AI reasoning + financial rules to match user to products.',
-                        'Deposits for surplus cash, Loans when liquidity risk detected.',
-                        'Installments for large upcoming payments, Investment products depending on risk score.',
-                        'Personalized explanations ("This deposit helps your goal reach 2 months earlier due to higher effective return").',
-                    ],
-                },
-                {
-                    title: 'Predictive Scenario & Simulation Engine',
-                    details: [
-                        'User can test scenarios: "What if I increase savings by 10%?", "What if inflation rises to 7%?", "What if I take a 5,000 loan?".',
-                        'The engine recalculates the entire projection with new inputs using fast Monte Carlo.',
-                    ],
-                },
-                {
-                    title: 'Adaptive Learning & Continuous Model Updating',
-                    details: [
-                        'Monthly profile recalibration: Update spending µ/σ, Relearn category weights.',
-                        'Adjust risk score, Update inflation & return assumptions.',
-                        'AI automatically adjusts predictions as user behavior changes.',
-                    ],
-                },
-            ],
-            stack: [
-                {
-                    category: 'Frontend',
-                    items: ['Next.js', 'Tailwind CSS', 'Recharts', 'Lucide React', 'TypeScript', 'Mobile First'],
-                },
-                {
-                    category: 'Backend',
-                    items: ['Python (Flask, SQLAlchemy)', 'PostgreSQL', 'REST API', 'Mathematical computations'],
-                },
-                {
-                    category: 'AI Layer',
-                    items: ['LangChain', 'OpenAI GPT-5.1/4.1/4o', 'Custom Rules and Instructions', 'Machine Learning'],
-                },
-                {
-                    category: 'Hosting',
-                    items: ['Vercel (Frontend)', 'Supabase (Infrastructure)', 'Render (Backend)', 'LangSmith (AI)'],
-                },
-            ],
-        },
-        team: {
-            title: 'Our Team',
-            subtitle: 'Lead and Senior level engineers and managers capable of shipping an MVP within days.',
-            teamLead: 'Team Lead',
-            members: [
-                {
-                    name: 'Azizullo Temirov',
-                    role: 'Product Manager',
-                    desc: 'Product strategy, UX thinking, financial behavior, business analysis',
-                },
-                {
-                    name: 'Khasan Rashidov',
-                    role: 'Senior Fullstack Engineer',
-                    desc: 'Python, Next.js, PostgreSQL, AI Integrations, .NET, Angular, Systems Design, Cloud Computing',
-                },
-                {
-                    name: 'Khusan Rashidov',
-                    role: 'Senior Backend Engineer',
-                    desc: 'Python, ML/AI, .NET, Azure/AWS, PostgreSQL',
-                },
-                {
-                    name: 'Burxonjon Solihjonov',
-                    role: 'Senior Frontend Engineer',
-                    desc: 'Next.js, Vue.js, UI/UX, Data Visualization',
-                },
-                {
-                    name: 'Bakhtiyorjon Bokhodirov',
-                    role: 'Lead AI Systems Engineer',
-                    desc: 'Python, LangChain, ML, AI analytics, AI Integrations',
-                },
-            ],
-        },
-        footer: {
-            copyright: '© 2025 Moliyachi. Built for Agrobank AI500 Hackathon.',
-            githubLink: 'Check our GitHub Repository',
-        },
+  en: {
+    hero: {
+      badge: "Powered with Artificial Intelligence",
+      title: "Moliyachi",
+      subtitle:
+        "Your AI-powered personal finance assistant inside Agrobank Mobile",
+      viewDemo: "View Demo",
+      learnMore: "Learn More",
+      demoTooltip: "Development in progress",
     },
-    uz: {
-        hero: {
-            badge: 'Sun\'iy Intellekt Bilan Quvvatlantirilgan',
-            title: 'Moliyachi',
-            subtitle: 'Agrobank Mobile ilovasidagi sun\'iy intellekt asosidagi shaxsiy moliyaviy yordamchingiz.',
-            viewDemo: 'Demoni Ko\'rish',
-            learnMore: 'Batafsil',
-            demoTooltip: 'Ishlab chiqilmoqda',
+    problemSolution: {
+      problemTitle: "The Problem",
+      problemDesc:
+        "A significant number of Agrobank's customers live on a strict salary cycle, facing stress and uncertainty every month",
+      problems: [
+        "Aggressive spending after salary arrival",
+        "Mid-month financial stress & uncertainty",
+        "No visibility into spending behavior",
+        "Lack of personalized budgeting guidance",
+        "Current banking apps provide transactions, not intelligence",
+        "Users need a way to understand their financial behavior—not just view their balance",
+      ],
+      solutionBadge: "The Solution",
+      meet: "Meet",
+      solutionTitle: "Moliyachi",
+      solutionDesc:
+        "A smart financial assistant fully embedded into AgrobankMobile that transforms it from a transaction tool into a financial partner",
+      solutions: [
+        {
+          title: "AI Spending Insights",
+          desc: "Short, actionable explanations of where your money goes",
         },
-        problemSolution: {
-            problemTitle: 'Muammo',
-            problemDesc: 'Agrobank mijozlarining katta qismi qat\'iy oylik maosh tsiklida yashaydi va har oy stress va noaniqlikka duch keladi.',
-            problems: [
-                'Maosh kelganidan keyin agressiv xarajatlar',
-                'Oy o\'rtasida moliyaviy stress va noaniqlik',
-                'Xarajatlar xatti-harakatlarini ko\'rish imkoni yo\'q',
-                'Shaxsiylashtirilgan byudjet bo\'yicha yo\'l-yo\'riq yo\'qligi',
-                'Hozirgi bank ilovalari tranzaksiyalarni taqdim etadi, intellektni emas',
-                'Foydalanuvchilar moliyaviy xatti-harakatlarini tushunish usulini talab qiladi — faqat balansni ko\'rish emas',
-            ],
-            solutionBadge: 'Yechim',
-            meet: 'Tanishing',
-            solutionTitle: 'Moliyachi',
-            solutionDesc: 'AgrobankMobile ilovasiga to\'liq integratsiyalashgan aqlli moliyaviy yordamchi, uni tranzaksiya vositasidan moliyaviy hamkorga aylantiradi.',
-            solutions: [
-                {
-                    title: 'AI Xarajat Tahlili',
-                    desc: 'Pulingiz qayerga ketayotgani haqida qisqa, amaliy tushuntirishlar.',
-                },
-                {
-                    title: 'Aqlli Oylik Rejalashtirish',
-                    desc: 'Xarajatlar juda tez bo\'lganda ogohlantirishlar va balans prognozlari.',
-                },
-                {
-                    title: 'Moliyaviy Salomatlik Balli',
-                    desc: 'Barqarorligingizni tushuntiradigan bitta oddiy ball (0–100).',
-                },
-                {
-                    title: 'Maqsad Rejalashtirish',
-                    desc: 'AI vaqt jadvallarini hisoblaydi va yaxshilashlarni taklif qiladi.',
-                },
-                {
-                    title: 'Shaxsiylashtirilgan Tavsiyalar',
-                    desc: 'Xarajat naqshlari, odatlar, daromad va maqsadlarga asoslangan.',
-                },
-                {
-                    title: 'Agrobank Mahsulotlari Moslashtirish',
-                    desc: 'AI Mikrokreditlar, Depozitlar, Jamg\'armalar va To\'lov rejalarini taklif qiladi.',
-                },
-            ],
+        {
+          title: "Smart Monthly Planning",
+          desc: "Warnings when spending is too fast & balance predictions",
         },
-        whyUs: {
-            title: 'Nega Bizning Jamoa?',
-            subtitle: 'Biz shunchaki funksiyalar yaratmayapmiz — biz Agrobank uchun moliyaviy intellekt qatlamini yaratyapmiz.',
-            reasons: [
-                {
-                    title: 'Biz juda tez harakatlanamiz',
-                    desc: 'Barcha a\'zolar bir necha kun ichida MVP ni ishlab chiqarishga qodir Lead va Senior darajadagi muhandislar.',
-                },
-                {
-                    title: 'Biz muammoni bilamiz',
-                    desc: 'Ko\'pchiligimiz oylik maosh tsiklida yashaymiz va hal qilayotgan muammolarni shaxsan boshdan kechiramiz.',
-                },
-                {
-                    title: 'Kuchli texnik bilim',
-                    desc: 'Biz ML/AI, Backend, Fintech mantiq va Zamonaviy UI/UX ni qamrab olamiz.',
-                },
-            ],
+        {
+          title: "Financial Health Score",
+          desc: "One simple score (0–100) explaining your stability",
         },
-        roadmap: {
-            badge: 'Yo\'l Xaritasi',
-            title: 'Rivojlanish Rejasi',
-            phases: [
-                {
-                    date: '26-30 Noyabr',
-                    title: '1-Bosqich: Demo Veb-sayt',
-                    items: ['Landing veb-sayt', 'Muammo va Yechim', 'Arxitektura rejalashtirish', 'Dastlabki AI tahlillari'],
-                },
-                {
-                    date: '1-5 Dekabr',
-                    title: 'Funktsional MVP Asosi',
-                    items: ['Next.js frontend asosi', 'Vizual dashboard joylashuvi', 'Mock profil sozlash', 'Frontend-Backend quvuri'],
-                },
-                {
-                    date: '5-10 Dekabr',
-                    title: 'Asosiy MVP Funksiyalari',
-                    items: ['AI tavsiya mexanizmi', 'Maqsad kalkulyatori', 'Moliyaviy Salomatlik Balli', 'Maosh tsikli ogohlantirishi'],
-                },
-                {
-                    date: '10-13 Dekabr',
-                    title: 'Jilolash va Topshirish',
-                    items: ['Supabase integratsiyasi', 'LangChain quvuri', 'Yakuniy UI jilolash', 'Joylashtirish (Vercel/Render)'],
-                },
-            ],
+        {
+          title: "Goal Planning",
+          desc: "AI calculates timelines and suggests improvements",
         },
-        methodology: {
-            title: 'Biz Buni Qanday Hal Qilamiz',
-            subtitle: 'Biz Agrobank moliyaviy infratuzilmasi ustiga yupqa, aqlli AI qatlamini quramiz.',
-            stepsTitle: 'Asosiy Amalga Oshirish Bosqichlari',
-            techStackTitle: 'Texnologiya To\'plami',
-            steps: [
-                {
-                    title: 'Foydalanuvchi Moliyaviy Profili Kiritish va Normalizatsiya',
-                    details: [
-                        'Tuzilgan ma\'lumotlarni to\'plash: maosh, yosh, oila hajmi, kasb, moliyaviy maqsadlar, valyuta afzalliklari.',
-                        'Dinamik ma\'lumotlarni chiqarish: daromad oqimlari, xarajatlar tarixi, takroriy to\'lovlar, kreditlar, aktivlar, majburiyatlar.',
-                        'Xavfsiz DB da normalizatsiya va saqlash (PII-xavfsiz).',
-                        'Tranzaksiya oqimlari + AI asosidagi hujjat tahlili yordamida doimiy profil yangilanishlarini yaratish.',
-                    ],
-                },
-                {
-                    title: 'Tranzaksiya Kategoriyalash va Xulq-atvor Modellashtirish',
-                    details: [
-                        'Gibrid mexanizm: Yuqori aniqlikdagi kategoriyalar uchun qoidaga asoslangan kalit so\'z aniqlash.',
-                        'Noaniq tranzaksiyalar uchun AI klassifikatori (GPT yoki sozlangan model).',
-                        'Har bir kategoriya bo\'yicha oylik o\'zgaruvchanlikni kuzatish (µ, σ).',
-                        'Xulq-atvor imzolarini yaratish: xarajat tsikllari, maosh tsikllari, dam olish kunlari ko\'tarilishlari, mavsumiylik.',
-                        'Anomaliyalarni aniqlash: to\'satdan ortiqcha xarajatlar, katta bir martalik to\'lovlar, paydo bo\'layotgan takroriy to\'lovlar.',
-                    ],
-                },
-                {
-                    title: 'Moliyaviy Tahlil Paneli',
-                    details: [
-                        'Next.js + Tailwind + diagrammalar (bar, doira, trend chiziqlari) bilan qurilgan.',
-                        'Ko\'rsatadi: Kategoriya bo\'yicha taqsimot, Oyma-oy tendentsiyalar, Muhim va ixtiyoriy xarajatlar.',
-                        'Daromad barqarorligi indeksi va Pul oqimi issiqlik xaritasi.',
-                        'AI g\'ayritabiiy tendentsiyalarni avtomatik ta\'kidlaydi (masalan, "Ovqatlanish +32% o\'tgan oyga nisbatan").',
-                    ],
-                },
-                {
-                    title: 'AI Tushuncha Mexanizmi (Asosiy Intellekt Qatlami)',
-                    details: [
-                        'GPT-5/4.1/4o + LangChain tomonidan quvvatlantirilgan.',
-                        'Yaratadi: Xarajat tushunchalari, Trend tushuntirishlari, Mikro-maslahatlar (qisqa, amaliy 1-2 jumlali maslahatlar).',
-                        'Bashoratli ogohlantirishlar (masalan, "Balans 9 kun ichida xavfsiz chegaradan pastga tushishi mumkin").',
-                        'Izchillik uchun zanjir-fikrlash yashirin mantiq + deterministik himoya choralaridan foydalanadi.',
-                    ],
-                },
-                {
-                    title: 'Maosh Tsikli va Pul Oqimi Prognozchisi',
-                    details: [
-                        'Foydalanuvchi qachon puldan qolishini bashorat qiladi: Tarixiy xarajat tezligi, Kelayotgan to\'lovlar, Kategoriya darajasidagi o\'zgaruvchanlik.',
-                        'Ishlab chiqaradi: "Nolga qadar kunlar", Ishonch oralig\'i (AI bilan kuchaytirilgan).',
-                        'Tavsiya etilgan aralashuvlar (ixtiyoriy xarajatlarda X% qisqartirish → +5 kun zaxira).',
-                    ],
-                },
-                {
-                    title: 'Ilg\'or Maqsad Vaqt Jadvali Kalkulyatori',
-                    details: [
-                        'Eski formulani to\'liq moliyaviy modellashtirish bilan almashtiradi.',
-                        'Haqiqiy hissalar = daromad – xarajatlar – to\'lovlar – soliqlar – o\'zgaruvchanlik zaxirasi.',
-                        'Realistik stsenariylar uchun Monte Karlo simulyatsiyasi (2k–10k ishga tushirish).',
-                        'Chiqishlar: Maqsadga deterministik oylar, Monte Karlo foizlari (10-chi, 50-chi, 90-chi), Muvaffaqiyat ehtimoli.',
-                    ],
-                },
-                {
-                    title: 'Moliyaviy Salomatlik Balli (Kompozit Indeks)',
-                    details: [
-                        'Omillar: Jamg\'arma stavkasi barqarorligi, Daromad izchilligi, Xarajat o\'zgaruvchanligi, Qarz nisbati, Favqulodda zaxira qamrovi.',
-                        'AI tomonidan olingan xavf baholash.',
-                        'Ball har oy aniq taqsimotlar bilan qayta hisoblanadi ("Sizning ballingiz Kommunal xizmatlar xarajatlaridagi o\'zgaruvchanlikning kamayishi tufayli yaxshilandi").',
-                    ],
-                },
-                {
-                    title: 'Agrobank Mahsulot Tavsiya Mexanizmi',
-                    details: [
-                        'Foydalanuvchini mahsulotlarga moslashtirish uchun AI mantiq + moliyaviy qoidalardan foydalanadi.',
-                        'Ortiqcha naqd pul uchun depozitlar, Likvidlik xavfi aniqlanganda kreditlar.',
-                        'Katta kelayotgan to\'lovlar uchun to\'lov rejalari, Xavf balliga qarab investitsiya mahsulotlari.',
-                        'Shaxsiylashtirilgan tushuntirishlar ("Bu depozit sizning maqsadingizga yuqori samarali daromad tufayli 2 oy oldinroq erishishga yordam beradi").',
-                    ],
-                },
-                {
-                    title: 'Bashoratli Stsenariy va Simulyatsiya Mexanizmi',
-                    details: [
-                        'Foydalanuvchi stsenariylarni sinab ko\'rishi mumkin: "Jamg\'armani 10% ga oshirsam nima bo\'ladi?", "Inflyatsiya 7% ga ko\'tarilsa nima bo\'ladi?", "5,000 kredit olsam nima bo\'ladi?".',
-                        'Mexanizm tez Monte Karlo yordamida yangi kirishlar bilan butun prognozni qayta hisoblaydi.',
-                    ],
-                },
-                {
-                    title: 'Moslashuvchan O\'rganish va Doimiy Model Yangilash',
-                    details: [
-                        'Oylik profil qayta kalibrlash: Xarajat µ/σ ni yangilash, Kategoriya og\'irliklarini qayta o\'rganish.',
-                        'Xavf ballini sozlash, Inflyatsiya va daromad taxminlarini yangilash.',
-                        'AI foydalanuvchi xatti-harakati o\'zgarganda prognozlarni avtomatik ravishda sozlaydi.',
-                    ],
-                },
-            ],
-            stack: [
-                {
-                    category: 'Frontend',
-                    items: ['Next.js', 'Tailwind CSS', 'Recharts', 'Lucide React', 'TypeScript', 'Mobile First'],
-                },
-                {
-                    category: 'Backend',
-                    items: ['Python (Flask, SQLAlchemy)', 'PostgreSQL', 'REST API', 'Mathematical computations'],
-                },
-                {
-                    category: 'AI Layer',
-                    items: ['LangChain', 'OpenAI GPT-5.1/4.1/4o', 'Custom Rules and Instructions', 'Machine Learning'],
-                },
-                {
-                    category: 'Hosting',
-                    items: ['Vercel (Frontend)', 'Supabase (Infrastructure)', 'Render (Backend)', 'LangSmith (AI)'],
-                },
-            ],
+        {
+          title: "Personalized Recommendations",
+          desc: "Based on spending patterns, habits, income, and goals",
         },
-        team: {
-            title: 'Bizning Jamoa',
-            subtitle: 'Bir necha kun ichida MVP ni ishlab chiqarishga qodir Lead va Senior darajadagi muhandislar va menejerlar.',
-            teamLead: 'Team Lead',
-            members: [
-                {
-                    name: 'Azizullo Temirov',
-                    role: 'Product Manager',
-                    desc: 'Product strategy, UX thinking, financial behavior, business analysis',
-                },
-                {
-                    name: 'Khasan Rashidov',
-                    role: 'Senior Fullstack Engineer',
-                    desc: 'Python, Next.js, PostgreSQL, AI Integrations, .NET, Angular, Systems Design, Cloud Computing',
-                },
-                {
-                    name: 'Khusan Rashidov',
-                    role: 'Senior Backend Engineer',
-                    desc: 'Python, ML/AI, .NET, Azure/AWS, PostgreSQL',
-                },
-                {
-                    name: 'Burxonjon Solihjonov',
-                    role: 'Senior Frontend Engineer',
-                    desc: 'Next.js, Vue.js, UI/UX, Data Visualization',
-                },
-                {
-                    name: 'Bakhtiyorjon Bokhodirov',
-                    role: 'Lead AI Systems Engineer',
-                    desc: 'Python, LangChain, ML, AI analytics, AI Integrations',
-                },
-            ],
+        {
+          title: "Agrobank Product Matching",
+          desc: "AI suggests Microloans, Deposits, Savings, and Installment options",
         },
-        footer: {
-            copyright: '© 2025 Moliyachi. Agrobank AI500 Hackathon uchun yaratilgan.',
-            githubLink: 'GitHub Repozitoriyamizni Ko\'ring',
-        },
+      ],
     },
-    ru: {
-        hero: {
-            badge: 'Работает на Искусственном Интеллекте',
-            title: 'Moliyachi',
-            subtitle: 'Ваш персональный финансовый помощник на базе ИИ в Agrobank Mobile.',
-            viewDemo: 'Посмотреть Демо',
-            learnMore: 'Узнать Больше',
-            demoTooltip: 'В разработке',
+    whyUs: {
+      title: "Why Our Team?",
+      subtitle:
+        "We are not just building features — we are building a financial intelligence layer for Agrobank",
+      reasons: [
+        {
+          title: "We move extremely fast",
+          desc: "All members are Lead and Senior level engineers capable of shipping an MVP within days",
         },
-        problemSolution: {
-            problemTitle: 'Проблема',
-            problemDesc: 'Значительное число клиентов Агробанка живет в строгом зарплатном цикле, сталкиваясь со стрессом и неопределенностью каждый месяц.',
-            problems: [
-                'Агрессивные траты после получения зарплаты',
-                'Финансовый стресс и неопределенность в середине месяца',
-                'Отсутствие видимости поведения расходов',
-                'Отсутствие персонализированных рекомендаций по бюджету',
-                'Текущие банковские приложения предоставляют транзакции, а не интеллект',
-                'Пользователям нужен способ понять свое финансовое поведение — не просто посмотреть баланс',
-            ],
-            solutionBadge: 'Решение',
-            meet: 'Знакомьтесь',
-            solutionTitle: 'Moliyachi',
-            solutionDesc: 'Умный финансовый помощник, полностью встроенный в AgrobankMobile, который превращает его из инструмента транзакций в финансового партнера.',
-            solutions: [
-                {
-                    title: 'AI Анализ Расходов',
-                    desc: 'Короткие, практичные объяснения того, куда уходят ваши деньги.',
-                },
-                {
-                    title: 'Умное Месячное Планирование',
-                    desc: 'Предупреждения при слишком быстрых тратах и прогнозы баланса.',
-                },
-                {
-                    title: 'Оценка Финансового Здоровья',
-                    desc: 'Один простой балл (0–100), объясняющий вашу стабильность.',
-                },
-                {
-                    title: 'Планирование Целей',
-                    desc: 'ИИ рассчитывает сроки и предлагает улучшения.',
-                },
-                {
-                    title: 'Персонализированные Рекомендации',
-                    desc: 'На основе паттернов расходов, привычек, дохода и целей.',
-                },
-                {
-                    title: 'Подбор Продуктов Агробанка',
-                    desc: 'ИИ предлагает Микрокредиты, Депозиты, Сбережения и Рассрочки.',
-                },
-            ],
+        {
+          title: "We know the problem",
+          desc: "Most of us live on a salary cycle and personally experience the challenges we are solving",
         },
-        whyUs: {
-            title: 'Почему Наша Команда?',
-            subtitle: 'Мы не просто создаем функции — мы создаем слой финансового интеллекта для Агробанка.',
-            reasons: [
-                {
-                    title: 'Мы работаем очень быстро',
-                    desc: 'Все члены команды — инженеры уровня Lead и Senior, способные выпустить MVP за несколько дней.',
-                },
-                {
-                    title: 'Мы знаем проблему',
-                    desc: 'Большинство из нас живет в зарплатном цикле и лично сталкивается с проблемами, которые мы решаем.',
-                },
-                {
-                    title: 'Сильный технический бэкграунд',
-                    desc: 'Мы охватываем ML/AI, Backend, Fintech логику и Современный UI/UX.',
-                },
-            ],
+        {
+          title: "Strong technical background",
+          desc: "We cover ML/AI, Backend, Fintech logic, and Modern UI/UX",
         },
-        roadmap: {
-            badge: 'Дорожная Карта',
-            title: 'План Разработки',
-            phases: [
-                {
-                    date: '26-30 Ноября',
-                    title: 'Этап 1: Демо Сайт',
-                    items: ['Лендинг сайт', 'Проблема и Решение', 'Планирование архитектуры', 'Начальные AI инсайты'],
-                },
-                {
-                    date: '1-5 Декабря',
-                    title: 'Функциональная Оболочка MVP',
-                    items: ['Основа Next.js frontend', 'Визуальная компоновка дашборда', 'Настройка Mock профиля', 'Конвейер Frontend-Backend'],
-                },
-                {
-                    date: '5-10 Декабря',
-                    title: 'Основная Функциональность MVP',
-                    items: ['AI движок рекомендаций', 'Калькулятор целей', 'Оценка Финансового Здоровья', 'Предупреждение о зарплатном цикле'],
-                },
-                {
-                    date: '10-13 Декабря',
-                    title: 'Полировка и Отправка',
-                    items: ['Интеграция Supabase', 'Конвейер LangChain', 'Финальная полировка UI', 'Развертывание (Vercel/Render)'],
-                },
-            ],
-        },
-        methodology: {
-            title: 'Как Мы Планируем Это Решить',
-            subtitle: 'Мы строим тонкий, интеллектуальный AI слой поверх финансовой инфраструктуры Агробанка.',
-            stepsTitle: 'Ключевые Этапы Реализации',
-            techStackTitle: 'Технологический Стек',
-            steps: [
-                {
-                    title: 'Ввод и Нормализация Финансового Профиля Пользователя',
-                    details: [
-                        'Сбор структурированных данных: зарплата, возраст, размер семьи, профессия, финансовые цели, валютные предпочтения.',
-                        'Извлечение динамических данных: потоки доходов, история расходов, регулярные платежи, кредиты, активы, обязательства.',
-                        'Нормализация и хранение в защищенной БД (PII-безопасно).',
-                        'Создание непрерывных обновлений профиля с использованием потоков транзакций + AI-анализа документов (например, зарплатных ведомостей).',
-                    ],
-                },
-                {
-                    title: 'Категоризация Транзакций и Моделирование Поведения',
-                    details: [
-                        'Гибридный движок: Обнаружение ключевых слов на основе правил для высокоточных категорий.',
-                        'AI классификатор (GPT или настроенная модель) для неоднозначных транзакций.',
-                        'Отслеживание месячной волатильности по категориям (µ, σ).',
-                        'Создание поведенческих сигнатур: циклы расходов, зарплатные циклы, всплески выходных, сезонность.',
-                        'Обнаружение аномалий: внезапные перерасходы, крупные разовые платежи, появляющиеся регулярные платежи.',
-                    ],
-                },
-                {
-                    title: 'Панель Финансовой Аналитики',
-                    details: [
-                        'Построена с Next.js + Tailwind + графиками (столбчатые, круговые, линии трендов).',
-                        'Показывает: Разбивка по категориям, Тренды месяц к месяцу, Основные vs дискреционные расходы.',
-                        'Индекс стабильности дохода и Тепловая карта денежного потока.',
-                        'AI автоматически выделяет необычные тренды (например, "Питание вне дома +32% по сравнению с прошлым месяцем").',
-                    ],
-                },
-                {
-                    title: 'AI Движок Инсайтов (Основной Интеллектуальный Слой)',
-                    details: [
-                        'Работает на GPT-5/4.1/4o + LangChain.',
-                        'Генерирует: Инсайты расходов, Объяснения трендов, Микро-советы (короткие, практичные советы из 1-2 предложений).',
-                        'Прогнозные предупреждения (например, "Баланс может упасть ниже безопасного порога через 9 дней").',
-                        'Использует скрытое рассуждение цепочки мыслей + детерминированные ограничения для согласованности.',
-                    ],
-                },
-                {
-                    title: 'Предсказатель Зарплатного Цикла и Денежного Потока',
-                    details: [
-                        'Предсказывает, когда у пользователя закончатся деньги, используя: Историческую скорость расходов, Предстоящие счета, Волатильность на уровне категорий.',
-                        'Производит: "Дни до нуля", Доверительный интервал (усиленный AI).',
-                        'Рекомендуемые вмешательства (сократить X% в дискреционных → +5 дней буфера).',
-                    ],
-                },
-                {
-                    title: 'Продвинутый Калькулятор Временной Шкалы Целей',
-                    details: [
-                        'Заменяет старую формулу полным финансовым моделированием.',
-                        'Реальные взносы = доход – расходы – рассрочки – налоги – буфер волатильности.',
-                        'Симуляция Монте-Карло (2k–10k прогонов) для реалистичных сценариев.',
-                        'Выходы: Детерминированные месяцы до цели, Процентили Монте-Карло (10-й, 50-й, 90-й), Вероятность успеха.',
-                    ],
-                },
-                {
-                    title: 'Оценка Финансового Здоровья (Композитный Индекс)',
-                    details: [
-                        'Факторы: Стабильность нормы сбережений, Постоянство дохода, Волатильность расходов, Долговой коэффициент, Покрытие аварийного буфера.',
-                        'AI-оценка рисков.',
-                        'Балл пересчитывается ежемесячно с четкими разбивками ("Ваш балл улучшился из-за снижения волатильности в расходах на Коммунальные услуги").',
-                    ],
-                },
-                {
-                    title: 'Движок Рекомендаций Продуктов Агробанка',
-                    details: [
-                        'Использует AI рассуждения + финансовые правила для подбора продуктов пользователю.',
-                        'Депозиты для избыточной наличности, Кредиты при обнаружении риска ликвидности.',
-                        'Рассрочки для крупных предстоящих платежей, Инвестиционные продукты в зависимости от балла риска.',
-                        'Персонализированные объяснения ("Этот депозит помогает вашей цели достичь на 2 месяца раньше благодаря более высокой эффективной доходности").',
-                    ],
-                },
-                {
-                    title: 'Движок Прогнозных Сценариев и Симуляции',
-                    details: [
-                        'Пользователь может тестировать сценарии: "Что если я увеличу сбережения на 10%?", "Что если инфляция вырастет до 7%?", "Что если я возьму кредит на 5,000?".',
-                        'Движок пересчитывает весь прогноз с новыми входными данными, используя быстрый Монте-Карло.',
-                    ],
-                },
-                {
-                    title: 'Адаптивное Обучение и Непрерывное Обновление Модели',
-                    details: [
-                        'Ежемесячная перекалибровка профиля: Обновление расходов µ/σ, Переобучение весов категорий.',
-                        'Корректировка балла риска, Обновление предположений об инфляции и доходности.',
-                        'AI автоматически корректирует прогнозы по мере изменения поведения пользователя.',
-                    ],
-                },
-            ],
-            stack: [
-                {
-                    category: 'Frontend',
-                    items: ['Next.js', 'Tailwind CSS', 'Recharts', 'Lucide React', 'TypeScript', 'Mobile First'],
-                },
-                {
-                    category: 'Backend',
-                    items: ['Python (Flask, SQLAlchemy)', 'PostgreSQL', 'REST API', 'Mathematical computations'],
-                },
-                {
-                    category: 'AI Layer',
-                    items: ['LangChain', 'OpenAI GPT-5.1/4.1/4o', 'Custom Rules and Instructions', 'Machine Learning'],
-                },
-                {
-                    category: 'Hosting',
-                    items: ['Vercel (Frontend)', 'Supabase (Infrastructure)', 'Render (Backend)', 'LangSmith (AI)'],
-                },
-            ],
-        },
-        team: {
-            title: 'Наша Команда',
-            subtitle: 'Инженеры и менеджеры уровня Lead и Senior, способные выпустить MVP за несколько дней.',
-            teamLead: 'Team Lead',
-            members: [
-                {
-                    name: 'Azizullo Temirov',
-                    role: 'Product Manager',
-                    desc: 'Product strategy, UX thinking, financial behavior, business analysis',
-                },
-                {
-                    name: 'Khasan Rashidov',
-                    role: 'Senior Fullstack Engineer',
-                    desc: 'Python, Next.js, PostgreSQL, AI Integrations, .NET, Angular, Systems Design, Cloud Computing',
-                },
-                {
-                    name: 'Khusan Rashidov',
-                    role: 'Senior Backend Engineer',
-                    desc: 'Python, ML/AI, .NET, Azure/AWS, PostgreSQL',
-                },
-                {
-                    name: 'Burxonjon Solihjonov',
-                    role: 'Senior Frontend Engineer',
-                    desc: 'Next.js, Vue.js, UI/UX, Data Visualization',
-                },
-                {
-                    name: 'Bakhtiyorjon Bokhodirov',
-                    role: 'Lead AI Systems Engineer',
-                    desc: 'Python, LangChain, ML, AI analytics, AI Integrations',
-                },
-            ],
-        },
-        footer: {
-            copyright: '© 2025 Moliyachi. Создано для Agrobank AI500 Hackathon.',
-            githubLink: 'Посмотреть наш GitHub Репозиторий',
-        },
+      ],
     },
+    roadmap: {
+      badge: "Roadmap",
+      title: "Development Plan",
+      phases: [
+        {
+          date: "Nov 26 – Nov 30",
+          title: "Stage 1: Demo Website",
+          items: [
+            "Landing website",
+            "Problem & Solution",
+            "Architecture planning",
+            "Initial AI insights",
+          ],
+        },
+        {
+          date: "Dec 1 – Dec 5",
+          title: "Functional MVP Shell",
+          items: [
+            "Next.js frontend base",
+            "Visual dashboard layout",
+            "Mock profile setup",
+            "Frontend-Backend pipeline",
+          ],
+        },
+        {
+          date: "Dec 5 – Dec 10",
+          title: "Core MVP Functionality",
+          items: [
+            "AI recommendation engine",
+            "Goal calculator",
+            "Financial Health Score",
+            "Salary-cycle warning",
+          ],
+        },
+        {
+          date: "Dec 10 – Dec 13",
+          title: "Polish & Submission",
+          items: [
+            "Supabase integration",
+            "LangChain pipeline",
+            "Final UI polishing",
+            "Deployment (Vercel/Render)",
+          ],
+        },
+      ],
+    },
+    methodology: {
+      title: "How We Plan to Solve It",
+      subtitle:
+        "We build a thin, intelligent AI layer on top of Agrobank's financial infrastructure",
+      stepsTitle: "Key Implementation Steps",
+      techStackTitle: "Tech Stack",
+      steps: [
+        {
+          title: "User Financial Profile Ingestion & Normalization",
+          details: [
+            "Collect structured data: salary, age, family size, occupation, financial goals, currency preferences",
+            "Extract dynamic data: income streams, spending history, recurring payments, loans, assets, liabilities",
+            "Normalize & store in secure DB (PII-safe)",
+            "Build continuous profile updates using transaction streams + AI-based document parsing (e.g., salary slips)",
+          ],
+        },
+        {
+          title: "Transaction Categorization & Behavioral Modeling",
+          details: [
+            "Hybrid engine: Rule-based keyword detection for high-precision categories",
+            "AI classifier (GPT or finetuned model) for ambiguous transactions",
+            "Track monthly volatility per category (µ, σ)",
+            "Build behavioral signatures: spending cycles, salary cycles, weekend spikes, seasonality",
+            "Detect anomalies: sudden overspending, large one-offs, emerging recurring charges",
+          ],
+        },
+        {
+          title: "Financial Analytics Dashboard",
+          details: [
+            "Built with Next.js + Tailwind + charts (bar, pie, trend lines)",
+            "Shows: Category breakdown, Month-over-month trends, Essential vs discretionary spend",
+            "Income stability index & Cashflow heatmap",
+            'AI auto-highlights unusual trends (e.g., "Dining Out +32% vs last month")',
+          ],
+        },
+        {
+          title: "AI Insight Engine (Core Intelligence Layer)",
+          details: [
+            "Powered by GPT-5/4.1/4o + LangChain",
+            "Generates: Spending insights, Trend explanations, Micro-advice (short, actionable 1–2 sentence tips)",
+            'Predictive alerts (e.g., "Balance may fall below safe threshold in 9 days").',
+            "Uses chain-of-thought hidden reasoning + deterministic guardrails for consistency",
+          ],
+        },
+        {
+          title: "Salary-Cycle & Cashflow Predictor",
+          details: [
+            "Predicts when user will run out of money using: Historical spending velocity, Upcoming bills, Category-level volatility",
+            'Produces: "Days until zero", Confidence interval (AI-enhanced).',
+            "Recommended interventions (cut X% in discretionary → +5 days buffer)",
+          ],
+        },
+        {
+          title: "Advanced Goal Timeline Calculator",
+          details: [
+            "Replaces the old formula with full financial modeling",
+            "Real contributions = income – spending – installments – taxes – volatility buffer",
+            "Monte Carlo simulation (2k–10k runs) for realistic scenarios",
+            "Outputs: Deterministic months to target, Monte Carlo percentiles (10th, 50th, 90th), Success probability",
+          ],
+        },
+        {
+          title: "Financial Health Score (Composite Index)",
+          details: [
+            "Factors: Savings rate stability, Income consistency, Spending volatility, Debt ratio, Emergency buffer coverage",
+            "AI-derived risk assessment",
+            'Score recalculated monthly with clear breakdowns ("Your score improved due to reduced volatility in Utilities spending").',
+          ],
+        },
+        {
+          title: "Agrobank Product Recommendation Engine",
+          details: [
+            "Uses AI reasoning + financial rules to match user to products",
+            "Deposits for surplus cash, Loans when liquidity risk detected",
+            "Installments for large upcoming payments, Investment products depending on risk score",
+            'Personalized explanations ("This deposit helps your goal reach 2 months earlier due to higher effective return").',
+          ],
+        },
+        {
+          title: "Predictive Scenario & Simulation Engine",
+          details: [
+            'User can test scenarios: "What if I increase savings by 10%?", "What if inflation rises to 7%?", "What if I take a 5,000 loan?".',
+            "The engine recalculates the entire projection with new inputs using fast Monte Carlo",
+          ],
+        },
+        {
+          title: "Adaptive Learning & Continuous Model Updating",
+          details: [
+            "Monthly profile recalibration: Update spending µ/σ, Relearn category weights",
+            "Adjust risk score, Update inflation & return assumptions",
+            "AI automatically adjusts predictions as user behavior changes",
+          ],
+        },
+      ],
+      stack: [
+        {
+          category: "Frontend",
+          items: [
+            "Next.js",
+            "Tailwind CSS",
+            "Recharts",
+            "Lucide React",
+            "TypeScript",
+            "Mobile First",
+          ],
+        },
+        {
+          category: "Backend",
+          items: [
+            "Python (Flask, SQLAlchemy)",
+            "PostgreSQL",
+            "REST API",
+            "Mathematical computations",
+          ],
+        },
+        {
+          category: "AI Layer",
+          items: [
+            "LangChain",
+            "OpenAI GPT-5.1/4.1/4o",
+            "Custom Rules and Instructions",
+            "Machine Learning",
+          ],
+        },
+        {
+          category: "Hosting",
+          items: [
+            "Vercel (Frontend)",
+            "Supabase (Infrastructure)",
+            "Render (Backend)",
+            "LangSmith (AI)",
+          ],
+        },
+      ],
+    },
+    team: {
+      title: "Our Team",
+      subtitle:
+        "Lead and Senior level engineers and managers capable of shipping an MVP within days",
+      teamLead: "Team Lead",
+      members: [
+        {
+          name: "Azizullo Temirov",
+          role: "Product Manager",
+          desc: "Product strategy, UX thinking, financial behavior, business analysis",
+        },
+        {
+          name: "Khasan Rashidov",
+          role: "Senior Fullstack Engineer",
+          desc: "Python, Next.js, PostgreSQL, AI Integrations, .NET, Angular, Systems Design, Cloud Computing",
+        },
+        {
+          name: "Khusan Rashidov",
+          role: "Senior Backend Engineer",
+          desc: "Python, ML/AI, .NET, Azure/AWS, PostgreSQL",
+        },
+        {
+          name: "Burxonjon Solihjonov",
+          role: "Senior Frontend Engineer",
+          desc: "Next.js, Vue.js, UI/UX, Data Visualization",
+        },
+        {
+          name: "Bakhtiyorjon Bokhodirov",
+          role: "Lead AI Systems Engineer",
+          desc: "Python, LangChain, ML, AI analytics, AI Integrations",
+        },
+      ],
+    },
+    footer: {
+      copyright: "© 2025 Moliyachi. Built for Agrobank AI500 Hackathon.",
+      githubLink: "Check our GitHub Repository",
+    },
+  },
+  uz: {
+    hero: {
+      badge: "Powered with Artificial Intelligence",
+      title: "Moliyachi",
+      subtitle:
+        "Agrobank Mobile ichidagi AI asosidagi shaxsiy moliyaviy yordamchingiz",
+      viewDemo: "Demo ko‘rish",
+      learnMore: "Batafsil",
+      demoTooltip: "Dasturlash jarayonida",
+    },
+    problemSolution: {
+      problemTitle: "Muammo",
+      problemDesc:
+        "Agrobank mijozlarining katta qismi qat’iy oylik tsiklida yashaydi va har oy stress hamda noaniqlikni boshdan kechiradi",
+      problems: [
+        "Oylikdan keyingi agressiv sarf-xarajatlar",
+        "Oy o‘rtasida moliyaviy stress va noaniqlik",
+        "Xarajatlar bo‘yicha tushunarli ko‘rinishning yo‘qligi",
+        "Shaxsiylashtirilgan byudjet bo‘yicha ko‘rsatmalar yetishmasligi",
+        "Hozirgi banking ilovalari faqat tranzaksiyalarni ko‘rsatadi, intellektni emas",
+        "Foydalanuvchilarga balansni ko‘rish emas, moliyaviy xatti-harakatlarini tushunish mexanizmi kerak",
+      ],
+      solutionBadge: "Yechim",
+      meet: "Tanishining",
+      solutionTitle: "Moliyachi",
+      solutionDesc:
+        "AgrobankMobile ichiga to‘liq integratsiya qilingan aqlli moliyaviy yordamchi, u ilovani tranzaksion vositadan moliyaviy hamkor darajasiga ko‘taradi",
+      solutions: [
+        {
+          title: "AI Spending Insights",
+          desc: "Pul qayerga ketayotganini qisqa va aniq izohlar bilan tushuntiradi",
+        },
+        {
+          title: "Smart Monthly Planning",
+          desc: "Juda tez sarflanish haqida ogohlantirish va balans prognozlari",
+        },
+        {
+          title: "Financial Health Score",
+          desc: "Barqarorlikni ifodalovchi bitta oddiy ko‘rsatkich (0–100)",
+        },
+        {
+          title: "Goal Planning",
+          desc: "AI maqsadlar muddatini hisoblab beradi va yaxshilash bo‘yicha tavsiyalar beradi",
+        },
+        {
+          title: "Personalized Recommendations",
+          desc: "Xarajatlar odatlari, daromad, maqsadlar va xulq-atvor asosida",
+        },
+        {
+          title: "Agrobank Product Matching",
+          desc: "AI Mikroqarzlar, Depozitlar, Jamg‘arma va Bo‘lib to‘lash mahsulotlarini tavsiya qiladi",
+        },
+      ],
+    },
+    whyUs: {
+      title: "Nega aynan biz?",
+      subtitle:
+        "Biz shunchaki funksiyalar yaratmayapmiz — Agrobank uchun moliyaviy intellekt qatlamini barpo qilmoqdamiz",
+      reasons: [
+        {
+          title: "Biz juda tez ishlaymiz",
+          desc: "Jamoamizning barcha a’zolari Lead va Senior darajadagi muhandislar bo‘lib, bir necha kun ichida MVP yaratish qobiliyatiga ega",
+        },
+        {
+          title: "Biz muammoni yaxshi bilamiz",
+          desc: "Jamoa a’zolarining ko‘pchiligi ham oylik tsikli bo‘yicha yashaydi va shu muammolarni shaxsan boshdan kechiradi",
+        },
+        {
+          title: "Kuchli texnik baza",
+          desc: "ML/AI, Backend, Fintech logikasi va zamonaviy UI/UX bo‘yicha to‘liq kompetensiyaga egamiz",
+        },
+      ],
+    },
+    roadmap: {
+      badge: "Roadmap",
+      title: "Rivojlanish rejasi",
+      phases: [
+        {
+          date: "26–30 noyabr",
+          title: "1-bosqich: Demo Website",
+          items: [
+            "Landing website",
+            "Muammo & Yechim",
+            "Arxitektura rejalashtirish",
+            "Dastlabki AI insights",
+          ],
+        },
+        {
+          date: "1–5 dekabr",
+          title: "Functional MVP Shell",
+          items: [
+            "Next.js frontend asoslari",
+            "Vizual dashboard",
+            "Mock profil sozlamalari",
+            "Frontend–Backend pipeline",
+          ],
+        },
+        {
+          date: "5–10 dekabr",
+          title: "MVP asosiy funksionalligi",
+          items: [
+            "AI recommendation engine",
+            "Goal calculator",
+            "Financial Health Score",
+            "Salary-cycle warning",
+          ],
+        },
+        {
+          date: "10–13 dekabr",
+          title: "Polish & Submission",
+          items: [
+            "Supabase integratsiyasi",
+            "LangChain pipeline",
+            "UI yakuniy polishing",
+            "Deployment (Vercel/Render)",
+          ],
+        },
+      ],
+    },
+    methodology: {
+      title: "Biz buni qanday hal qilamiz",
+      subtitle:
+        "Biz Agrobank moliyaviy infratuzilmasi ustida ingichka, aqlli AI qatlamini quramiz",
+      stepsTitle: "Asosiy implementatsiya bosqichlari",
+      techStackTitle: "Tech Stack",
+      steps: [
+        {
+          title: "User Financial Profile Ingestion & Normalization",
+          details: [
+            "Strukturaviy ma’lumotlar yig‘ish: oylik, yosh, oila hajmi, kasb, moliyaviy maqsadlar, valyuta",
+            "Dinamik ma’lumotlar chiqarish: daromad oqimlari, xarajatlar tarixi, takroriy to‘lovlar, kreditlar, aktivlar, majburiyatlar",
+            "Ma’lumotlarni normalizatsiya qilish va himoyalangan DB’da saqlash (PII-safe)",
+            "Profilni tranzaksiya oqimlari + AI hujjat parsing yordamida doimiy yangilab borish",
+          ],
+        },
+        {
+          title: "Transaction Categorization & Behavioral Modeling",
+          details: [
+            "Gibrid dvijok: rule-based keyword detection yuqori aniqlik uchun",
+            "AI classifier (GPT yoki finetuned model) noaniq tranzaksiyalar uchun",
+            "Har oy bo‘yicha kategoriya volatilligi (µ, σ) kuzatuvi",
+            "Xulq-atvor imzolari: xarajat tsikllari, oylik tsikli, hafta oxiri spike’lari, mavsumiylik",
+            "Anomaliyalar aniqlash: keskin ortiqcha sarflanish, katta bir martalik xarajatlar, yangi takroriy to‘lovlar",
+          ],
+        },
+        {
+          title: "Financial Analytics Dashboard",
+          details: [
+            "Next.js + Tailwind + charts (bar, pie, trend lines) yordamida yaratilgan",
+            "Ko‘rsatadi: Kategoriya bo‘yicha taqsimot, oylik dinamika, zaruriy vs ixtiyoriy xarajatlar",
+            "Daromad barqarorligi indeksi va Cashflow heatmap",
+            'AI noodatiy trendlarni avtomatik ta’kidlaydi (masalan, "Dining Out +32% last month").',
+          ],
+        },
+        {
+          title: "AI Insight Engine (Core Intelligence Layer)",
+          details: [
+            "GPT-5/4.1/4o + LangChain asosida ishlaydi",
+            "Yaratadi: Spending insights, trend sharhlari, 1–2 jumlalik amaliy micro-advice",
+            'Predictive ogohlantirishlar (masalan, "Balans 9 kun ichida xavfsiz chegaradan pastga tushishi mumkin").',
+            "Barqarorlik uchun chain-of-thought yashirin reasoningi + deterministik guardrails",
+          ],
+        },
+        {
+          title: "Salary-Cycle & Cashflow Predictor",
+          details: [
+            "Foydalanuvchi qachon puldan chiqib qolishini bashorat qiladi: xarajat tezligi, kelayotgan to‘lovlar, kategoriya volatilligi asosida",
+            '"Days until zero", AI kuchaytirilgan ishonch intervalini beradi.',
+            "Tavsiya etilgan choralar (ixtiyoriy xarajatlarni X%ga qisqartirish → +5 kun zaxira)",
+          ],
+        },
+        {
+          title: "Advanced Goal Timeline Calculator",
+          details: [
+            "Eskirgan formulani to‘liq moliyaviy model bilan almashtiradi",
+            "Haqiqiy jamg‘arma = daromad – xarajatlar – bo‘lib to‘lash – soliqlar – volatillik buferi",
+            "Monte Carlo (2k–10k runs) orqali realistik ssenariylar",
+            "Natija: aniq muddatlar, percentiles (10th/50th/90th), muvaffaqiyat ehtimoli",
+          ],
+        },
+        {
+          title: "Financial Health Score (Composite Index)",
+          details: [
+            "Faktorlar: jamg‘arma barqarorligi, daromad doimiyligi, xarajat volatilligi, qarz nisbati, favqulodda zaxira",
+            "AI risk bahosi",
+            'Har oy qayta hisoblanadi va tushunarli sharhlar beriladi (masalan, "Utilities bo‘yicha volatillik kamaygani uchun ball oshdi").',
+          ],
+        },
+        {
+          title: "Agrobank Product Recommendation Engine",
+          details: [
+            "AI reasoning + moliyaviy qoida asosida foydalanuvchiga mos mahsulotlarni tanlaydi",
+            "Ortiqcha mablag‘ uchun depozitlar, likvidlik xavfi bo‘lsa kreditlar",
+            "Katta to‘lovlar uchun rassrochka, risk profiliga qarab investitsiya variantlari",
+            'Shaxsiy izohlar (masalan, "Bu depozit maqsadga erishishni 2 oyga tezlashtiradi").',
+          ],
+        },
+        {
+          title: "Predictive Scenario & Simulation Engine",
+          details: [
+            'Foydalanuvchi ssenariylarni sinab ko‘rishi mumkin: "Agar 10% ko‘proq jamg‘arsam?", "Inflyatsiya 7% bo‘lsa?", "5,000 kredit olsam?"',
+            "Dvigatel yangi parametrlar asosida butun modelni tezkor Monte Carlo yordamida qayta hisoblaydi",
+          ],
+        },
+        {
+          title: "Adaptive Learning & Continuous Model Updating",
+          details: [
+            "Oylik rekalibratsiya: µ/σ yangilanishi, kategoriya vaznlari qayta o‘rganilishi",
+            "Risk skori, inflyatsiya va daromad taxminlari yangilanadi",
+            "AI foydalanuvchi xulqi o‘zgarishi bilan prognozlarni moslashtiradi",
+          ],
+        },
+      ],
+      stack: [
+        {
+          category: "Frontend",
+          items: [
+            "Next.js",
+            "Tailwind CSS",
+            "Recharts",
+            "Lucide React",
+            "TypeScript",
+            "Mobile First",
+          ],
+        },
+        {
+          category: "Backend",
+          items: [
+            "Python (Flask, SQLAlchemy)",
+            "PostgreSQL",
+            "REST API",
+            "Mathematical computations",
+          ],
+        },
+        {
+          category: "AI Layer",
+          items: [
+            "LangChain",
+            "OpenAI GPT-5.1/4.1/4o",
+            "Custom Rules and Instructions",
+            "Machine Learning",
+          ],
+        },
+        {
+          category: "Hosting",
+          items: [
+            "Vercel (Frontend)",
+            "Supabase (Infrastructure)",
+            "Render (Backend)",
+            "LangSmith (AI)",
+          ],
+        },
+      ],
+    },
+    team: {
+      title: "Bizning Jamoa",
+      subtitle:
+        "Bir necha kun ichida MVP ni ishlab chiqarishga qodir Lead va Senior darajadagi muhandislar va menejerlar",
+      teamLead: "Team Lead",
+      members: [
+        {
+          name: "Azizullo Temirov",
+          role: "Product Manager",
+          desc: "Product strategy, UX thinking, financial behavior, business analysis",
+        },
+        {
+          name: "Khasan Rashidov",
+          role: "Senior Fullstack Engineer",
+          desc: "Python, Next.js, PostgreSQL, AI Integrations, .NET, Angular, Systems Design, Cloud Computing",
+        },
+        {
+          name: "Khusan Rashidov",
+          role: "Senior Backend Engineer",
+          desc: "Python, ML/AI, .NET, Azure/AWS, PostgreSQL",
+        },
+        {
+          name: "Burxonjon Solihjonov",
+          role: "Senior Frontend Engineer",
+          desc: "Next.js, Vue.js, UI/UX, Data Visualization",
+        },
+        {
+          name: "Bakhtiyorjon Bokhodirov",
+          role: "Lead AI Systems Engineer",
+          desc: "Python, LangChain, ML, AI analytics, AI Integrations",
+        },
+      ],
+    },
+    footer: {
+      copyright: "© 2025 Moliyachi. Agrobank AI500 Hackathon uchun yaratilgan.",
+      githubLink: "GitHub Repozitoriyamizni Ko'ring",
+    },
+  },
+  ru: {
+    hero: {
+      badge: "Powered with Artificial Intelligence",
+      title: "Moliyachi",
+      subtitle:
+        "Ваш персональный финансовый ассистент на основе AI внутри Agrobank Mobile",
+      viewDemo: "Посмотреть демо",
+      learnMore: "Узнать больше",
+      demoTooltip: "Разработка в процессе",
+    },
+    problemSolution: {
+      problemTitle: "Проблема",
+      problemDesc:
+        "Значительная часть клиентов Agrobank живёт от зарплаты до зарплаты, испытывая стресс и неопределённость каждый месяц",
+      problems: [
+        "Агрессивные траты сразу после получения зарплаты",
+        "Финансовый стресс и неопределённость в середине месяца",
+        "Отсутствие прозрачности в поведении расходов",
+        "Недостаток персонализированных рекомендаций по бюджету",
+        "Текущие банковские приложения дают транзакции, а не интеллект",
+        "Пользователям нужен способ понимать своё финансовое поведение — не просто видеть баланс",
+      ],
+      solutionBadge: "Решение",
+      meet: "Представляем",
+      solutionTitle: "Moliyachi",
+      solutionDesc:
+        "Умный финансовый ассистент, встроенный в AgrobankMobile, который превращает его из транзакционного инструмента в финансового партнёра",
+      solutions: [
+        {
+          title: "AI Spending Insights",
+          desc: "Короткие и практичные объяснения того, куда уходят ваши деньги",
+        },
+        {
+          title: "Smart Monthly Planning",
+          desc: "Предупреждения при слишком быстрых тратах и прогнозы баланса",
+        },
+        {
+          title: "Financial Health Score",
+          desc: "Один простой показатель (0–100), отражающий вашу финансовую стабильность",
+        },
+        {
+          title: "Goal Planning",
+          desc: "AI рассчитывает сроки достижения целей и предлагает улучшения",
+        },
+        {
+          title: "Personalized Recommendations",
+          desc: "На основе ваших привычек, доходов, расходов и целей",
+        },
+        {
+          title: "Agrobank Product Matching",
+          desc: "AI подбирает Микрозаймы, Депозиты, Накопления и Рассрочки",
+        },
+      ],
+    },
+    whyUs: {
+      title: "Почему именно мы?",
+      subtitle:
+        "Мы создаём не просто функции — мы создаём интеллектуальный финансовый слой для Agrobank",
+      reasons: [
+        {
+          title: "Мы работаем невероятно быстро",
+          desc: "Все участники — инженеры уровня Lead и Senior, способные собрать MVP за несколько дней",
+        },
+        {
+          title: "Мы понимаем проблему",
+          desc: "Большинство из нас также живут на зарплатном цикле и лично испытывают эти трудности",
+        },
+        {
+          title: "Сильная техническая база",
+          desc: "Мы покрываем ML/AI, Backend, финтех-логику и современный UI/UX",
+        },
+      ],
+    },
+    roadmap: {
+      badge: "Roadmap",
+      title: "План разработки",
+      phases: [
+        {
+          date: "26–30 ноября",
+          title: "Этап 1: Demo Website",
+          items: [
+            "Landing сайт",
+            "Проблема & Решение",
+            "Архитектурное планирование",
+            "Начальные AI insights",
+          ],
+        },
+        {
+          date: "1–5 декабря",
+          title: "Functional MVP Shell",
+          items: [
+            "База Next.js frontend",
+            "Визуальный дашборд",
+            "Mock-профиль",
+            "Frontend–Backend pipeline",
+          ],
+        },
+        {
+          date: "5–10 декабря",
+          title: "Основной функционал MVP",
+          items: [
+            "AI recommendation engine",
+            "Goal calculator",
+            "Financial Health Score",
+            "Salary-cycle warning",
+          ],
+        },
+        {
+          date: "10–13 декабря",
+          title: "Полировка и подача",
+          items: [
+            "Supabase интеграция",
+            "LangChain pipeline",
+            "Финальная UI-полировка",
+            "Деплой (Vercel/Render)",
+          ],
+        },
+      ],
+    },
+    methodology: {
+      title: "Как мы планируем решить задачу",
+      subtitle:
+        "Мы строим тонкий интеллектуальный AI-слой поверх финансовой инфраструктуры Agrobank",
+      stepsTitle: "Ключевые этапы реализации",
+      techStackTitle: "Tech Stack",
+      steps: [
+        {
+          title: "User Financial Profile Ingestion & Normalization",
+          details: [
+            "Сбор структурированных данных: зарплата, возраст, семья, профессия, финансовые цели, валюта",
+            "Извлечение динамических данных: источники доходов, история расходов, регулярные платежи, кредиты, активы, обязательства",
+            "Нормализация и хранение в защищённой БД (PII-safe)",
+            "Постоянное обновление профиля с помощью транзакционных потоков + AI-документ-парсинга (например, зарплатных ведомостей)",
+          ],
+        },
+        {
+          title: "Transaction Categorization & Behavioral Modeling",
+          details: [
+            "Гибридный движок: rule-based keywords для точной категоризации",
+            "AI classifier (GPT или fine-tuned модель) для неоднозначных транзакций",
+            "Отслеживание месячной волатильности по категориям (µ, σ)",
+            "Построение поведенческих моделей: циклы расходов, зарплатный цикл, всплески в выходные, сезонность",
+            "Выявление аномалий: резкие перерасходы, крупные разовые траты, новые регулярные списания",
+          ],
+        },
+        {
+          title: "Financial Analytics Dashboard",
+          details: [
+            "Построен на Next.js + Tailwind + charts (bar, pie, trend lines)",
+            "Показывает: Распределение по категориям, сравнение по месяцам, базовые vs необязательные расходы",
+            "Индекс стабильности доходов и Cashflow heatmap",
+            'AI автоматически выделяет необычные тренды (например, "Dining Out +32% vs last month").',
+          ],
+        },
+        {
+          title: "AI Insight Engine (Core Intelligence Layer)",
+          details: [
+            "Работает на GPT-5/4.1/4o + LangChain",
+            "Формирует: Spending insights, объяснения трендов, микро-советы (1–2 коротких и практичных рекомендации)",
+            'Предиктивные предупреждения (например, "Баланс может опуститься ниже безопасного уровня через 9 дней").',
+            "Использует скрытое chain-of-thought + детерминированные guardrails для стабильности",
+          ],
+        },
+        {
+          title: "Salary-Cycle & Cashflow Predictor",
+          details: [
+            "Прогнозирует, когда пользователь останется без денег, используя: скорость трат, предстоящие платежи, волатильность по категориям",
+            'Формирует: "Дней до нуля", доверительный интервал (улучшенный AI).',
+            "Рекомендации (например: сократить X% необязательных расходов → +5 дней запаса)",
+          ],
+        },
+        {
+          title: "Advanced Goal Timeline Calculator",
+          details: [
+            "Заменяет старую формулу полноценным финансовым моделированием",
+            "Реальные накопления = доход – расходы – рассрочки – налоги – волатильность",
+            "Monte Carlo симуляция (2k–10k прогонов) для реалистичных сценариев",
+            "Выдаёт: детерминированные сроки, перцентили (10/50/90), вероятность успеха",
+          ],
+        },
+        {
+          title: "Financial Health Score (Composite Index)",
+          details: [
+            "Факторы: стабильность накоплений, постоянство доходов, волатильность расходов, долговая нагрузка, резерв безопасности",
+            "AI-оценка рисков",
+            'Счёт пересчитывается ежемесячно с понятными объяснениями (например, "Ваш показатель улучшился благодаря снижению волатильности в Utilities").',
+          ],
+        },
+        {
+          title: "Agrobank Product Recommendation Engine",
+          details: [
+            "Использует AI reasoning + финансовые правила для подбора продуктов",
+            "Депозиты при избытке средств, кредиты при риске нехватки ликвидности",
+            "Рассрочки для крупных будущих платежей, инвестиции в зависимости от вашего риска",
+            'Персональные объяснения (например, "Этот депозит ускорит достижение цели на 2 месяца благодаря большей доходности").',
+          ],
+        },
+        {
+          title: "Predictive Scenario & Simulation Engine",
+          details: [
+            'Пользователь может тестировать сценарии: "А если я увеличу сбережения на 10%?", "Если инфляция вырастет до 7%?", "Если взять кредит 5,000?"',
+            "Движок пересчитывает всю модель с новыми параметрами с помощью быстрой Monte Carlo",
+          ],
+        },
+        {
+          title: "Adaptive Learning & Continuous Model Updating",
+          details: [
+            "Ежемесячная перекалибровка: обновление µ/σ, перерасчёт весов категорий",
+            "Актуализация риска, обновление инфляционных и доходностных предположений",
+            "AI адаптирует прогнозы по мере изменения поведения пользователя",
+          ],
+        },
+      ],
+      stack: [
+        {
+          category: "Frontend",
+          items: [
+            "Next.js",
+            "Tailwind CSS",
+            "Recharts",
+            "Lucide React",
+            "TypeScript",
+            "Mobile First",
+          ],
+        },
+        {
+          category: "Backend",
+          items: [
+            "Python (Flask, SQLAlchemy)",
+            "PostgreSQL",
+            "REST API",
+            "Mathematical computations",
+          ],
+        },
+        {
+          category: "AI Layer",
+          items: [
+            "LangChain",
+            "OpenAI GPT-5.1/4.1/4o",
+            "Custom Rules and Instructions",
+            "Machine Learning",
+          ],
+        },
+        {
+          category: "Hosting",
+          items: [
+            "Vercel (Frontend)",
+            "Supabase (Infrastructure)",
+            "Render (Backend)",
+            "LangSmith (AI)",
+          ],
+        },
+      ],
+    },
+    team: {
+      title: "Наша Команда",
+      subtitle:
+        "Инженеры и менеджеры уровня Lead и Senior, способные выпустить MVP за несколько дней",
+      teamLead: "Team Lead",
+      members: [
+        {
+          name: "Azizullo Temirov",
+          role: "Product Manager",
+          desc: "Product strategy, UX thinking, financial behavior, business analysis",
+        },
+        {
+          name: "Khasan Rashidov",
+          role: "Senior Fullstack Engineer",
+          desc: "Python, Next.js, PostgreSQL, AI Integrations, .NET, Angular, Systems Design, Cloud Computing",
+        },
+        {
+          name: "Khusan Rashidov",
+          role: "Senior Backend Engineer",
+          desc: "Python, ML/AI, .NET, Azure/AWS, PostgreSQL",
+        },
+        {
+          name: "Burxonjon Solihjonov",
+          role: "Senior Frontend Engineer",
+          desc: "Next.js, Vue.js, UI/UX, Data Visualization",
+        },
+        {
+          name: "Bakhtiyorjon Bokhodirov",
+          role: "Lead AI Systems Engineer",
+          desc: "Python, LangChain, ML, AI analytics, AI Integrations",
+        },
+      ],
+    },
+    footer: {
+      copyright: "© 2025 Moliyachi. Создано для Agrobank AI500 Hackathon.",
+      githubLink: "Посмотреть наш GitHub Репозиторий",
+    },
+  },
 };
