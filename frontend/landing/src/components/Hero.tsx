@@ -19,7 +19,7 @@ export default function Hero() {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 >
                     <span className="inline-block py-1 px-3 rounded-full bg-emerald-50 text-emerald-600 text-sm font-medium mb-6 border border-emerald-100">
-                        Powered by Artificial Intelligence
+                        Powered with Artificial Intelligence
                     </span>
                     <h1 className="text-6xl md:text-8xl font-bold font-display tracking-tight mb-6 bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
                         Moliyachi
