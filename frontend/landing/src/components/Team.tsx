@@ -73,8 +73,8 @@ export default function Team() {
                             onMouseEnter={() => setHoveredIndex(index)}
                             onMouseLeave={() => setHoveredIndex(null)}
                             className={`bg-gray-50 rounded-2xl p-6 border border-gray-100 transition-all duration-300 group ${hoveredIndex !== null && hoveredIndex !== index
-                                ? "opacity-40 scale-95 grayscale"
-                                : "hover:border-emerald-200 hover:shadow-lg hover:-translate-y-1"
+                                ? "opacity-40 grayscale"
+                                : "hover:border-emerald-200"
                                 }`}
                         >
                             <div className="flex items-center gap-4 mb-4">
