@@ -348,7 +348,7 @@ export const translations: Record<Language, Translations> = {
         {
           name: "Burxonjon Solihjonov",
           role: "Senior Frontend Engineer",
-          desc: "Next.js, Vue.js, UI/UX, Data Visualization",
+          desc: "Next.js, Vue.js, Angular, Nest.js UI/UX, Data Visualization",
         },
         {
           name: "Bakhtiyorjon Bokhodirov",
@@ -640,7 +640,7 @@ export const translations: Record<Language, Translations> = {
         {
           name: "Burxonjon Solihjonov",
           role: "Senior Frontend Engineer",
-          desc: "Next.js, Vue.js, UI/UX, Data Visualization",
+          desc: "Next.js, Vue.js, Angular, Nest.js UI/UX, Data Visualization",
         },
         {
           name: "Bakhtiyorjon Bokhodirov",
@@ -932,7 +932,7 @@ export const translations: Record<Language, Translations> = {
         {
           name: "Burxonjon Solihjonov",
           role: "Senior Frontend Engineer",
-          desc: "Next.js, Vue.js, UI/UX, Data Visualization",
+          desc: "Next.js, Vue.js, Angular, Nest.js UI/UX, Data Visualization",
         },
         {
           name: "Bakhtiyorjon Bokhodirov",
