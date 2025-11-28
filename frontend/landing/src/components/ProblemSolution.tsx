@@ -76,7 +76,7 @@ export default function ProblemSolution() {
                         <div className="mb-8">
                             <span className="text-emerald-600 font-semibold tracking-wide uppercase text-sm">The Solution</span>
                             <h2 className="text-4xl font-bold font-display text-gray-900 mt-2 mb-4">
-                                Meet <span className="text-emerald-600">Moliyachi AI</span>
+                                Meet <span className="text-emerald-600">Moliyachi</span>
                             </h2>
                             <p className="text-gray-600 text-lg">
                                 A smart financial assistant fully embedded into AgrobankMobile that transforms it from a transaction tool into a financial partner.

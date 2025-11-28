@@ -16,7 +16,7 @@ export default function Home() {
       <Team />
 
       <footer className="py-8 text-center text-gray-500 text-sm bg-gray-50 border-t border-gray-100">
-        <p>© 2025 Moliyachi AI. Built for Agrobank AI500 Hackathon.</p>
+        <p>© 2025 Moliyachi. Built for Agrobank AI500 Hackathon.</p>
       </footer>
     </main>
   );
