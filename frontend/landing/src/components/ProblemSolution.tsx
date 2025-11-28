@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { AlertCircle, CheckCircle2, TrendingUp, Brain, ShieldCheck, Clock } from "lucide-react";
+import { AlertCircle, TrendingUp, Brain, ShieldCheck, Clock, Sparkles, Landmark } from "lucide-react";
 
 export default function ProblemSolution() {
     const problems = [
@@ -9,6 +9,8 @@ export default function ProblemSolution() {
         "Mid-month financial stress & uncertainty",
         "No visibility into spending behavior",
         "Lack of personalized budgeting guidance",
+        "Current banking apps provide transactions, not intelligence",
+        "Users need a way to understand their financial behavior—not just view their balance"
     ];
 
     const solutions = [
@@ -31,6 +33,16 @@ export default function ProblemSolution() {
             icon: Clock,
             title: "Goal Planning",
             desc: "AI calculates timelines and suggests improvements.",
+        },
+        {
+            icon: Sparkles,
+            title: "Personalized Recommendations",
+            desc: "Based on spending patterns, habits, income, and goals.",
+        },
+        {
+            icon: Landmark,
+            title: "Agrobank Product Matching",
+            desc: "AI suggests Microloans, Deposits, Savings, and Installment options.",
         },
     ];
 
@@ -58,7 +70,7 @@ export default function ProblemSolution() {
                             <ul className="space-y-4">
                                 {problems.map((item, index) => (
                                     <li key={index} className="flex items-start gap-3 text-gray-700">
-                                        <span className="mt-1 w-2 h-2 rounded-full bg-red-400 flex-shrink-0" />
+                                        <span className="mt-[9px] w-2 h-2 rounded-full bg-red-400 flex-shrink-0" />
                                         {item}
                                     </li>
                                 ))}
@@ -78,7 +90,7 @@ export default function ProblemSolution() {
                             <h2 className="text-4xl font-bold font-display text-gray-900 mt-2 mb-4">
                                 Meet <span className="text-emerald-600">Moliyachi</span>
                             </h2>
-                            <p className="text-gray-600 text-lg">
+                            <p className="text-gray-600 text-lg leading-relaxed">
                                 A smart financial assistant fully embedded into AgrobankMobile that transforms it from a transaction tool into a financial partner.
                             </p>
                         </div>
@@ -86,11 +98,13 @@ export default function ProblemSolution() {
                         <div className="grid sm:grid-cols-2 gap-4">
                             {solutions.map((item, index) => (
                                 <div key={index} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                                    <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600 w-fit mb-4">
-                                        <item.icon size={20} />
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600 w-fit mb-2">
+                                            <item.icon size={20} />
+                                        </div>
+                                        <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
                                     </div>
-                                    <h3 className="font-bold text-gray-900 mb-2">{item.title}</h3>
-                                    <p className="text-sm text-gray-500">{item.desc}</p>
+                                    <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                                 </div>
                             ))}
                         </div>
