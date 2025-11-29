@@ -47,6 +47,7 @@ export interface Translations {
     steps: Array<{
       title: string;
       details: string[];
+      futurePlan?: boolean;
     }>;
     stack: Array<{
       category: string;
@@ -200,9 +201,8 @@ export const translations: Record<Language, Translations> = {
           title: "User Financial Profile Ingestion & Normalization",
           details: [
             "Collect structured data: salary, age, family size, occupation, financial goals, currency preferences",
-            "Extract dynamic data: income streams, spending history, recurring payments, loans, assets, liabilities",
+            "Extract static data: income streams, spending history, recurring payments, loans, assets, liabilities (NOTE: For hackathon purposes static mock data close to real life data is used)",
             "Normalize & store in secure DB (PII-safe)",
-            "Build continuous profile updates using transaction streams + AI-based document parsing (e.g., salary slips)",
           ],
         },
         {
@@ -210,7 +210,7 @@ export const translations: Record<Language, Translations> = {
           details: [
             "Hybrid engine: Rule-based keyword detection for high-precision categories",
             "AI classifier (GPT or finetuned model) for ambiguous transactions",
-            "Track monthly volatility per category (µ, σ)",
+            "Track monthly volatility per category",
             "Build behavioral signatures: spending cycles, salary cycles, weekend spikes, seasonality",
             "Detect anomalies: sudden overspending, large one-offs, emerging recurring charges",
           ],
@@ -220,14 +220,16 @@ export const translations: Record<Language, Translations> = {
           details: [
             "Built with Next.js + Tailwind + charts (bar, pie, trend lines)",
             "Shows: Category breakdown, Month-over-month trends, Essential vs discretionary spend",
-            "Income stability index & Cashflow heatmap",
             'AI auto-highlights unusual trends (e.g., "Dining Out +32% vs last month")',
           ],
         },
         {
           title: "AI Insight Engine (Core Intelligence Layer)",
           details: [
-            "Powered by GPT-5/4.1/4o + LangChain",
+            "Powered by GPT-5.1/4.1/4o + LangChain",
+            "Model-agnostic architecture: supports any LLM provider",
+            "Can use open-source LLMs or fine-tuned models running on-premises for complete data privacy",
+            "Zero user data sent to external services when using on-premises deployment",
             "Generates: Spending insights, Trend explanations, Micro-advice (short, actionable 1–2 sentence tips)",
             'Predictive alerts (e.g., "Balance may fall below safe threshold in 9 days").',
             "Uses chain-of-thought hidden reasoning + deterministic guardrails for consistency",
@@ -244,7 +246,7 @@ export const translations: Record<Language, Translations> = {
         {
           title: "Advanced Goal Timeline Calculator",
           details: [
-            "Replaces the old formula with full financial modeling",
+            "Mathematical computations",
             "Real contributions = income – spending – installments – taxes – volatility buffer",
             "Monte Carlo simulation (2k–10k runs) for realistic scenarios",
             "Outputs: Deterministic months to target, Monte Carlo percentiles (10th, 50th, 90th), Success probability",
@@ -281,6 +283,7 @@ export const translations: Record<Language, Translations> = {
             "Adjust risk score, Update inflation & return assumptions",
             "AI automatically adjusts predictions as user behavior changes",
           ],
+          futurePlan: true,
         },
       ],
       stack: [
@@ -492,9 +495,8 @@ export const translations: Record<Language, Translations> = {
           title: "User Financial Profile Ingestion & Normalization",
           details: [
             "Strukturaviy ma’lumotlar yig‘ish: oylik, yosh, oila hajmi, kasb, moliyaviy maqsadlar, valyuta",
-            "Dinamik ma’lumotlar chiqarish: daromad oqimlari, xarajatlar tarixi, takroriy to‘lovlar, kreditlar, aktivlar, majburiyatlar",
+            "Statik ma’lumotlar chiqarish: daromad oqimlari, xarajatlar tarixi, takroriy to‘lovlar, kreditlar, aktivlar, majburiyatlar (NOTE: For hackathon purposes static mock data close to real life data is used)",
             "Ma’lumotlarni normalizatsiya qilish va himoyalangan DB’da saqlash (PII-safe)",
-            "Profilni tranzaksiya oqimlari + AI hujjat parsing yordamida doimiy yangilab borish",
           ],
         },
         {
@@ -502,7 +504,7 @@ export const translations: Record<Language, Translations> = {
           details: [
             "Gibrid dvijok: rule-based keyword detection yuqori aniqlik uchun",
             "AI classifier (GPT yoki finetuned model) noaniq tranzaksiyalar uchun",
-            "Har oy bo‘yicha kategoriya volatilligi (µ, σ) kuzatuvi",
+            "Har oy bo'yicha kategoriya o'zgaruvchanligi kuzatuvi",
             "Xulq-atvor imzolari: xarajat tsikllari, oylik tsikli, hafta oxiri spike’lari, mavsumiylik",
             "Anomaliyalar aniqlash: keskin ortiqcha sarflanish, katta bir martalik xarajatlar, yangi takroriy to‘lovlar",
           ],
@@ -512,23 +514,25 @@ export const translations: Record<Language, Translations> = {
           details: [
             "Next.js + Tailwind + charts (bar, pie, trend lines) yordamida yaratilgan",
             "Ko‘rsatadi: Kategoriya bo‘yicha taqsimot, oylik dinamika, zaruriy vs ixtiyoriy xarajatlar",
-            "Daromad barqarorligi indeksi va Cashflow heatmap",
             'AI noodatiy trendlarni avtomatik ta’kidlaydi (masalan, "Dining Out +32% last month").',
           ],
         },
         {
           title: "AI Insight Engine (Core Intelligence Layer)",
           details: [
-            "GPT-5/4.1/4o + LangChain asosida ishlaydi",
+            "GPT-5.1/4.1/4o + LangChain asosida ishlaydi",
+            "Model-agnostik arxitektura: istalgan LLM provayderini qo'llab-quvvatlaydi",
+            "To'liq ma'lumotlar maxfiyligi uchun on-premises ichki serverda ochiq kodli LLM yoki sozlangan modellardan foydalanish mumkin",
+            "On-premises joylashtirish ishlatilganda foydalanuvchi ma'lumotlari tashqi servisga yuborilmaydi",
             "Yaratadi: Spending insights, trend sharhlari, 1–2 jumlalik amaliy micro-advice",
             'Predictive ogohlantirishlar (masalan, "Balans 9 kun ichida xavfsiz chegaradan pastga tushishi mumkin").',
-            "Barqarorlik uchun chain-of-thought yashirin reasoningi + deterministik guardrails",
+            "Barqarorlik uchun yashirin ketma-ket fikrlash + deterministik cheklovlar",
           ],
         },
         {
           title: "Salary-Cycle & Cashflow Predictor",
           details: [
-            "Foydalanuvchi qachon puldan chiqib qolishini bashorat qiladi: xarajat tezligi, kelayotgan to‘lovlar, kategoriya volatilligi asosida",
+            "Foydalanuvchi mablag'ining qachon tugashini prognoz qiladi: o'tmishdagi xarajat tezligi, yaqinlashib kelayotgan to'lovlar va kategoriya bo'yicha o'zgaruvchanlik asosida",
             '"Days until zero", AI kuchaytirilgan ishonch intervalini beradi.',
             "Tavsiya etilgan choralar (ixtiyoriy xarajatlarni X%ga qisqartirish → +5 kun zaxira)",
           ],
@@ -536,8 +540,8 @@ export const translations: Record<Language, Translations> = {
         {
           title: "Advanced Goal Timeline Calculator",
           details: [
-            "Eskirgan formulani to‘liq moliyaviy model bilan almashtiradi",
-            "Haqiqiy jamg‘arma = daromad – xarajatlar – bo‘lib to‘lash – soliqlar – volatillik buferi",
+            "Matematik hisoblashlar",
+            "Haqiqiy jamg'arma = daromad – xarajatlar – bo'lib to'lash – soliqlar – o'zgaruvchanlik buferi",
             "Monte Carlo (2k–10k runs) orqali realistik ssenariylar",
             "Natija: aniq muddatlar, percentiles (10th/50th/90th), muvaffaqiyat ehtimoli",
           ],
@@ -545,9 +549,9 @@ export const translations: Record<Language, Translations> = {
         {
           title: "Financial Health Score (Composite Index)",
           details: [
-            "Faktorlar: jamg‘arma barqarorligi, daromad doimiyligi, xarajat volatilligi, qarz nisbati, favqulodda zaxira",
+            "Faktorlar: jamg'arma barqarorligi, daromad doimiyligi, xarajat o'zgaruvchanligi, qarz nisbati, favqulodda zaxira",
             "AI risk bahosi",
-            'Har oy qayta hisoblanadi va tushunarli sharhlar beriladi (masalan, "Utilities bo‘yicha volatillik kamaygani uchun ball oshdi").',
+            'Har oy qayta hisoblanadi va tushunarli sharhlar beriladi (masalan, "Utilities bo\'yicha o\'zgaruvchanlik kamaygani uchun ball oshdi").',
           ],
         },
         {
@@ -569,10 +573,11 @@ export const translations: Record<Language, Translations> = {
         {
           title: "Adaptive Learning & Continuous Model Updating",
           details: [
-            "Oylik rekalibratsiya: µ/σ yangilanishi, kategoriya vaznlari qayta o‘rganilishi",
-            "Risk skori, inflyatsiya va daromad taxminlari yangilanadi",
-            "AI foydalanuvchi xulqi o‘zgarishi bilan prognozlarni moslashtiradi",
+            "Oylik profil qayta kalibratsiyasi: Xarajat µ/σ yangilash, kategoriya og'irliklarini qayta o'rganish",
+            "Risk ballini sozlash, inflyatsiya va daromad taxminlarini yangilash",
+            "AI foydalanuvchi xatti-harakati o'zgarganda bashoratlarni avtomatik ravishda sozlaydi",
           ],
+          futurePlan: true,
         },
       ],
       stack: [
@@ -784,9 +789,8 @@ export const translations: Record<Language, Translations> = {
           title: "User Financial Profile Ingestion & Normalization",
           details: [
             "Сбор структурированных данных: зарплата, возраст, семья, профессия, финансовые цели, валюта",
-            "Извлечение динамических данных: источники доходов, история расходов, регулярные платежи, кредиты, активы, обязательства",
+            "Извлечение статических данных: источники доходов, история расходов, регулярные платежи, кредиты, активы, обязательства (NOTE: For hackathon purposes static mock data close to real life data is used)",
             "Нормализация и хранение в защищённой БД (PII-safe)",
-            "Постоянное обновление профиля с помощью транзакционных потоков + AI-документ-парсинга (например, зарплатных ведомостей)",
           ],
         },
         {
@@ -794,7 +798,7 @@ export const translations: Record<Language, Translations> = {
           details: [
             "Гибридный движок: rule-based keywords для точной категоризации",
             "AI classifier (GPT или fine-tuned модель) для неоднозначных транзакций",
-            "Отслеживание месячной волатильности по категориям (µ, σ)",
+            "Отслеживание месячной волатильности по категориям",
             "Построение поведенческих моделей: циклы расходов, зарплатный цикл, всплески в выходные, сезонность",
             "Выявление аномалий: резкие перерасходы, крупные разовые траты, новые регулярные списания",
           ],
@@ -804,17 +808,19 @@ export const translations: Record<Language, Translations> = {
           details: [
             "Построен на Next.js + Tailwind + charts (bar, pie, trend lines)",
             "Показывает: Распределение по категориям, сравнение по месяцам, базовые vs необязательные расходы",
-            "Индекс стабильности доходов и Cashflow heatmap",
             'AI автоматически выделяет необычные тренды (например, "Dining Out +32% vs last month").',
           ],
         },
         {
           title: "AI Insight Engine (Core Intelligence Layer)",
           details: [
-            "Работает на GPT-5/4.1/4o + LangChain",
+            "Работает на GPT-5.1/4.1/4o + LangChain",
+            "Модель-агностичная архитектура: поддерживает любого LLM-провайдера",
+            "Можно использовать открытые LLM или fine-tuned модели на локальном сервере для полной конфиденциальности данных",
+            "Нулевая передача пользовательских данных внешним сервисам при on-premises развертывании",
             "Формирует: Spending insights, объяснения трендов, микро-советы (1–2 коротких и практичных рекомендации)",
             'Предиктивные предупреждения (например, "Баланс может опуститься ниже безопасного уровня через 9 дней").',
-            "Использует скрытое chain-of-thought + детерминированные guardrails для стабильности",
+            "Использует скрытое цепочное рассуждение + детерминированные ограничители для стабильности",
           ],
         },
         {
@@ -828,7 +834,7 @@ export const translations: Record<Language, Translations> = {
         {
           title: "Advanced Goal Timeline Calculator",
           details: [
-            "Заменяет старую формулу полноценным финансовым моделированием",
+            "Математические вычисления",
             "Реальные накопления = доход – расходы – рассрочки – налоги – волатильность",
             "Monte Carlo симуляция (2k–10k прогонов) для реалистичных сценариев",
             "Выдаёт: детерминированные сроки, перцентили (10/50/90), вероятность успеха",
@@ -861,10 +867,11 @@ export const translations: Record<Language, Translations> = {
         {
           title: "Adaptive Learning & Continuous Model Updating",
           details: [
-            "Ежемесячная перекалибровка: обновление µ/σ, перерасчёт весов категорий",
-            "Актуализация риска, обновление инфляционных и доходностных предположений",
-            "AI адаптирует прогнозы по мере изменения поведения пользователя",
+            "Ежемесячная перекалибровка профиля: обновление расходов µ/σ, переобучение весов категорий",
+            "Корректировка балла риска, обновление предположений по инфляции и доходности",
+            "AI автоматически корректирует прогнозы по мере изменения поведения пользователя",
           ],
+          futurePlan: true,
         },
       ],
       stack: [
