@@ -79,7 +79,7 @@ export const translations: Record<Language, Translations> = {
         "Your AI-powered personal finance assistant inside Agrobank Mobile",
       viewDemo: "View Demo",
       learnMore: "Learn More",
-      demoTooltip: "Development in progress",
+      demoTooltip: "Development in progress. For now it is just UI template",
     },
     problemSolution: {
       problemTitle: "The Problem",
@@ -156,6 +156,10 @@ export const translations: Record<Language, Translations> = {
             "Problem & Solution",
             "Architecture planning",
             "Initial AI insights",
+            "Everything written from scratch",
+            "Frontend development of demo MVP started",
+            "Currently has UI template, development in progress",
+            "Basic CI/CD, environment setup, base deployments",
           ],
         },
         {
@@ -373,7 +377,7 @@ export const translations: Record<Language, Translations> = {
         "Agrobank Mobile ichidagi AI asosidagi shaxsiy moliyaviy yordamchingiz",
       viewDemo: "Demo ko‘rish",
       learnMore: "Batafsil",
-      demoTooltip: "Dasturlash jarayonida",
+      demoTooltip: "Ishlab chiqilmoqda. Hozircha faqat UI shablon",
     },
     problemSolution: {
       problemTitle: "Muammo",
@@ -443,13 +447,17 @@ export const translations: Record<Language, Translations> = {
       title: "Rivojlanish rejasi",
       phases: [
         {
-          date: "26–30 noyabr",
-          title: "1-bosqich: Demo Website",
+          date: "26-30 Noyabr",
+          title: "1-Bosqich: Demo Veb-sayt",
           items: [
-            "Landing website",
-            "Muammo & Yechim",
+            "Landing veb-sayt",
+            "Muammo va Yechim",
             "Arxitektura rejalashtirish",
-            "Dastlabki AI insights",
+            "Dastlabki AI tahlillari",
+            "Hamma narsa noldan yozildi",
+            "Demo MVP frontend ishlab chiqish boshlandi",
+            "Hozirda UI shablon mavjud, ishlab chiqish davom etmoqda",
+            "Asosiy CI/CD, muhit sozlash, bazaviy joylashtirish",
           ],
         },
         {
@@ -575,7 +583,7 @@ export const translations: Record<Language, Translations> = {
           details: [
             "Oylik profil qayta kalibratsiyasi: Xarajat µ/σ yangilash, kategoriya og'irliklarini qayta o'rganish",
             "Risk ballini sozlash, inflyatsiya va daromad taxminlarini yangilash",
-            "AI foydalanuvchi xatti-harakati o'zgarganda bashoratlarni avtomatik ravishda sozlaydi",
+            "AI avtomatik ravishda bashoratlarni foydalanuvchi xatti-harakati o'zgarganda sozlaydi",
           ],
           futurePlan: true,
         },
@@ -667,7 +675,7 @@ export const translations: Record<Language, Translations> = {
         "Ваш персональный финансовый ассистент на основе AI внутри Agrobank Mobile",
       viewDemo: "Посмотреть демо",
       learnMore: "Узнать больше",
-      demoTooltip: "Разработка в процессе",
+      demoTooltip: "В разработке. Пока это только UI шаблон",
     },
     problemSolution: {
       problemTitle: "Проблема",
@@ -737,13 +745,17 @@ export const translations: Record<Language, Translations> = {
       title: "План разработки",
       phases: [
         {
-          date: "26–30 ноября",
-          title: "Этап 1: Demo Website",
+          date: "26-30 Ноября",
+          title: "Этап 1: Демо Сайт",
           items: [
-            "Landing сайт",
-            "Проблема & Решение",
-            "Архитектурное планирование",
-            "Начальные AI insights",
+            "Лендинг сайт",
+            "Проблема и Решение",
+            "Планирование архитектуры",
+            "Начальные AI инсайты",
+            "Всё написано с нуля",
+            "Начата фронтенд-разработка демо MVP",
+            "Сейчас есть UI шаблон, разработка продолжается",
+            "Базовый CI/CD, настройка окружений, начальные деплойменты",
           ],
         },
         {
