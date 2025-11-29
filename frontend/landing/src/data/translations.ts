@@ -316,6 +316,7 @@ export const translations: Record<Language, Translations> = {
           items: [
             "LangChain",
             "OpenAI GPT-5.1/4.1/4o",
+            "Open-source LLM models for on-premise deployment",
             "Custom Rules and Instructions",
             "Machine Learning",
           ],
@@ -614,6 +615,7 @@ export const translations: Record<Language, Translations> = {
           items: [
             "LangChain",
             "OpenAI GPT-5.1/4.1/4o",
+            "Open-source LLM models for on-premise deployment",
             "Custom Rules and Instructions",
             "Machine Learning",
           ],
@@ -912,6 +914,7 @@ export const translations: Record<Language, Translations> = {
           items: [
             "LangChain",
             "OpenAI GPT-5.1/4.1/4o",
+            "Open-source LLM models for on-premise deployment",
             "Custom Rules and Instructions",
             "Machine Learning",
           ],
