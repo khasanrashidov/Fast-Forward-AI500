@@ -9,6 +9,9 @@ export interface Translations {
     learnMore: string;
     demoTooltip: string;
   };
+  nav: {
+    demo: string;
+  };
   problemSolution: {
     problemTitle: string;
     problemDesc: string;
@@ -80,6 +83,9 @@ export const translations: Record<Language, Translations> = {
       viewDemo: "View Demo",
       learnMore: "Learn More",
       demoTooltip: "Development in progress. For now it is just UI template",
+    },
+    nav: {
+      demo: "Demo",
     },
     problemSolution: {
       problemTitle: "The Problem",
@@ -380,6 +386,9 @@ export const translations: Record<Language, Translations> = {
       learnMore: "Batafsil",
       demoTooltip: "Ishlab chiqilmoqda. Hozircha faqat UI shablon",
     },
+    nav: {
+      demo: "Demo",
+    },
     problemSolution: {
       problemTitle: "Muammo",
       problemDesc:
@@ -678,6 +687,9 @@ export const translations: Record<Language, Translations> = {
       viewDemo: "Посмотреть демо",
       learnMore: "Узнать больше",
       demoTooltip: "В разработке. Пока это только UI шаблон",
+    },
+    nav: {
+      demo: "Демо",
     },
     problemSolution: {
       problemTitle: "Проблема",
