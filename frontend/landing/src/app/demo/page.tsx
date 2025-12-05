@@ -8,8 +8,8 @@ export default function DemoPage() {
   return (
     <main className="min-h-screen bg-gray-50 pt-24 pb-12">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto space-y-12">
-          {/* 1. Demo Recording */}
+        <div className="max-w-6xl mx-auto space-y-12">
+          {/* Demo Recording */}
           <section className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
             <h2 className="text-2xl font-bold font-display text-gray-900 mb-6">Demo Recording</h2>
             <div className="aspect-video bg-gray-100 rounded-2xl flex items-center justify-center border-2 border-dashed border-gray-200">
@@ -17,59 +17,109 @@ export default function DemoPage() {
             </div>
           </section>
 
-          {/* 2. Description */}
-          <section className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-            <h2 className="text-2xl font-bold font-display text-gray-900 mb-6">
-              Project Description
-            </h2>
+          {/* About + Try App - Side by Side */}
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Project Description - Left */}
+            <section className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 h-fit">
+              <h2 className="text-2xl font-bold font-display text-gray-900 mb-6">
+                About Moliyachi
+              </h2>
 
-            <div className="space-y-6">
-              <div>
-                <h3 className="font-bold text-gray-900 mb-2">What is being shown</h3>
-                <p className="text-gray-600">Placeholder for description of the demo content.</p>
-              </div>
-
-              <div>
-                <h3 className="font-bold text-gray-900 mb-2">Problem & Solution</h3>
-                <p className="text-gray-600">
-                  Placeholder for how this relates to the problem and solution.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-bold text-gray-900 mb-2">Tech Stack & AI</h3>
-                <p className="text-gray-600">
-                  Placeholder for stack, technologies, and AI solutions used.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-bold text-gray-900 mb-2">Roadmap Stage</h3>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
-                    MVP
-                  </span>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-2">What is Moliyachi?</h3>
+                  <p className="text-gray-600">
+                    An AI-powered personal finance assistant that lives inside Agrobank Mobile. It
+                    transforms your banking app into an intelligent financial companion.
+                  </p>
                 </div>
-                <p className="text-gray-600">Next steps placeholder.</p>
-              </div>
-            </div>
-          </section>
 
-          {/* 3. Live Access */}
-          <section className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-            <h2 className="text-2xl font-bold font-display text-gray-900 mb-6">Live Access</h2>
-            <p className="text-gray-600 mb-4">
-              Try out the working application. No authorization required for testing.
-            </p>
-            <a
-              href="https://moliyachi-web.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors"
-            >
-              Open Live App
-            </a>
-          </section>
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-2">Key Features</h3>
+                  <ul className="text-gray-600 space-y-1">
+                    <li>• AI spending insights & categorization</li>
+                    <li>• Financial health score (0-100)</li>
+                    <li>• Smart monthly planning</li>
+                    <li>• Goal tracking with AI predictions</li>
+                    <li>• Personalized recommendations</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-2">Tech Stack</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {['Next.js', 'Python', 'FastAPI', 'OpenAI', 'PostgreSQL', 'Tailwind'].map(
+                      (tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                        >
+                          {tech}
+                        </span>
+                      )
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-2">Current Stage</h3>
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
+                      MVP
+                    </span>
+                    <span className="text-gray-600 text-sm">AI500 Hackathon Submission</span>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-bold text-gray-900 mb-2">Live Access</h3>
+                  <p className="text-gray-600 mb-3">
+                    Try out the working application. No authorization required for testing.
+                  </p>
+                  <a
+                    href="https://moliyachi-web.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center px-6 py-3 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors text-sm"
+                  >
+                    Open Live App
+                  </a>
+                </div>
+              </div>
+            </section>
+
+            {/* Mobile App Preview - Right */}
+            <section className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <h2 className="text-xl font-bold font-display text-gray-900">Try the App</h2>
+                  <p className="text-gray-500 text-sm">Interactive preview</p>
+                </div>
+                <a
+                  href="https://moliyachi-web.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-600 hover:text-emerald-700 font-medium text-sm"
+                >
+                  Open fullscreen →
+                </a>
+              </div>
+
+              {/* App iframe - clean container */}
+              <div
+                className="flex-1 rounded-2xl overflow-hidden border border-gray-200 bg-white"
+                style={{ minHeight: '600px' }}
+                data-lenis-prevent
+              >
+                <iframe
+                  src="https://moliyachi-web.vercel.app/"
+                  className="w-full h-full border-0"
+                  title="Moliyachi Mobile App"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                />
+              </div>
+            </section>
+          </div>
         </div>
       </div>
     </main>
