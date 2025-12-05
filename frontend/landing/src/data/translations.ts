@@ -11,6 +11,25 @@ export interface Translations {
   nav: {
     demo: string;
   };
+  demo: {
+    title: string;
+    videoPlaceholder: string;
+    aboutTitle: string;
+    whatIsTitle: string;
+    whatIsDesc: string;
+    featuresTitle: string;
+    features: string[];
+    techStackTitle: string;
+    currentStageTitle: string;
+    currentStage: string;
+    hackathonSubmission: string;
+    tryAppTitle: string;
+    tryAppSubtitle: string;
+    openFullscreen: string;
+    liveAccessTitle: string;
+    liveAccessDesc: string;
+    openLiveApp: string;
+  };
   problemSolution: {
     problemTitle: string;
     problemDesc: string;
@@ -83,6 +102,32 @@ export const translations: Record<Language, Translations> = {
     },
     nav: {
       demo: 'Demo',
+    },
+    demo: {
+      title: 'Demo Recording',
+      videoPlaceholder: 'Video Placeholder (1-5 mins)',
+      aboutTitle: 'About Moliyachi',
+      whatIsTitle: 'What is Moliyachi?',
+      whatIsDesc:
+        'An AI-powered personal finance assistant that lives inside Agrobank Mobile. It transforms your banking app into an intelligent financial companion.',
+      featuresTitle: 'Key Features',
+      features: [
+        'AI spending insights & categorization',
+        'Financial health score (0-100)',
+        'Agrobank product recommendations',
+        'Goal tracking with AI predictions',
+        'Personalized recommendations',
+      ],
+      techStackTitle: 'Tech Stack',
+      currentStageTitle: 'Current Stage',
+      currentStage: 'MVP',
+      hackathonSubmission: 'AI500 Hackathon Submission',
+      tryAppTitle: 'Try the App',
+      tryAppSubtitle: 'Interactive preview',
+      openFullscreen: 'Open fullscreen →',
+      liveAccessTitle: 'Live Access',
+      liveAccessDesc: 'Try out the working application. No authorization required for testing.',
+      openLiveApp: 'Open Live App',
     },
     problemSolution: {
       problemTitle: 'The Problem',
@@ -384,6 +429,33 @@ export const translations: Record<Language, Translations> = {
     nav: {
       demo: 'Demo',
     },
+    demo: {
+      title: 'Demo Yozuvi',
+      videoPlaceholder: "Video O'rni (1-5 daqiqa)",
+      aboutTitle: 'Moliyachi haqida',
+      whatIsTitle: 'Moliyachi nima?',
+      whatIsDesc:
+        'Agrobank Mobile ichida joylashgan AI asosidagi shaxsiy moliyaviy yordamchi. U bank ilovangizni aqlli moliyaviy hamrohga aylantiradi.',
+      featuresTitle: 'Asosiy Imkoniyatlar',
+      features: [
+        'AI xarajatlar tahlili va toifalash',
+        "Moliyaviy sog'lik balli (0-100)",
+        'Agrobank mahsulotlari tavsiyalari',
+        'AI bashoratlari bilan maqsadlarni kuzatish',
+        'Shaxsiy tavsiyalar',
+      ],
+      techStackTitle: 'Texnologiyalar',
+      currentStageTitle: 'Hozirgi Bosqich',
+      currentStage: 'MVP',
+      hackathonSubmission: 'AI500 Xakaton Loyihasi',
+      tryAppTitle: "Ilovani Sinab Ko'ring",
+      tryAppSubtitle: "Interaktiv ko'rinish",
+      openFullscreen: "To'liq ekran →",
+      liveAccessTitle: 'Jonli Kirish',
+      liveAccessDesc:
+        "Ishlayotgan ilovani sinab ko'ring. Sinov uchun ro'yxatdan o'tish shart emas.",
+      openLiveApp: 'Jonli Ilovani Ochish',
+    },
     problemSolution: {
       problemTitle: 'Muammo',
       problemDesc:
@@ -682,6 +754,32 @@ export const translations: Record<Language, Translations> = {
     },
     nav: {
       demo: 'Демо',
+    },
+    demo: {
+      title: 'Демо Запись',
+      videoPlaceholder: 'Место для видео (1-5 мин)',
+      aboutTitle: 'О Moliyachi',
+      whatIsTitle: 'Что такое Moliyachi?',
+      whatIsDesc:
+        'Персональный финансовый помощник на базе ИИ внутри Agrobank Mobile. Он превращает ваше банковское приложение в умного финансового партнера.',
+      featuresTitle: 'Ключевые Особенности',
+      features: [
+        'ИИ анализ расходов и категоризация',
+        'Оценка финансового здоровья (0-100)',
+        'Рекомендации продуктов Агробанка',
+        'Отслеживание целей с ИИ прогнозами',
+        'Персональные рекомендации',
+      ],
+      techStackTitle: 'Стек Технологий',
+      currentStageTitle: 'Текущая Стадия',
+      currentStage: 'MVP',
+      hackathonSubmission: 'Проект AI500 Хакатон',
+      tryAppTitle: 'Попробовать Приложение',
+      tryAppSubtitle: 'Интерактивный предпросмотр',
+      openFullscreen: 'Открыть на весь экран →',
+      liveAccessTitle: 'Живой Доступ',
+      liveAccessDesc: 'Попробуйте рабочее приложение. Авторизация для тестирования не требуется.',
+      openLiveApp: 'Открыть Приложение',
     },
     problemSolution: {
       problemTitle: 'Проблема',

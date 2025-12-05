@@ -11,9 +11,13 @@ export default function DemoPage() {
         <div className="max-w-6xl mx-auto space-y-12">
           {/* Demo Recording */}
           <section className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-            <h2 className="text-2xl font-bold font-display text-gray-900 mb-6">Demo Recording</h2>
+            <h2 className="text-2xl font-bold font-display text-gray-900 mb-6">
+              {t.demo?.title || 'Demo Recording'}
+            </h2>
             <div className="aspect-video bg-gray-100 rounded-2xl flex items-center justify-center border-2 border-dashed border-gray-200">
-              <p className="text-gray-500">Video Placeholder (1-5 mins)</p>
+              <p className="text-gray-500">
+                {t.demo?.videoPlaceholder || 'Video Placeholder (1-5 mins)'}
+              </p>
             </div>
           </section>
 
@@ -22,59 +26,71 @@ export default function DemoPage() {
             {/* Project Description - Left */}
             <section className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 h-fit">
               <h2 className="text-2xl font-bold font-display text-gray-900 mb-6">
-                About Moliyachi
+                {t.demo?.aboutTitle || 'About Moliyachi'}
               </h2>
 
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-bold text-gray-900 mb-2">What is Moliyachi?</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">
+                    {t.demo?.whatIsTitle || 'What is Moliyachi?'}
+                  </h3>
                   <p className="text-gray-600">
-                    An AI-powered personal finance assistant that lives inside Agrobank Mobile. It
-                    transforms your banking app into an intelligent financial companion.
+                    {t.demo?.whatIsDesc ||
+                      'An AI-powered personal finance assistant that lives inside Agrobank Mobile. It transforms your banking app into an intelligent financial companion.'}
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-gray-900 mb-2">Key Features</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">
+                    {t.demo?.featuresTitle || 'Key Features'}
+                  </h3>
                   <ul className="text-gray-600 space-y-1">
-                    <li>• AI spending insights & categorization</li>
-                    <li>• Financial health score (0-100)</li>
-                    <li>• Smart monthly planning</li>
-                    <li>• Goal tracking with AI predictions</li>
-                    <li>• Personalized recommendations</li>
+                    {(t.demo?.features || []).map((feature: string, index: number) => (
+                      <li key={index}>• {feature}</li>
+                    ))}
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-gray-900 mb-2">Tech Stack</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">
+                    {t.demo?.techStackTitle || 'Tech Stack'}
+                  </h3>
                   <div className="flex flex-wrap gap-2">
-                    {['Next.js', 'Python', 'FastAPI', 'OpenAI', 'PostgreSQL', 'Tailwind'].map(
-                      (tech) => (
+                    {t.methodology.stack
+                      .flatMap((s) => s.items)
+                      .slice(0, 12) // Limit to 12 items to prevent overcrowding
+                      .map((tech) => (
                         <span
                           key={tech}
                           className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
                         >
                           {tech}
                         </span>
-                      )
-                    )}
+                      ))}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-gray-900 mb-2">Current Stage</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">
+                    {t.demo?.currentStageTitle || 'Current Stage'}
+                  </h3>
                   <div className="flex items-center gap-2">
                     <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
-                      MVP
+                      {t.demo?.currentStage || 'MVP'}
                     </span>
-                    <span className="text-gray-600 text-sm">AI500 Hackathon Submission</span>
+                    <span className="text-gray-600 text-sm">
+                      {t.demo?.hackathonSubmission || 'AI500 Hackathon Submission'}
+                    </span>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-gray-900 mb-2">Live Access</h3>
+                  <h3 className="font-bold text-gray-900 mb-2">
+                    {t.demo?.liveAccessTitle || 'Live Access'}
+                  </h3>
                   <p className="text-gray-600 mb-3">
-                    Try out the working application. No authorization required for testing.
+                    {t.demo?.liveAccessDesc ||
+                      'Try out the working application. No authorization required for testing.'}
                   </p>
                   <a
                     href="https://moliyachi-web.vercel.app/"
@@ -82,7 +98,7 @@ export default function DemoPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center px-6 py-3 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors text-sm"
                   >
-                    Open Live App
+                    {t.demo?.openLiveApp || 'Open Live App'}
                   </a>
                 </div>
               </div>
@@ -92,8 +108,12 @@ export default function DemoPage() {
             <section className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-xl font-bold font-display text-gray-900">Try the App</h2>
-                  <p className="text-gray-500 text-sm">Interactive preview</p>
+                  <h2 className="text-xl font-bold font-display text-gray-900">
+                    {t.demo?.tryAppTitle || 'Try the App'}
+                  </h2>
+                  <p className="text-gray-500 text-sm">
+                    {t.demo?.tryAppSubtitle || 'Interactive preview'}
+                  </p>
                 </div>
                 <a
                   href="https://moliyachi-web.vercel.app/"
@@ -101,7 +121,7 @@ export default function DemoPage() {
                   rel="noopener noreferrer"
                   className="text-emerald-600 hover:text-emerald-700 font-medium text-sm"
                 >
-                  Open fullscreen →
+                  {t.demo?.openFullscreen || 'Open fullscreen →'}
                 </a>
               </div>
 
