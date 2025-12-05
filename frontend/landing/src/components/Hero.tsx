@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import Link from 'next/link';
 
 export default function Hero() {
   const { t } = useLanguage();
@@ -33,15 +34,13 @@ export default function Hero() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <div className="relative group">
-              <a
-                href="https://moliyachi-web.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/demo"
                 className="px-8 py-4 bg-emerald-600 text-white rounded-2xl font-semibold hover:bg-emerald-700 transition-all flex items-center gap-2 shadow-lg shadow-emerald-200 hover:shadow-emerald-300 transform hover:-translate-y-1"
               >
                 {t.hero.viewDemo}
                 <ArrowRight size={20} />
-              </a>
+              </Link>
               <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                 {t.hero.demoTooltip}
                 <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />

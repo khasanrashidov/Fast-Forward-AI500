@@ -6,6 +6,7 @@ import { LanguageProvider } from '@/contexts/LanguageContext';
 import CursorFollower from '@/components/CursorFollower';
 import { ReactLenis } from 'lenis/react';
 import Header from '@/components/Header';
+import ChatWidget from '@/components/ChatWidget';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -45,6 +46,7 @@ export default function RootLayout({
             <CursorFollower />
             <Header />
             {children}
+            <ChatWidget />
           </ReactLenis>
         </LanguageProvider>
       </body>

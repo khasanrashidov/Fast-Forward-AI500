@@ -1,8 +1,6 @@
 'use client';
 
 import { useLanguage } from '@/contexts/LanguageContext';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
 
 export default function DemoPage() {
   const { t } = useLanguage();
@@ -10,14 +8,6 @@ export default function DemoPage() {
   return (
     <main className="min-h-screen bg-gray-50 pt-24 pb-12">
       <div className="container mx-auto px-4">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors mb-8"
-        >
-          <ArrowLeft size={20} />
-          Back to Home
-        </Link>
-
         <div className="max-w-4xl mx-auto space-y-12">
           {/* 1. Demo Recording */}
           <section className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
