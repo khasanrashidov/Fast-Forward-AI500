@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
-import { Home, CreditCard, Target, Lightbulb, LayoutDashboard, ChevronLeft, ChevronRight } from "lucide-react";
+import { Home, CreditCard, Target, Lightbulb, LayoutDashboard, ChevronLeft, ChevronRight, Settings, Wallet } from "lucide-react";
 
 interface SidebarProps {
     isCollapsed: boolean;
@@ -17,8 +16,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
         { icon: Home, label: "Dashboard", href: "/" },
         { icon: CreditCard, label: "Transactions", href: "/transactions" },
         { icon: Target, label: "Goals", href: "/goals" },
-        { icon: Lightbulb, label: "AI Insights", href: "/ai-insights" },
-        { icon: LayoutDashboard, label: "Showcase", href: "/showcase" },
+        { icon: Lightbulb, label: "Insights", href: "/insights" },
     ];
 
     return (
@@ -27,11 +25,11 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
                 }`}
         >
             <div className="p-6 flex items-center gap-3">
-                <div className="relative w-8 h-8 flex-shrink-0">
-                    <Image src="/logo.png" alt="Moliyachi Logo" fill className="object-contain" />
+                <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-blue-600 shadow-lg shadow-blue-600/20">
+                    <Wallet className="w-5 h-5 text-white" strokeWidth={2.5} />
                 </div>
                 {!isCollapsed && (
-                    <span className="font-outfit font-bold text-xl text-emerald-600 whitespace-nowrap">
+                    <span className="font-outfit font-bold text-xl text-blue-600 whitespace-nowrap">
                         Moliyachi
                     </span>
                 )}
@@ -45,21 +43,28 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
                             key={item.href}
                             href={item.href}
                             className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group ${isActive
-                                ? "bg-emerald-50 text-emerald-600 shadow-sm"
-                                : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                                ? "bg-zinc-100 text-zinc-900 shadow-sm dark:bg-zinc-800 dark:text-zinc-50"
+                                : "text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-50"
                                 }`}
                         >
-                            <item.icon size={20} className={isActive ? "text-emerald-600 ml-[2px]" : "text-gray-400 group-hover:text-gray-600 ml-[2px]"} />
+                            <item.icon size={20} className={isActive ? "text-zinc-900 dark:text-zinc-50 ml-[2px]" : "text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 ml-[2px]"} />
                             {!isCollapsed && <span className="font-medium">{item.label}</span>}
                         </Link>
                     );
                 })}
             </nav>
 
-            <div className="p-4 border-t border-gray-100">
+            <div className="p-4 border-t border-zinc-100 dark:border-zinc-800">
+                <Link
+                    href="/onboarding"
+                    className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-50`}
+                >
+                    <Settings size={20} className="text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 ml-[2px]" />
+                    {!isCollapsed && <span className="font-medium">Onboarding</span>}
+                </Link>
                 <button
                     onClick={() => setIsCollapsed(!isCollapsed)}
-                    className={`w-full flex items-center p-2 rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors ${isCollapsed ? 'justify-center' : 'justify-between'}`}
+                    className={`mt-2 w-full flex items-center p-2 rounded-xl text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 transition-colors ${isCollapsed ? 'justify-center' : 'justify-between'} dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-50`}
                 >
                     {!isCollapsed && <span className="font-medium ml-2">Collapse</span>}
                     {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}

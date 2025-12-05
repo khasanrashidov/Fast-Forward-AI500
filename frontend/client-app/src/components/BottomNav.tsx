@@ -5,11 +5,10 @@ import { usePathname } from "next/navigation";
 import { LayoutDashboard, ArrowRightLeft, Target, Sparkles, Store } from "lucide-react";
 
 const navItems = [
-    { name: "Main", href: "/", icon: LayoutDashboard },
+    { name: "Home", href: "/", icon: LayoutDashboard },
     { name: "Transactions", href: "/transactions", icon: ArrowRightLeft },
     { name: "Goals", href: "/goals", icon: Target },
-    { name: "AI Insights", href: "/ai-insights", icon: Sparkles },
-    { name: "Showcase", href: "/showcase", icon: Store },
+    { name: "Insights", href: "/insights", icon: Sparkles },
 ];
 
 export default function BottomNav() {
