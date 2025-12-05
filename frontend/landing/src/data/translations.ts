@@ -7,7 +7,6 @@ export interface Translations {
     subtitle: string;
     viewDemo: string;
     learnMore: string;
-    demoTooltip: string;
   };
   nav: {
     demo: string;
@@ -81,7 +80,6 @@ export const translations: Record<Language, Translations> = {
       subtitle: 'Your AI-powered personal finance assistant inside Agrobank Mobile',
       viewDemo: 'View Demo',
       learnMore: 'Learn More',
-      demoTooltip: 'Development in progress. For now it is just UI template',
     },
     nav: {
       demo: 'Demo',
@@ -382,7 +380,6 @@ export const translations: Record<Language, Translations> = {
       subtitle: 'Agrobank Mobile ichidagi AI asosidagi shaxsiy moliyaviy yordamchingiz',
       viewDemo: 'Demo ko‘rish',
       learnMore: 'Batafsil',
-      demoTooltip: 'Ishlab chiqilmoqda. Hozircha faqat UI shablon',
     },
     nav: {
       demo: 'Demo',
@@ -682,7 +679,6 @@ export const translations: Record<Language, Translations> = {
       subtitle: 'Ваш персональный финансовый ассистент на основе AI внутри Agrobank Mobile',
       viewDemo: 'Посмотреть демо',
       learnMore: 'Узнать больше',
-      demoTooltip: 'В разработке. Пока это только UI шаблон',
     },
     nav: {
       demo: 'Демо',
