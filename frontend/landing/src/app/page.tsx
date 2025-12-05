@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import Hero from "@/components/Hero";
-import ProblemSolution from "@/components/ProblemSolution";
-import Team from "@/components/Team";
-import WhyUs from "@/components/WhyUs";
-import Roadmap from "@/components/Roadmap";
-import Methodology from "@/components/Methodology";
-import { Github } from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+import Hero from '@/components/Hero';
+import ProblemSolution from '@/components/ProblemSolution';
+import Team from '@/components/Team';
+import WhyUs from '@/components/WhyUs';
+import Roadmap from '@/components/Roadmap';
+import Methodology from '@/components/Methodology';
+import { Github } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export const dynamic = 'force-dynamic';
 
