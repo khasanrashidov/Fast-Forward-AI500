@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useLanguage } from "@/contexts/LanguageContext";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { useLanguage } from '@/contexts/LanguageContext';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export default function DemoPage() {
   const { t } = useLanguage();
@@ -10,8 +10,8 @@ export default function DemoPage() {
   return (
     <main className="min-h-screen bg-gray-50 pt-24 pb-12">
       <div className="container mx-auto px-4">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="inline-flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors mb-8"
         >
           <ArrowLeft size={20} />
@@ -29,8 +29,10 @@ export default function DemoPage() {
 
           {/* 2. Description */}
           <section className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-            <h2 className="text-2xl font-bold font-display text-gray-900 mb-6">Project Description</h2>
-            
+            <h2 className="text-2xl font-bold font-display text-gray-900 mb-6">
+              Project Description
+            </h2>
+
             <div className="space-y-6">
               <div>
                 <h3 className="font-bold text-gray-900 mb-2">What is being shown</h3>
@@ -39,18 +41,24 @@ export default function DemoPage() {
 
               <div>
                 <h3 className="font-bold text-gray-900 mb-2">Problem & Solution</h3>
-                <p className="text-gray-600">Placeholder for how this relates to the problem and solution.</p>
+                <p className="text-gray-600">
+                  Placeholder for how this relates to the problem and solution.
+                </p>
               </div>
 
               <div>
                 <h3 className="font-bold text-gray-900 mb-2">Tech Stack & AI</h3>
-                <p className="text-gray-600">Placeholder for stack, technologies, and AI solutions used.</p>
+                <p className="text-gray-600">
+                  Placeholder for stack, technologies, and AI solutions used.
+                </p>
               </div>
 
               <div>
                 <h3 className="font-bold text-gray-900 mb-2">Roadmap Stage</h3>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">MVP</span>
+                  <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
+                    MVP
+                  </span>
                 </div>
                 <p className="text-gray-600">Next steps placeholder.</p>
               </div>
@@ -63,9 +71,9 @@ export default function DemoPage() {
             <p className="text-gray-600 mb-4">
               Try out the working application. No authorization required for testing.
             </p>
-            <a 
-              href="https://moliyachi-web.vercel.app/" 
-              target="_blank" 
+            <a
+              href="https://moliyachi-web.vercel.app/"
+              target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 bg-emerald-600 text-white rounded-xl font-semibold hover:bg-emerald-700 transition-colors"
             >

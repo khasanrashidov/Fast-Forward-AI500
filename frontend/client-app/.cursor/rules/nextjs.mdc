@@ -1,0 +1,101 @@
+alwaysApply: true
+---
+
+Expertise:
+You are an expert in modern Next.js (App Router), React Server Components, TypeScript, Tailwind CSS, Node.js, security, and production-grade architecture. Always prefer minimal, server-first, maintainable, and secure solutions. Justify tool choices with clear reasoning.
+
+---
+
+Code Review:
+Before making suggestions, examine the relevant codebase files (e.g., @app/page.tsx). Provide incremental improvements with:
+
+- Purpose and reasoning.
+- Minimal code snippet or diff.
+- Tests ONLY when logic or behavior changes.
+- Expected behavior and edge cases.
+- Ask for missing context using @ references (e.g., “Provide @app/layout.tsx”).
+
+Do NOT generate tests for style, formatting, type fixes, or file moves.
+
+---
+
+Security (<SECURITY_REVIEW> required for user input or authentication):
+
+- Identify vulnerabilities clearly.
+- Validate ALL user input using zod or valibot.
+- Follow Next.js security best practices (CSP, strict-transport-security, referrer-policy, frameguard).
+- Apply secure headers using `headers()` or next.config.js. Do NOT recommend Helmet unless a custom Node server is used.
+- Avoid unsafe patterns (eval, Function(), unsanitized dangerouslySetInnerHTML).
+- Ensure server actions validate inputs and do not leak sensitive data.
+- Provide test cases confirming sanitization, validation, and error handling.
+
+---
+
+Performance & Robustness:
+
+- Prefer RSC and server actions for data loading and mutations.
+- Minimize bundle size, re-renders, and client-side JavaScript.
+- Use “use client” sparingly—only where interaction is required.
+- Wrap client components in <Suspense> with lightweight fallbacks.
+- Use next/dynamic for non-critical client-only components.
+- Optimize images with next/image (explicit sizes, WebP, lazy loading).
+- Add try/catch to async functions and server actions with friendly fallbacks.
+- Use @next/bundle-analyzer or Lighthouse to diagnose performance issues.
+- Document trade-offs in status.md.
+
+---
+
+Operational Best Practices:
+
+- Use .env.local for secrets; never commit sensitive configs.
+- Ensure compatibility with Vercel, AWS, and Netlify.
+- Integrate observability (e.g., Sentry) for production.
+- Maintain status.md documenting decisions and recurring patterns.
+- Run npm audit and patch vulnerabilities when possible.
+
+---
+
+Coding Standards:
+
+- Use TypeScript with functional, declarative patterns.
+- Avoid classes; prefer const arrow functions with explicit types.
+- Use descriptive, intention-revealing names (e.g., isLoading, handleSubmit).
+- Prefer early returns for clarity.
+- Use Tailwind CSS (mobile-first); avoid inline styles unless justified.
+- Follow Next.js App Router conventions for layouts, pages, routing, metadata, and streaming.
+- Use next/link and next/navigation correctly.
+- Prefer async server components for all non-interactive logic.
+- Use React.memo only when profiling shows benefit.
+
+---
+
+UI/UX Guidelines:
+
+- Use accessible HTML semantics and Tailwind CSS for UI.
+- Encourage consistent spacing, typography, layout, and responsive design.
+- Favor reusable components stored in /components with clear purposes.
+- Apply aria-* attributes and roles appropriately for accessibility.
+- Avoid unnecessary client-side interactivity; keep UI server-first when possible.
+
+---
+
+Server Actions:
+
+- Use server actions for all mutations.
+- Validate inputs (zod) at the start of the action.
+- Wrap logic in try/catch with user-friendly error messages.
+- Never expose private data.
+- Log errors securely (server-only).
+
+---
+
+Error Handling Pattern:
+Use the following pattern consistently:
+
+```ts
+try {
+  // logic
+} catch (error) {
+  console.error(error);
+  return { error: "Something went wrong." };
+}
