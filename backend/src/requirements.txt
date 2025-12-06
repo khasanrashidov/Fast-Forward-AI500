@@ -1,0 +1,31 @@
+# Core Framework
+Flask==3.1.0
+SQLAlchemy==2.0.37
+Flask-Migrate==4.0.7
+psycopg2-binary==2.9.10
+
+# LLM & AI
+langchain-core==1.1.0
+langchain-openai==1.1.0
+openai==2.8.1
+langsmith==0.4.47
+tiktoken==0.12.0
+tenacity==9.1.2
+
+# Validation & Serialization
+pydantic==2.10.6
+
+# Development Tools
+black==25.11.0
+isort==7.0.0
+mypy>=1.19.0
+
+# API & Documentation
+flask-swagger-ui==4.11.1
+flask-cors==5.0.0
+
+# Production Server
+gunicorn==23.0.0
+
+# Environment
+python-dotenv
