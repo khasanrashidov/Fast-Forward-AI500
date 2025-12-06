@@ -18,23 +18,27 @@ const placeholders = {
     subtitle: 'Ask me anything about the project',
     placeholder: 'Type your message...',
     thinking: 'Thinking...',
+    tooltip: 'Have questions? Ask our AI',
   },
   uz: {
     title: 'Moliyachi AI',
     subtitle: 'Loyiha haqida savol bering',
     placeholder: 'Xabaringizni yozing...',
     thinking: "O'ylamoqda...",
+    tooltip: "Savollaringiz bormi? Bizning AI'dan so'rang",
   },
   ru: {
     title: 'Moliyachi AI',
     subtitle: 'Задайте вопрос о проекте',
     placeholder: 'Введите сообщение...',
     thinking: 'Думаю...',
+    tooltip: 'Есть вопросы? Задайте их нашему ИИ.',
   },
 };
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -44,6 +48,16 @@ export default function ChatWidget() {
   const chatRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
   const { language } = useLanguage();
+
+  useEffect(() => {
+    // Show tooltip after 1 second
+    const timer = setTimeout(() => setShowTooltip(true), 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) setShowTooltip(false);
+  }, [isOpen]);
 
   const t = placeholders[language] || placeholders.en;
   const sampleQuestions = knowledgeBase.sampleQuestions.slice(0, 3).map((q) => q[language] || q.en);
@@ -126,7 +140,43 @@ export default function ChatWidget() {
   return (
     <>
       {/* Floating Button */}
-      <div ref={buttonRef} className="fixed bottom-6 right-6 z-50">
+      <div ref={buttonRef} className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+        <AnimatePresence>
+          {showTooltip && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.9 }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                boxShadow: [
+                  '0 4px 6px -1px rgba(16, 185, 129, 0.1), 0 2px 4px -1px rgba(16, 185, 129, 0.06)',
+                  '0 0 15px 2px rgba(16, 185, 129, 0.4)',
+                  '0 4px 6px -1px rgba(16, 185, 129, 0.1), 0 2px 4px -1px rgba(16, 185, 129, 0.06)',
+                ],
+              }}
+              transition={{
+                boxShadow: {
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatType: 'reverse',
+                },
+                default: { duration: 0.2 },
+              }}
+              exit={{ opacity: 0, y: 10, scale: 0.9 }}
+              className="bg-white text-emerald-900 border border-emerald-100 text-sm font-semibold px-4 py-2 rounded-xl relative pointer-events-none"
+            >
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                {t.tooltip}
+              </div>
+              <div className="absolute -bottom-1 right-6 w-3 h-3 bg-white border-b border-r border-emerald-100 transform rotate-45" />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
           className="w-14 h-14 bg-emerald-600 text-white rounded-full shadow-lg hover:bg-emerald-700 transition-colors flex items-center justify-center"
