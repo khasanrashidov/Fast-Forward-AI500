@@ -8,10 +8,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SpendingCategoryRadial } from "@/components/SpendingCategoryRadial";
+import { SpendingCategoryRadial, CATEGORY_COLORS } from "@/components/SpendingCategoryRadial";
 import { getTransactions } from "@/lib/services/transactions";
 
 type StatusTone = "primary" | "warn" | "error" | "muted";
+
+const CHART_PALETTE = [
+  "#2563eb",
+  "#f97316",
+  "#22c55e",
+  "#a855f7",
+  "#ec4899",
+  "#14b8a6",
+  "#f59e0b",
+  "#e11d48",
+  "#6366f1",
+  "#0ea5e9",
+  "#84cc16",
+  "#d946ef",
+];
 
 function formatAmount(amount: number, direction?: string, currency?: string) {
   const signed = direction === "INCOMING" ? Math.abs(amount) : -Math.abs(amount);
@@ -104,76 +119,82 @@ export default async function TransactionsPage() {
           </CardContent>
         </Card>
       ) : (
-        monthOrder.map((month) => (
-          <Card key={month}>
-            <CardHeader>
-              <CardTitle>{month}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-4">
-                <div className="flex items-center justify-center">
-                  {(() => {
-                    const grouped = groups[month].reduce<Record<string, number>>((acc, t) => {
-                      acc[t.category] = (acc[t.category] ?? 0) + Math.abs(t.amount);
-                      return acc;
-                    }, {});
-                    const categories = Object.entries(grouped).map(([name, value]) => ({ name, value }));
-                    return (
-                      <SpendingCategoryRadial
-                        categories={categories}
-                        sizeClassName="w-[180px] max-w-full"
-                        centerLabel="UZS"
-                        subLabel={month}
-                        currency="UZS"
-                      />
-                    );
-                  })()}
+        monthOrder.map((month) => {
+          const grouped = groups[month].reduce<Record<string, number>>((acc, t) => {
+            acc[t.category] = (acc[t.category] ?? 0) + Math.abs(t.amount);
+            return acc;
+          }, {});
+          const categories = Object.entries(grouped).map(([name, value]) => ({ name, value }));
+          const palette = categories.map((_, idx) => CHART_PALETTE[idx % CHART_PALETTE.length]);
+          const categoryColors = categories.reduce<Record<string, string>>((acc, cat, idx) => {
+            acc[cat.name] = palette[idx % palette.length] ?? "var(--muted)";
+            return acc;
+          }, {});
+
+          return (
+            <Card key={month}>
+              <CardHeader>
+                <CardTitle>{month}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-4">
+                  <div className="flex items-center justify-center">
+                    <SpendingCategoryRadial
+                      categories={categories}
+                      colors={palette}
+                      sizeClassName="w-[180px] max-w-full"
+                      centerLabel="UZS"
+                      subLabel={month}
+                      currency="UZS"
+                    />
+                  </div>
                 </div>
-              </div>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Merchant</TableHead>
-                    <TableHead>Category</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {groups[month].map((transaction: any) => {
-                    const { tone, label } = statusStyle(transaction.status);
-                    const { formatted, signed } = formatAmount(
-                      transaction.amount,
-                      transaction.transaction_direction,
-                      transaction.currency
-                    );
-                    const displayDate = transaction.created_at || transaction.date;
-                    return (
-                      <TableRow key={transaction.id}>
-                        <TableCell>{formatDate(displayDate)}</TableCell>
-                        <TableCell className="font-medium">{transaction.merchant}</TableCell>
-                        <TableCell>
-                          <Badge className="bg-zinc-100 text-zinc-700 font-semibold">
-                            {transaction.category}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{toneBadge(tone, label)}</TableCell>
-                        <TableCell
-                          className={`text-right font-bold ${
-                            signed >= 0 ? "text-[var(--primary)]" : "text-zinc-900"
-                          }`}
-                        >
-                          {formatted}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        ))
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Merchant</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Amount</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {groups[month].map((transaction: any) => {
+                      const { tone, label } = statusStyle(transaction.status);
+                      const { formatted, signed } = formatAmount(
+                        transaction.amount,
+                        transaction.transaction_direction,
+                        transaction.currency
+                      );
+                      const displayDate = transaction.created_at || transaction.date;
+                      const color = categoryColors[transaction.category] ?? "var(--muted)";
+                      return (
+                        <TableRow key={transaction.id}>
+                          <TableCell>{formatDate(displayDate)}</TableCell>
+                          <TableCell className="font-medium">{transaction.merchant}</TableCell>
+                          <TableCell>
+                            <Badge className="font-semibold text-white" style={{ backgroundColor: color }}>
+                              {transaction.category}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{toneBadge(tone, label)}</TableCell>
+                          <TableCell
+                            className={`text-right font-bold ${
+                              signed >= 0 ? "text-[var(--primary)]" : "text-zinc-900"
+                            }`}
+                          >
+                            {formatted}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          );
+        })
       )}
     </div>
   );

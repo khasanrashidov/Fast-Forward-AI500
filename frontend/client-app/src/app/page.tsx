@@ -107,7 +107,6 @@ export default async function DashboardPage() {
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10 bg-[color-mix(in_srgb,var(--primary)_10%,transparent)] text-[var(--primary)]">
-            <AvatarImage src="/user_avatar.png" alt="User avatar" />
             <AvatarFallback>
               {user ? `${user.first_name?.[0] ?? ""}${user.last_name?.[0] ?? ""}` : "U"}
             </AvatarFallback>
