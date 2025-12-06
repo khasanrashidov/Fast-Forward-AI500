@@ -3,6 +3,7 @@ from pydantic import ValidationError
 
 from configurations.logging_config import get_logger
 from models.goal_create_model import GoalCreateModel
+from models.goal_update_model import GoalUpdateModel
 from services.core.goal_service import GoalService
 
 logger = get_logger(__name__)
@@ -81,3 +82,30 @@ def update_goal():
     logger.info(f"Updating goal for user: {model.user_id}")
     response = GoalService.update_goal(model)
     return jsonify(response.dict()), 200 if response.is_success else 500
+
+
+@goals_bp.route("/<goal_id>/timeline", methods=["GET"])
+def predict_timeline(goal_id):
+    """Predict goal timeline using Monte Carlo simulation"""
+    username = request.args.get("username")
+
+    if not username:
+        return jsonify({"is_success": False, "message": "username is required"}), 400
+
+    logger.info(f"Predicting timeline for goal {goal_id}, user: {username}")
+    response = GoalService.predict_goal_timeline(goal_id, username)
+    return jsonify(response.dict()), 200 if response.is_success else 500
+
+
+@goals_bp.route("/<goal_id>/recommendations", methods=["GET"])
+def get_product_recommendations(goal_id):
+    """Get Agrobank product recommendations for a goal"""
+    username = request.args.get("username")
+
+    if not username:
+        return jsonify({"is_success": False, "message": "username is required"}), 400
+
+    logger.info(f"Getting product recommendations for goal {goal_id}, user: {username}")
+    response = GoalService.get_product_recommendations(goal_id, username)
+    return jsonify(response.dict()), 200 if response.is_success else 500
+

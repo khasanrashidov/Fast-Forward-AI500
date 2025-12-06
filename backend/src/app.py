@@ -11,7 +11,7 @@ from controllers.cards_controller import cards_bp
 from controllers.dashboard_controller import dashboard_bp
 from controllers.docs_controller import docs_bp
 from controllers.goals_controller import goals_bp
-from controllers.recommendations_controller import recommendations_bp
+from controllers.shop_controller import shop_bp
 from controllers.transactions_controller import transactions_bp
 from controllers.users_controller import users_bp
 from entities.card import Card
@@ -40,9 +40,9 @@ app.register_blueprint(users_bp)
 app.register_blueprint(transactions_bp)
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(goals_bp)
-app.register_blueprint(recommendations_bp)
 app.register_blueprint(cards_bp)
 app.register_blueprint(docs_bp)
+app.register_blueprint(shop_bp)
 
 
 # Simple hello world endpoint.

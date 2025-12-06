@@ -1,0 +1,251 @@
+[
+    {
+        "id": "comfort-deposit",
+        "name": "Comfort Deposit",
+        "category": "Deposits",
+        "type": "Fixed-term Deposit",
+        "description": "13-month fixed UZS deposit with 21% annual rate and monthly interest payouts.",
+        "details": {
+            "interest_rate": "21% annually",
+            "term": "13 months",
+            "minimum_deposit": "500000 UZS",
+            "currency": "UZS",
+            "interest_payment": "Monthly",
+            "availability": "Online & in-branch",
+            "early_withdrawal": "Allowed with recalculation"
+        },
+        "link": "https://agrobank.uz/en/person/deposits/komfort"
+    },
+    {
+        "id": "progress-deposit",
+        "name": "Progress Deposit",
+        "category": "Deposits",
+        "type": "Fixed-term Deposit",
+        "description": "13-month UZS deposit with monthly interest and ability to top up.",
+        "details": {
+            "interest_rate": "21% annually",
+            "term": "13 months",
+            "minimum_deposit": "500000 UZS",
+            "currency": "UZS",
+            "interest_payment": "Monthly",
+            "availability": "Online & in-branch",
+            "top_up": "Allowed"
+        },
+        "link": "https://agrobank.uz/en/person/deposits/progress"
+    },
+    {
+        "id": "sandiq-deposit",
+        "name": "Sandiq Deposit",
+        "category": "Deposits",
+        "type": "Fixed-term Deposit",
+        "description": "18-month UZS deposit with monthly interest, available online with a lower minimum.",
+        "details": {
+            "interest_rate": "21% annually",
+            "term": "18 months",
+            "minimum_deposit_online": "100000 UZS",
+            "currency": "UZS",
+            "interest_payment": "Monthly",
+            "availability": "Online via Agrobank Mobile"
+        },
+        "link": "https://agrobank.uz/en/person/deposits/sandiq"
+    },
+    {
+        "id": "nihol-deposit",
+        "name": "Nihol Deposit",
+        "category": "Deposits",
+        "type": "Variable-term Deposit",
+        "description": "Variable-term deposit with different interest rates for online vs in-branch opening.",
+        "details": {
+            "interest_rate_online": "20% annually",
+            "interest_rate_branch": "19% annually",
+            "capitalization": "No",
+            "currency": "UZS",
+            "term": "Variable"
+        },
+        "link": "https://agrobank.uz/en/person/deposits/nihol"
+    },
+    {
+        "id": "foreign-currency-deposits",
+        "name": "Foreign Currency Deposits",
+        "category": "Deposits",
+        "type": "Foreign Currency Deposit",
+        "description": "USD/EUR deposits with 3–5% annual interest depending on the term.",
+        "details": {
+            "interest_rate": "3–5% annually",
+            "terms": [
+                "6 months",
+                "12 months",
+                "24 months"
+            ],
+            "currencies": [
+                "USD",
+                "EUR"
+            ],
+            "availability": "Individuals & businesses"
+        },
+        "link": "https://agrobank.uz/en/person/deposits"
+    },
+    {
+        "id": "microloan",
+        "name": "Microloan",
+        "category": "Loans",
+        "type": "Personal Loan",
+        "description": "Non-targeted personal microloan up to 100 million UZS with up to 36-month term.",
+        "details": {
+            "purpose": "Any personal need",
+            "amount_limit": "100000000 UZS",
+            "term": "Up to 36 months",
+            "collateral": "Guarantee or salary account may be required",
+            "documents": [
+                "ID",
+                "Proof of income"
+            ],
+            "disbursement": "Same day possible"
+        },
+        "link": "https://agrobank.uz/en/person/loans/microloan-self-employed"
+    },
+    {
+        "id": "education-loan",
+        "name": "Education Loan",
+        "category": "Loans",
+        "type": "Education Loan",
+        "description": "Preferential student loan covering tuition with grace period until after graduation.",
+        "details": {
+            "purpose": "University tuition",
+            "borrower": "Student or sponsor",
+            "interest_rate": "Preferential (subsidized)",
+            "term": "Education period + grace period",
+            "repayment": "Starts after graduation"
+        },
+        "link": "https://agrobank.uz/en/person/loans/edu"
+    },
+    {
+        "id": "credit-card-loan",
+        "name": "Credit Card Loan",
+        "category": "Loans",
+        "type": "Revolving Credit Line",
+        "description": "Credit card with up to 100 million UZS limit and ~27% annual rate.",
+        "details": {
+            "limit": "100000000 UZS",
+            "interest_rate": "Around 27% annually",
+            "validity": "Up to 4 years",
+            "usage": [
+                "Online",
+                "POS",
+                "ATM withdrawal"
+            ]
+        },
+        "link": "https://agrobank.uz/en/person/loans/credit-karta"
+    },
+    {
+        "id": "consumer-loan",
+        "name": "Consumer Loan",
+        "category": "Loans",
+        "type": "Consumer Loan",
+        "description": "Loan for vehicles, household goods, repairs, and other consumer needs.",
+        "details": {
+            "purpose": [
+                "Household goods",
+                "Vehicles",
+                "Renovation",
+                "Other purchases"
+            ],
+            "interest_rate": "Variable 24–28%",
+            "repayment": "Monthly installments",
+            "amount": "Based on income & collateral"
+        },
+        "link": "https://agrobank.uz/en/person/loans"
+    },
+    {
+        "id": "business-deposits",
+        "name": "Business Deposits",
+        "category": "Business",
+        "type": "Corporate Deposit",
+        "description": "Corporate deposits in UZS/USD with 18–21% interest depending on term.",
+        "details": {
+            "currencies": [
+                "UZS",
+                "USD"
+            ],
+            "interest": "18–21% in UZS",
+            "purpose": "Corporate savings",
+            "options": [
+                "Short-term liquidity deposits"
+            ]
+        },
+        "link": "https://agrobank.uz/en/business/deposits"
+    },
+    {
+        "id": "business-loans",
+        "name": "Business Loans",
+        "category": "Business",
+        "type": "Corporate Loan",
+        "description": "Loans for working capital, investment, equipment, and express financing.",
+        "details": {
+            "types": [
+                "Working capital loan",
+                "Investment loan",
+                "Express loan (up to 1 billion UZS)",
+                "Equipment financing",
+                "Auto financing"
+            ],
+            "collateral": "Business assets or property",
+            "term": "12–60 months",
+            "interest_rate": "22–26%"
+        },
+        "link": "https://agrobank.uz/en/business/loans"
+    },
+    {
+        "id": "sme-programs",
+        "name": "Agro-sector & SME Programs",
+        "category": "Business",
+        "type": "Government-backed Program",
+        "description": "Subsidized credit programs for farmers, cooperatives, and small businesses.",
+        "details": {
+            "beneficiaries": [
+                "Farmers",
+                "Entrepreneurs",
+                "Cooperatives"
+            ],
+            "benefits": "Subsidized interest and government support",
+            "availability": "Regional branches"
+        },
+        "link": "https://agrobank.uz/en/business"
+    },
+    {
+        "id": "digital-services",
+        "name": "Digital Banking",
+        "category": "Digital",
+        "type": "Online Banking Service",
+        "description": "Mobile and internet banking for deposits, transfers, loans, and card management.",
+        "details": {
+            "platforms": [
+                "iOS",
+                "Android",
+                "Web"
+            ],
+            "features": [
+                "Open deposits",
+                "Loan repayment",
+                "Transfers",
+                "Card management"
+            ],
+            "support": "+998 71 200-55-55"
+        },
+        "link": "https://agrobank.uz"
+    },
+    {
+        "id": "branch-network",
+        "name": "Branch Network",
+        "category": "Branch",
+        "type": "Bank Branches",
+        "description": "Over 170 branches across Uzbekistan with HQ in Tashkent.",
+        "details": {
+            "hq_address": "Tashkent, Amir Temur Avenue, 41",
+            "phone": "+998 71 200-55-55",
+            "email": "info@agrobank.uz",
+            "branch_count": 170
+        },
+        "link": "https://agrobank.uz/en/branches"
+    }
+]

@@ -7,6 +7,7 @@ from configurations.logging_config import get_logger
 from entities.goal import Goal
 from entities.transaction import Transaction
 from entities.user import User
+from enums.transaction_direction_enum import TransactionDirectionEnum
 from models.base_response import BaseResponse
 from services.ai_services.ai_service import AIService
 
@@ -74,23 +75,25 @@ class DashboardService:
             two_weeks_ago = week_start - timedelta(days=7)
 
             for category in current_categories.keys():
-                # Last 7 days spending.
+                # Last 7 days spending (OUTGOING only)
                 recent_week_spending = (
                     db.session.query(func.sum(Transaction.amount))
                     .filter(Transaction.user_id == user_id)
                     .filter(Transaction.category == category)
                     .filter(Transaction.date >= week_start)
+                    .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
                     .scalar()
                     or 0
                 )
 
-                # Previous 7 days spending.
+                # Previous 7 days spending (OUTGOING only)
                 previous_week_spending = (
                     db.session.query(func.sum(Transaction.amount))
                     .filter(Transaction.user_id == user_id)
                     .filter(Transaction.category == category)
                     .filter(Transaction.date >= two_weeks_ago)
                     .filter(Transaction.date < week_start)
+                    .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
                     .scalar()
                     or 0
                 )
@@ -148,49 +151,49 @@ class DashboardService:
             # Previous month end is the day before current month start.
             previous_month_end = current_month_start - timedelta(seconds=1)
 
-            # 3. Calculate current month spending.
+            # 3. Calculate current month spending (OUTGOING only).
             current_month_spending = (
                 db.session.query(func.sum(Transaction.amount))
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= current_month_start)
+                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
                 .scalar()
                 or 0
             )
 
-            # 4. Calculate current month category breakdown.
+            # 4. Calculate current month category breakdown (OUTGOING only).
             current_category_stats = (
                 db.session.query(Transaction.category, func.sum(Transaction.amount))
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= current_month_start)
+                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
                 .group_by(Transaction.category)
                 .all()
             )
-            current_category_breakdown = {
-                cat: amount for cat, amount in current_category_stats
-            }
+            current_category_breakdown = {cat: amount for cat, amount in current_category_stats if cat != "Income"}
 
-            # 5. Calculate previous month spending.
+            # 5. Calculate previous month spending (OUTGOING only).
             previous_month_spending = (
                 db.session.query(func.sum(Transaction.amount))
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= previous_month_start)
                 .filter(Transaction.date <= previous_month_end)
+                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
                 .scalar()
                 or 0
             )
 
-            # 6. Calculate previous month category breakdown.
+            # 6. Calculate previous month category breakdown (OUTGOING only).
             previous_category_stats = (
                 db.session.query(Transaction.category, func.sum(Transaction.amount))
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= previous_month_start)
                 .filter(Transaction.date <= previous_month_end)
+                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
                 .group_by(Transaction.category)
                 .all()
             )
-            previous_category_breakdown = {
-                cat: amount for cat, amount in previous_category_stats
-            }
+            previous_category_breakdown = {cat: amount for cat, amount in previous_category_stats if cat != "Income"}
 
             # 7. Calculate month-over-month change percentage.
             if previous_month_spending > 0:
@@ -291,7 +294,7 @@ class DashboardService:
                     errors=["Unauthorized access to goal."],
                 )
 
-            # Get spending data for last 30 days.
+            # Get spending data for last 30 days (OUTGOING only).
             thirty_days_ago = datetime.now() - timedelta(days=30)
 
             total_spending = (
@@ -299,6 +302,7 @@ class DashboardService:
                 .filter(
                     Transaction.user_id == str(user.id),
                     Transaction.created_at >= thirty_days_ago,
+                    Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING
                 )
                 .scalar()
                 or 0
@@ -309,31 +313,40 @@ class DashboardService:
                 .filter(
                     Transaction.user_id == str(user.id),
                     Transaction.created_at >= thirty_days_ago,
+                    Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING
                 )
                 .group_by(Transaction.category)
                 .all()
             )
 
-            categories = {cat: amount for cat, amount in category_stats}
+            categories = {cat: amount for cat, amount in category_stats if cat != "Income"}
 
             # Prepare goal data with calculations.
             remaining_amount = max(0, goal.target_amount - goal.current_amount)
             days_remaining = (
                 (goal.target_date - datetime.now()).days if goal.target_date else 0
             )
-            
+
             # Calculate progress percentage
-            progress_percent = (goal.current_amount / goal.target_amount * 100) if goal.target_amount > 0 else 0
-            
+            progress_percent = (
+                (goal.current_amount / goal.target_amount * 100)
+                if goal.target_amount > 0
+                else 0
+            )
+
             # Calculate required monthly savings
             months_remaining = max(1, days_remaining / 30) if days_remaining > 0 else 1
-            required_monthly_savings = remaining_amount / months_remaining if months_remaining > 0 else 0
-            
+            required_monthly_savings = (
+                remaining_amount / months_remaining if months_remaining > 0 else 0
+            )
+
             # Normalize 30-day spending to monthly average
             income = user.salary or 0
             monthly_spending = total_spending  # Already 30 days ≈ 1 month
-            current_monthly_savings = max(0, income - monthly_spending) if income > 0 else 0
-            
+            current_monthly_savings = (
+                max(0, income - monthly_spending) if income > 0 else 0
+            )
+
             # Calculate savings gap (positive = need more, negative = on track)
             savings_gap = required_monthly_savings - current_monthly_savings
             is_overspending = monthly_spending > income if income > 0 else False
@@ -360,9 +373,11 @@ class DashboardService:
             }
 
             # Calculate spending metrics
-            top_category = max(categories.items(), key=lambda x: x[1]) if categories else (None, 0)
+            top_category = (
+                max(categories.items(), key=lambda x: x[1]) if categories else (None, 0)
+            )
             spending_rate = (monthly_spending / income * 100) if income > 0 else 0
-            
+
             spending_data = {
                 "monthly_spending": round(monthly_spending, 0),
                 "categories": categories,

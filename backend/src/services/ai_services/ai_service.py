@@ -8,12 +8,12 @@ from langchain_openai import ChatOpenAI
 from configurations.logging_config import get_logger
 from enums.transaction_category_enum import TransactionCategoryEnum
 from services.ai_services.llm_client import LLMClient
-from services.ai_services.structured_outputs import (
-    FinancialInsights,
-    GoalBasedInsights,
-    SmartRecommendations,
-    TransactionCategorization,
-)
+from services.ai_services.structured_outputs import (FinancialInsights,
+                                                     GoalBasedInsights,
+                                                     GoalTimelinePrediction,
+                                                     SmartRecommendations,
+                                                     TransactionCategorization,
+                                                     AgrobankProductRecommendations)
 
 logger = get_logger(__name__)
 
@@ -456,19 +456,203 @@ class AIService:
             )
 
             logger.info("Successfully generated goal insights via LLM.")
-            
+
             # Build response with single insights
-            insights = [response.savings_budget_insight, response.goal_optimized_insight]
+            insights = [
+                response.savings_budget_insight,
+                response.goal_optimized_insight,
+            ]
             if response.anomaly_overspend_alert:
                 insights.append(response.anomaly_overspend_alert)
-            
+
             return {"insights": insights}
 
         except Exception as e:
             logger.error(f"LLM goal insights generation failed: {e}")
+            return {"insights": ["Unable to generate insights at this time."]}
+
+    @staticmethod
+    def predict_goal_timeline(
+        goal_data: Dict,
+        financial_data: Dict,
+        monte_carlo_results: Dict,
+        timeline_data: List[Dict],
+    ) -> Dict:
+        """Generate goal timeline prediction with Monte Carlo simulation interpretation using LLM."""
+        try:
+            logger.info("Generating goal timeline prediction via LLM.")
+
+            llm_client = _get_llm_client()
+            structured_llm = llm_client.llm.with_structured_output(
+                GoalTimelinePrediction
+            )
+
+            system_prompt = _load_prompt("goal_timeline_system.md")
+            user_prompt = _load_prompt("goal_timeline_user.md")
+
+            prompt = ChatPromptTemplate.from_messages(
+                [("system", system_prompt), ("user", user_prompt)]
+            )
+
+            # Format timeline data for prompt
+            timeline_str = "\n".join(
+                [
+                    f"Month {d['month']}: {d['amount']:,.0f} {goal_data['currency']}"
+                    for d in timeline_data[:12]  # Show first 12 months
+                ]
+            )
+
+            chain = prompt | structured_llm
+            response = chain.invoke(
+                {
+                    "goal_name": goal_data["name"],
+                    "target_amount": goal_data["target_amount"],
+                    "current_amount": goal_data["current_amount"],
+                    "remaining_amount": goal_data["remaining_amount"],
+                    "currency": goal_data["currency"],
+                    "income": financial_data["income"],
+                    "monthly_spending": financial_data["monthly_spending"],
+                    "installments": financial_data["installments"],
+                    "taxes": financial_data["taxes"],
+                    "volatility_buffer": financial_data["volatility_buffer"],
+                    "real_contribution": financial_data["real_contribution"],
+                    "simulations": monte_carlo_results["simulations"],
+                    "deterministic_months": monte_carlo_results["deterministic_months"],
+                    "p10_months": monte_carlo_results["p10"],
+                    "p50_months": monte_carlo_results["p50"],
+                    "p90_months": monte_carlo_results["p90"],
+                    "success_probability": monte_carlo_results["success_probability"],
+                    "target_date": goal_data.get("target_date", "Not set"),
+                    "months_to_target": goal_data.get("months_to_target", 0),
+                    "timeline_data": timeline_str,
+                }
+            )
+
+            logger.info("Successfully generated goal timeline prediction via LLM.")
+
             return {
-                "insights": ["Unable to generate insights at this time."]
+                "deterministic_months": response.deterministic_months,
+                "monte_carlo": {
+                    "p10": response.monte_carlo_p10,
+                    "p50": response.monte_carlo_p50,
+                    "p90": response.monte_carlo_p90,
+                },
+                "success_probability": response.success_probability,
+                "real_monthly_contribution": response.real_monthly_contribution,
+                "timeline_data": [
+                    {
+                        "month": d.month,
+                        "deterministic": d.deterministic,
+                        "p10_optimistic": d.p10_optimistic,
+                        "p50_median": d.p50_median,
+                        "p90_pessimistic": d.p90_pessimistic,
+                    }
+                    for d in response.timeline_data
+                ],
+                "interpretation": response.interpretation,
             }
+
+        except Exception as e:
+            logger.error(f"LLM goal timeline prediction failed: {e}")
+            return {
+                "deterministic_months": monte_carlo_results["deterministic_months"],
+                "monte_carlo": {
+                    "p10": monte_carlo_results["p10"],
+                    "p50": monte_carlo_results["p50"],
+                    "p90": monte_carlo_results["p90"],
+                },
+                "success_probability": monte_carlo_results["success_probability"],
+                "real_monthly_contribution": financial_data["real_contribution"],
+                "timeline_data": timeline_data,
+                "interpretation": "Timeline prediction completed. Review scenarios for planning.",
+            }
+
+    @staticmethod
+    def recommend_agrobank_products(
+        goal_data: Dict, spending_data: Dict, products: List[Dict]
+    ) -> List[Dict]:
+        """Recommend Agrobank products for a specific goal using LLM."""
+        try:
+            logger.info("Generating Agrobank product recommendations via LLM.")
+
+            llm_client = _get_llm_client()
+            structured_llm = llm_client.llm.with_structured_output(
+                AgrobankProductRecommendations
+            )
+
+            system_prompt = _load_prompt("agrobank_recommendations_system.md")
+            user_prompt = _load_prompt("agrobank_recommendations_user.md")
+
+            prompt = ChatPromptTemplate.from_messages(
+                [("system", system_prompt), ("user", user_prompt)]
+            )
+
+            # Format products list
+            products_list = "\n".join(
+                [
+                    f"- {p['id']}: {p['name']} ({p['category']}) - {p['description']}"
+                    for p in products
+                ]
+            )
+
+            # Format category breakdown
+            category_breakdown = "\n".join(
+                [
+                    f"- {category}: {amount} {goal_data['currency']}"
+                    for category, amount in spending_data.get("categories", {}).items()
+                ]
+            )
+
+            chain = prompt | structured_llm
+            response = chain.invoke(
+                {
+                    "goal_name": goal_data["name"],
+                    "target_amount": goal_data["target_amount"],
+                    "current_amount": goal_data["current_amount"],
+                    "remaining_amount": goal_data["remaining_amount"],
+                    "progress_percent": goal_data["progress_percent"],
+                    "months_remaining": goal_data["months_remaining"],
+                    "required_monthly_savings": goal_data["required_monthly_savings"],
+                    "currency": goal_data["currency"],
+                    "income": spending_data["income"],
+                    "monthly_spending": spending_data["monthly_spending"],
+                    "current_monthly_savings": spending_data["current_monthly_savings"],
+                    "savings_gap": spending_data["savings_gap"],
+                    "spending_rate": spending_data["spending_rate"],
+                    "top_category": spending_data["top_category"],
+                    "top_category_amount": spending_data["top_category_amount"],
+                    "category_breakdown": category_breakdown,
+                    "products_list": products_list,
+                }
+            )
+
+            logger.info(
+                f"Successfully generated {len(response.recommendations)} product recommendations via LLM."
+            )
+
+            # Convert to dict format with full product details
+            recommendations = []
+            for rec in response.recommendations:
+                # Find full product details
+                product = next((p for p in products if p["id"] == rec.product_id), None)
+                if product:
+                    recommendations.append(
+                        {
+                            "product_id": rec.product_id,
+                            "product_name": rec.product_name,
+                            "category": product["category"],
+                            "type": product["type"],
+                            "description": product["description"],
+                            "reason": rec.reason,
+                            "link": product["link"],
+                        }
+                    )
+
+            return recommendations
+
+        except Exception as e:
+            logger.error(f"LLM product recommendations failed: {e}")
+            return []
 
 
 def _load_prompt(filename: str) -> str:

@@ -15,7 +15,8 @@ def get_all_users():
     """Get all users"""
     logger.info("Getting all users")
 
-    pass
+    response = UserService.get_all_users()
+    return jsonify(response.dict()), 200 if response.is_success else 400
 
 
 @users_bp.route("/<string:username>", methods=["GET"])

@@ -71,3 +71,18 @@ Type checking with mypy:
 ```bash
 mypy .
 ```
+
+### Database Management
+
+Clean and reseed database with fresh test data:
+
+```bash
+# Step 1: Clean the database (removes all users, cards, transactions, and goals)
+python clean_database.py
+
+# Step 2: Seed fresh test data
+cd src
+python seed_data.py
+```
+
+**Note:** The app automatically seeds data on startup. If you just want to reseed, run both commands in sequence to ensure a clean slate.

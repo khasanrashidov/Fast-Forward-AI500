@@ -7,7 +7,8 @@ from configurations.logging_config import get_logger
 from entities.card import Card
 from entities.transaction import Transaction
 from entities.user import User
-from enums import TransactionDirectionEnum, TransactionStatusEnum, TransactionTypeEnum
+from enums import (TransactionDirectionEnum, TransactionStatusEnum,
+                   TransactionTypeEnum)
 
 logger = get_logger(__name__)
 
@@ -21,6 +22,9 @@ class TransactionSeedingService:
         logger.info("Seeding transactions...")
 
         try:
+            # Set seed for consistent randomization
+            random.seed(42)
+
             user = User.query.filter_by(username="khasanrashidov").first()
             if not user:
                 logger.warning("Main user not found. Skipping transaction seeding.")
@@ -50,7 +54,7 @@ class TransactionSeedingService:
 
             # Helper to create a transaction.
             def create_txn(
-                card, amount, merchant, category, direction, type_, date_offset_days
+                card, amount, merchant, category, direction, type_, date_offset_days, status=TransactionStatusEnum.APPROVED
             ):
                 date = datetime.utcnow() - timedelta(days=date_offset_days)
                 return Transaction(
@@ -58,7 +62,7 @@ class TransactionSeedingService:
                     external_id=f"seed_{uuid.uuid4().hex[:12]}",
                     transaction_type=type_,
                     transaction_direction=direction,
-                    status=TransactionStatus.APPROVED,
+                    status=status,
                     amount=amount,
                     currency=card.currency,
                     fee=0.0,
@@ -71,100 +75,287 @@ class TransactionSeedingService:
                     sender_info={"type": "CARD", "card_id": str(card.id)},
                     receiver_info=(
                         {"type": "MERCHANT", "merchant_name": merchant}
-                        if direction == TransactionDirection.OUTGOING
+                        if direction == TransactionDirectionEnum.OUTGOING
                         else {"type": "CARD", "card_id": str(card.id)}
                     ),
                 )
 
-            # Generate history for last 30 days.
-            for day in range(30):
-                # Daily Expenses
-                if uzcard and random.random() > 0.3:
+            # Generate history for last 90 days (3 months).
+            for day in range(90):
+                date = datetime.utcnow() - timedelta(days=day)
+                day_of_week = date.weekday()  # 0=Monday, 6=Sunday
+                is_weekend = day_of_week >= 5
+                month = date.month
+
+                # Determine transaction status (97% approved, 2% declined, 1% pending)
+                def get_status():
+                    rand = random.random()
+                    if rand < 0.97:
+                        return TransactionStatusEnum.APPROVED
+                    elif rand < 0.99:
+                        return TransactionStatusEnum.DECLINED
+                    else:
+                        return TransactionStatusEnum.PENDING
+
+                # Daily grocery shopping (2-3 times per week)
+                if uzcard:
+                    grocery_chance = 0.5 if is_weekend else 0.15
+                    if random.random() < grocery_chance:
+                        grocery_stores = ["Korzinka", "Makro", "Havas", "Baraka Market"]
+                        transactions.append(
+                            create_txn(
+                                uzcard,
+                                random.randint(50000, 120000),
+                                random.choice(grocery_stores),
+                                "Shopping",
+                                TransactionDirectionEnum.OUTGOING,
+                                TransactionTypeEnum.P2M_PAYMENT,
+                                day,
+                                get_status(),
+                            )
+                        )
+
+                # Transportation (weekdays only, most days)
+                if humo:
+                    transport_chance = 0.7 if not is_weekend else 0.1
+                    if random.random() < transport_chance:
+                        transport_services = ["Yandex Go", "Yandex Taxi", "Uzmetro"]
+                        transactions.append(
+                            create_txn(
+                                humo,
+                                random.randint(10000, 35000),
+                                random.choice(transport_services),
+                                "Transportation",
+                                TransactionDirectionEnum.OUTGOING,
+                                TransactionTypeEnum.P2M_PAYMENT,
+                                day,
+                                get_status(),
+                            )
+                        )
+
+                # Restaurant/Cafe (occasional, mostly weekends)
+                if uzcard:
+                    food_chance = 0.4 if is_weekend else 0.1
+                    if random.random() < food_chance:
+                        restaurants = ["Rayhon", "Osh Markazi", "Evos", "Meros", "Caffè Nero"]
+                        transactions.append(
+                            create_txn(
+                                uzcard,
+                                random.randint(40000, 120000),
+                                random.choice(restaurants),
+                                "Food",
+                                TransactionDirectionEnum.OUTGOING,
+                                TransactionTypeEnum.P2M_PAYMENT,
+                                day,
+                                get_status(),
+                            )
+                        )
+
+                # Weekday coffee/breakfast (reduced frequency and amount)
+                if uzcard and not is_weekend and random.random() < 0.4:
                     transactions.append(
                         create_txn(
                             uzcard,
-                            random.randint(50000, 300000),
-                            "Korzinka",
-                            "Shopping",
-                            TransactionDirection.OUTGOING,
-                            TransactionType.P2M_PAYMENT,
+                            random.randint(15000, 30000),
+                            "Caffè Nero",
+                            "Food",
+                            TransactionDirectionEnum.OUTGOING,
+                            TransactionTypeEnum.P2M_PAYMENT,
                             day,
+                            get_status(),
                         )
                     )
 
-                if humo and random.random() > 0.5:
+                # Weekend entertainment (less frequent, lower amounts)
+                if uzcard and is_weekend and random.random() < 0.15:
+                    entertainment = [
+                        ("Magic City", "Entertainment", random.randint(50000, 100000)),
+                        ("MediaPark", "Shopping", random.randint(80000, 200000)),
+                        ("Texnomart", "Shopping", random.randint(100000, 300000)),
+                    ]
+                    merchant, category, amount = random.choice(entertainment)
+                    transactions.append(
+                        create_txn(
+                            uzcard,
+                            amount,
+                            merchant,
+                            category,
+                            TransactionDirectionEnum.OUTGOING,
+                            TransactionTypeEnum.P2M_PAYMENT,
+                            day,
+                            get_status(),
+                        )
+                    )
+
+                # December special: holiday shopping (2-3 gifts only)
+                if month == 12 and day <= 25 and uzcard and random.random() < 0.1:
+                    gift_stores = ["Texnomart", "MediaPark", "Amazon"]
+                    transactions.append(
+                        create_txn(
+                            uzcard,
+                            random.randint(150000, 400000),
+                            random.choice(gift_stores),
+                            "Gifts_Donations",
+                            TransactionDirectionEnum.OUTGOING,
+                            TransactionTypeEnum.P2M_PAYMENT,
+                            day,
+                            get_status(),
+                        )
+                    )
+
+            # Monthly recurring transactions (rent, utilities, subscriptions)
+            for month_offset in range(3):  # Last 3 months
+                base_day = month_offset * 30
+
+                # Rent (1st of month) - 30% of salary
+                if uzcard:
+                    transactions.append(
+                        create_txn(
+                            uzcard,
+                            900000,
+                            "Landlord Payment",
+                            "Housing",
+                            TransactionDirectionEnum.OUTGOING,
+                            TransactionTypeEnum.P2P_TRANSFER,
+                            base_day + 1,
+                            TransactionStatusEnum.APPROVED,
+                        )
+                    )
+
+                # Utilities (5th of month) - reduced to realistic amount
+                if uzcard:
+                    transactions.append(
+                        create_txn(
+                            uzcard,
+                            random.randint(150000, 200000),
+                            "Toshkent Energy",
+                            "Utilities",
+                            TransactionDirectionEnum.OUTGOING,
+                            TransactionTypeEnum.P2M_PAYMENT,
+                            base_day + 5,
+                            TransactionStatusEnum.APPROVED,
+                        )
+                    )
+
+                # Internet/Phone (8th of month) - reduced cost
+                if humo:
+                    telecom_providers = ["Beeline", "Ucell", "UMS"]
                     transactions.append(
                         create_txn(
                             humo,
-                            random.randint(20000, 100000),
-                            "Yandex Go",
-                            "Transport",
-                            TransactionDirection.OUTGOING,
-                            TransactionType.P2M_PAYMENT,
-                            day,
+                            100000,
+                            random.choice(telecom_providers),
+                            "Utilities",
+                            TransactionDirectionEnum.OUTGOING,
+                            TransactionTypeEnum.P2M_PAYMENT,
+                            base_day + 8,
+                            TransactionStatusEnum.APPROVED,
                         )
                     )
 
-                if uzcard and random.random() > 0.7:
+                # Gym membership (10th of month) - reduced to affordable
+                if uzcard:
                     transactions.append(
                         create_txn(
                             uzcard,
-                            random.randint(100000, 500000),
-                            "Rayhon",
-                            "Food",
-                            TransactionDirection.OUTGOING,
-                            TransactionType.P2M_PAYMENT,
-                            day,
+                            200000,
+                            "World Class Gym",
+                            "Healthcare",
+                            TransactionDirectionEnum.OUTGOING,
+                            TransactionTypeEnum.P2M_PAYMENT,
+                            base_day + 10,
+                            TransactionStatusEnum.APPROVED,
                         )
                     )
 
-            # Salary (Twice a month).
+                # Monthly salary (25th of month) - 9M UZS (3x higher for better ratio)
+                # This is INCOMING money, not spending
+                if uzcard:
+                    transactions.append(
+                        create_txn(
+                            uzcard,
+                            9000000,
+                            "AgroAI Salary",
+                            "Income",
+                            TransactionDirectionEnum.INCOMING,
+                            TransactionTypeEnum.P2P_TRANSFER,
+                            base_day + 25,
+                            TransactionStatusEnum.APPROVED,
+                        )
+                    )
+
+            # Add one more salary for current month (December) since we're early in the month
+            # Salary for November 25 (most recent) - this ensures December has income
             if uzcard:
                 transactions.append(
                     create_txn(
                         uzcard,
-                        5000000,
+                        9000000,
                         "AgroAI Salary",
                         "Income",
-                        TransactionDirection.INCOMING,
-                        TransactionType.P2P_TRANSFER,
-                        5,
-                    )
-                )
-                transactions.append(
-                    create_txn(
-                        uzcard,
-                        5000000,
-                        "AgroAI Salary",
-                        "Income",
-                        TransactionDirection.INCOMING,
-                        TransactionType.P2P_TRANSFER,
-                        20,
+                        TransactionDirectionEnum.INCOMING,
+                        TransactionTypeEnum.P2P_TRANSFER,
+                        11,  # Nov 25 was 11 days ago from Dec 6
+                        TransactionStatusEnum.APPROVED,
                     )
                 )
 
-            # International (Visa).
+            # International subscriptions (Visa) - monthly recurring
             if visa:
-                transactions.append(
-                    create_txn(
-                        visa,
-                        15.0,
-                        "Netflix",
-                        "Subscriptions",
-                        TransactionDirection.OUTGOING,
-                        TransactionType.P2M_PAYMENT,
-                        2,
+                for month_offset in range(3):  # Last 3 months
+                    base_day = month_offset * 30
+
+                    # Netflix subscription (12th of month)
+                    transactions.append(
+                        create_txn(
+                            visa,
+                            15.0,
+                            "Netflix",
+                            "Entertainment",
+                            TransactionDirectionEnum.OUTGOING,
+                            TransactionTypeEnum.P2M_PAYMENT,
+                            base_day + 12,
+                            TransactionStatusEnum.APPROVED,
+                        )
                     )
-                )
+
+                    # Spotify subscription (15th of month)
+                    transactions.append(
+                        create_txn(
+                            visa,
+                            10.0,
+                            "Spotify",
+                            "Entertainment",
+                            TransactionDirectionEnum.OUTGOING,
+                            TransactionTypeEnum.P2M_PAYMENT,
+                            base_day + 15,
+                            TransactionStatusEnum.APPROVED,
+                        )
+                    )
+
+                # One-time online shopping purchases
                 transactions.append(
                     create_txn(
                         visa,
                         120.0,
                         "Amazon",
                         "Shopping",
-                        TransactionDirection.OUTGOING,
-                        TransactionType.P2M_PAYMENT,
+                        TransactionDirectionEnum.OUTGOING,
+                        TransactionTypeEnum.P2M_PAYMENT,
                         15,
+                        TransactionStatusEnum.APPROVED,
+                    )
+                )
+                transactions.append(
+                    create_txn(
+                        visa,
+                        85.0,
+                        "Amazon",
+                        "Shopping",
+                        TransactionDirectionEnum.OUTGOING,
+                        TransactionTypeEnum.P2M_PAYMENT,
+                        48,
+                        TransactionStatusEnum.APPROVED,
                     )
                 )
 

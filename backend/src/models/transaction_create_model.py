@@ -6,13 +6,8 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from enums import (
-    CardTypeEnum,
-    PartyTypeEnum,
-    TransactionDirectionEnum,
-    TransactionStatusEnum,
-    TransactionTypeEnum,
-)
+from enums import (CardTypeEnum, PartyTypeEnum, TransactionDirectionEnum,
+                   TransactionStatusEnum, TransactionTypeEnum)
 
 # Transaction type       | sender.type | receiver.type | card field refers to
 # -----------------------|-------------|---------------|--------------------------

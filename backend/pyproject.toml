@@ -35,6 +35,7 @@ dependencies = [
     "markupsafe==3.0.3",
     "mypy>=1.19.0",
     "mypy-extensions==1.1.0",
+    "numpy>=2.3.5",
     "openai==2.8.1",
     "orjson==3.11.4",
     "packaging==25.0",

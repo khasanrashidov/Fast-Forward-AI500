@@ -10,20 +10,6 @@ logger = get_logger(__name__)
 transactions_bp = Blueprint("transactions", __name__, url_prefix="/api/transactions")
 
 
-@transactions_bp.route("/import", methods=["POST"])
-def import_transactions():
-    """Import mock transactions for a user"""
-    data = request.get_json()
-    username = data.get("username")
-
-    if not username:
-        return jsonify({"is_success": False, "message": "username is required"}), 400
-
-    logger.info(f"Importing mock transactions for user: {username}")
-    response = TransactionService.load_mock_transactions(username)
-    return jsonify(response.dict()), 200 if response.is_success else 500
-
-
 @transactions_bp.route("/", methods=["GET"])
 def get_transactions():
     """Get transactions for a user"""

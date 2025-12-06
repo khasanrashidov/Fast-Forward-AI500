@@ -15,7 +15,20 @@ class UserService:
     @staticmethod
     def get_all_users() -> BaseResponse:
         """Get all users from the database"""
-        pass
+        try:
+            users = User.query.all()
+            return BaseResponse(
+                is_success=True,
+                message="Users retrieved successfully",
+                data=[user.to_dict() for user in users],
+            )
+        except Exception as e:
+            logger.error(f"Error getting all users: {str(e)}")
+            return BaseResponse(
+                is_success=False,
+                message="Failed to retrieve users",
+                errors=[str(e)],
+            )
 
     @staticmethod
     def get_user_by_id(user_id: str) -> BaseResponse:
