@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { SpendingCategoryRadial } from "@/components/SpendingCategoryRadial";
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 
 type StatusTone = "primary" | "warn" | "error" | "muted";
 
@@ -78,6 +78,10 @@ type MonthGroup = {
 export default function TransactionsClient({ monthGroups }: { monthGroups: MonthGroup[] }) {
   const [index, setIndex] = useState(0);
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState<{ key: "date" | "merchant" | "category" | "status" | "amount"; dir: "asc" | "desc" }>({
+    key: "date",
+    dir: "desc",
+  });
   const current = useMemo(() => monthGroups[index], [monthGroups, index]);
 
   if (monthGroups.length === 0) {
@@ -100,15 +104,53 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
   };
 
   const filteredRows = current.rows.filter((tx) => {
-    if (!search.trim()) return true;
-    const q = search.toLowerCase();
+    const q = (search ?? "").toLowerCase().trim();
+    if (!q) return true;
     return (
-      tx.merchant?.toLowerCase().includes(q) ||
-      tx.category?.toLowerCase().includes(q) ||
-      tx.status?.toLowerCase().includes(q) ||
+      String(tx.merchant ?? "").toLowerCase().includes(q) ||
+      String(tx.category ?? "").toLowerCase().includes(q) ||
+      String(tx.status ?? "").toLowerCase().includes(q) ||
       tx.amount.toString().includes(q)
     );
   });
+
+  const sortedRows = [...filteredRows].sort((a, b) => {
+    const dir = sort.dir === "asc" ? 1 : -1;
+    switch (sort.key) {
+      case "date": {
+        return (new Date(a.date).getTime() - new Date(b.date).getTime()) * dir;
+      }
+      case "merchant": {
+        return (a.merchant || "").localeCompare(b.merchant || "") * dir;
+      }
+      case "category": {
+        return (a.category || "").localeCompare(b.category || "") * dir;
+      }
+      case "status": {
+        return (a.status || "").localeCompare(b.status || "") * dir;
+      }
+      case "amount": {
+        return (a.amount - b.amount) * dir;
+      }
+      default:
+        return 0;
+    }
+  });
+
+  const toggleSort = (key: typeof sort.key) => {
+    setSort((prev) =>
+      prev.key === key ? { key, dir: prev.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" }
+    );
+  };
+
+  const renderSortIcon = (key: typeof sort.key) => {
+    if (sort.key !== key) return <ArrowUpDown className="h-3.5 w-3.5 text-zinc-400" />;
+    return sort.dir === "asc" ? (
+      <ArrowUp className="h-3.5 w-3.5 text-[var(--primary)]" />
+    ) : (
+      <ArrowDown className="h-3.5 w-3.5 text-[var(--primary)]" />
+    );
+  };
 
   return (
     <Card>
@@ -160,20 +202,65 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Merchant</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead>
+                <button
+                  onClick={() => toggleSort("date")}
+                  className={`flex items-center gap-1 font-medium ${
+                    sort.key === "date" ? "text-[var(--primary)]" : ""
+                  }`}
+                >
+                  Date {renderSortIcon("date")}
+                </button>
+              </TableHead>
+              <TableHead>
+                <button
+                  onClick={() => toggleSort("merchant")}
+                  className={`flex items-center gap-1 font-medium ${
+                    sort.key === "merchant" ? "text-[var(--primary)]" : ""
+                  }`}
+                >
+                  Merchant {renderSortIcon("merchant")}
+                </button>
+              </TableHead>
+              <TableHead>
+                <button
+                  onClick={() => toggleSort("category")}
+                  className={`flex items-center gap-1 font-medium ${
+                    sort.key === "category" ? "text-[var(--primary)]" : ""
+                  }`}
+                >
+                  Category {renderSortIcon("category")}
+                </button>
+              </TableHead>
+              <TableHead>
+                <button
+                  onClick={() => toggleSort("status")}
+                  className={`flex items-center gap-1 font-medium ${
+                    sort.key === "status" ? "text-[var(--primary)]" : ""
+                  }`}
+                >
+                  Status {renderSortIcon("status")}
+                </button>
+              </TableHead>
+              <TableHead className="text-right">
+                <button
+                  onClick={() => toggleSort("amount")}
+                  className={`flex w-full items-center justify-end gap-1 font-medium ${
+                    sort.key === "amount" ? "text-[var(--primary)]" : ""
+                  }`}
+                >
+                  Amount {renderSortIcon("amount")}
+                </button>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredRows.map((transaction) => {
-              const { tone, label } = statusStyle(transaction.status);
+            {sortedRows.map((transaction) => {
+              const { tone, label } = statusStyle(transaction.status ?? "");
               const { formatted, signed } = formatAmount(
                 transaction.amount,
-                transaction.direction,
-                transaction.currency
+                transaction.direction ?? undefined,
+                transaction.currency ?? undefined
               );
               return (
                 <TableRow key={transaction.id}>
