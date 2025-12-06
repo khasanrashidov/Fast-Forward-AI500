@@ -83,6 +83,8 @@ export interface Translations {
       name: string;
       role: string;
       desc: string;
+      linkedin?: string;
+      github?: string;
     }>;
   };
   footer: {
@@ -390,26 +392,36 @@ export const translations: Record<Language, Translations> = {
           name: 'Azizullo Temirov',
           role: 'Product Manager',
           desc: 'Product strategy, UX thinking, financial behavior, business analysis',
+          linkedin: 'https://www.linkedin.com/in/azizullo',
+          github: 'https://github.com/azakapro',
         },
         {
           name: 'Khasan Rashidov',
           role: 'Senior Fullstack Engineer',
           desc: 'Python, Next.js, PostgreSQL, AI Integrations, .NET, Angular, Systems Design, Cloud Computing',
+          linkedin: 'https://www.linkedin.com/in/khasanr',
+          github: 'https://github.com/khasanrashidov',
         },
         {
           name: 'Khusan Rashidov',
           role: 'Senior Backend Engineer',
           desc: 'Python, ML/AI, .NET, Azure/AWS, PostgreSQL',
+          linkedin: 'https://www.linkedin.com/in/xkhusan',
+          github: 'https://github.com/xkhusan',
         },
         {
           name: 'Burxonjon Solihjonov',
           role: 'Senior Frontend Engineer',
           desc: 'Next.js, Vue.js, Angular, Nest.js UI/UX, Data Visualization',
+          linkedin: 'https://www.linkedin.com/in/burkhonjon-solihjonov',
+          github: 'https://github.com/black-belt-engineer',
         },
         {
           name: 'Bakhtiyorjon Bokhodirov',
           role: 'Lead AI Systems Engineer',
           desc: 'Python, LangChain, ML, AI analytics, AI Integrations',
+          linkedin: 'https://www.linkedin.com/in/bakhtiyorjon-bokhodirov',
+          github: 'https://github.com/Fasttyper',
         },
       ],
     },
@@ -716,26 +728,36 @@ export const translations: Record<Language, Translations> = {
           name: 'Azizullo Temirov',
           role: 'Product Manager',
           desc: 'Product strategy, UX thinking, financial behavior, business analysis',
+          linkedin: 'https://www.linkedin.com/in/azizullo',
+          github: 'https://github.com/azakapro',
         },
         {
           name: 'Khasan Rashidov',
           role: 'Senior Fullstack Engineer',
           desc: 'Python, Next.js, PostgreSQL, AI Integrations, .NET, Angular, Systems Design, Cloud Computing',
+          linkedin: 'https://www.linkedin.com/in/khasanr',
+          github: 'https://github.com/khasanrashidov',
         },
         {
           name: 'Khusan Rashidov',
           role: 'Senior Backend Engineer',
           desc: 'Python, ML/AI, .NET, Azure/AWS, PostgreSQL',
+          linkedin: 'https://www.linkedin.com/in/xkhusan',
+          github: 'https://github.com/xkhusan',
         },
         {
           name: 'Burxonjon Solihjonov',
           role: 'Senior Frontend Engineer',
           desc: 'Next.js, Vue.js, Angular, Nest.js UI/UX, Data Visualization',
+          linkedin: 'https://www.linkedin.com/in/burkhonjon-solihjonov',
+          github: 'https://github.com/black-belt-engineer',
         },
         {
           name: 'Bakhtiyorjon Bokhodirov',
           role: 'Lead AI Systems Engineer',
           desc: 'Python, LangChain, ML, AI analytics, AI Integrations',
+          linkedin: 'https://www.linkedin.com/in/bakhtiyorjon-bokhodirov',
+          github: 'https://github.com/Fasttyper',
         },
       ],
     },
@@ -1042,26 +1064,36 @@ export const translations: Record<Language, Translations> = {
           name: 'Azizullo Temirov',
           role: 'Product Manager',
           desc: 'Product strategy, UX thinking, financial behavior, business analysis',
+          linkedin: 'https://www.linkedin.com/in/azizullo',
+          github: 'https://github.com/azakapro',
         },
         {
           name: 'Khasan Rashidov',
           role: 'Senior Fullstack Engineer',
           desc: 'Python, Next.js, PostgreSQL, AI Integrations, .NET, Angular, Systems Design, Cloud Computing',
+          linkedin: 'https://www.linkedin.com/in/khasanr',
+          github: 'https://github.com/khasanrashidov',
         },
         {
           name: 'Khusan Rashidov',
           role: 'Senior Backend Engineer',
           desc: 'Python, ML/AI, .NET, Azure/AWS, PostgreSQL',
+          linkedin: 'https://www.linkedin.com/in/xkhusan',
+          github: 'https://github.com/xkhusan',
         },
         {
           name: 'Burxonjon Solihjonov',
           role: 'Senior Frontend Engineer',
           desc: 'Next.js, Vue.js, Angular, Nest.js UI/UX, Data Visualization',
+          linkedin: 'https://www.linkedin.com/in/burkhonjon-solihjonov',
+          github: 'https://github.com/black-belt-engineer',
         },
         {
           name: 'Bakhtiyorjon Bokhodirov',
           role: 'Lead AI Systems Engineer',
           desc: 'Python, LangChain, ML, AI analytics, AI Integrations',
+          linkedin: 'https://www.linkedin.com/in/bakhtiyorjon-bokhodirov',
+          github: 'https://github.com/Fasttyper',
         },
       ],
     },

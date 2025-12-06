@@ -73,7 +73,10 @@ function buildKnowledgeBaseFromTranslations(lang: Language): {
     steps: { title: string; details: string[] }[];
     stack: { category: string; items: string[] }[];
   };
-  team: { title: string; members: { name: string; role: string; desc: string }[] };
+  team: {
+    title: string;
+    members: { name: string; role: string; desc: string; linkedin?: string; github?: string }[];
+  };
 } {
   const t: Translations = translations[lang];
 
@@ -142,7 +145,14 @@ TECHNOLOGY STACK:
 ${kb.methodology.stack.map((s) => `- ${s.category}: ${s.items.join(', ')}`).join('\n')}
 
 TEAM - ${kb.team.title}:
-${kb.team.members.map((m) => `- ${m.name} (${m.role}): ${m.desc}`).join('\n')}
+${kb.team.members
+  .map(
+    (m) =>
+      `- ${m.name} (${m.role}): ${m.desc}${
+        m.linkedin ? ` | LinkedIn: ${m.linkedin}` : ''
+      }${m.github ? ` | GitHub: ${m.github}` : ''}`
+  )
+  .join('\n')}
 
 ROADMAP - ${kb.roadmap.title}:
 ${kb.roadmap.phases.map((p) => `- ${p.date} | ${p.title}: ${p.items.slice(0, 3).join(', ')}`).join('\n')}
