@@ -24,7 +24,7 @@ export default function BottomNav() {
                         <Link
                             key={item.name}
                             href={item.href}
-                            className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${isActive ? "text-primary" : "text-gray-500 hover:text-gray-900"
+                            className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${isActive ? "text-emerald-600" : "text-gray-500 hover:text-gray-900"
                                 }`}
                         >
                             <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />

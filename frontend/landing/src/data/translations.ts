@@ -705,6 +705,7 @@ export const translations: Record<Language, Translations> = {
             'Open-source LLM models for on-premise deployment',
             'Custom Rules and Instructions',
             'Machine Learning',
+            'RAG',
           ],
         },
         {
