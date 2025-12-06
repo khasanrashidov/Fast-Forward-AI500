@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import LanguageSwitcher from './LanguageSwitcher';
-import { ExternalLink, Menu, X } from 'lucide-react';
+import { ExternalLink, Menu, X, Sparkles } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export default function Header() {
@@ -26,9 +26,13 @@ export default function Header() {
         <div className="hidden md:flex items-center gap-1">
           <Link
             href="/ask"
-            className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all"
+            className="px-3 py-2 text-sm font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-all flex items-center gap-2 group border border-emerald-100"
           >
-            Ask AI
+            <Sparkles
+              size={16}
+              className="text-emerald-500 group-hover:scale-110 transition-transform"
+            />
+            Ask our AI
           </Link>
           <Link
             href="/demo"
@@ -74,9 +78,10 @@ export default function Header() {
               <Link
                 href="/ask"
                 onClick={closeMenu}
-                className="px-4 py-3 text-base font-medium text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-xl transition-all"
+                className="px-4 py-3 text-base font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-xl transition-all flex items-center gap-2"
               >
-                Ask AI
+                <Sparkles size={18} className="text-emerald-500" />
+                Ask our AI
               </Link>
               <Link
                 href="/demo"

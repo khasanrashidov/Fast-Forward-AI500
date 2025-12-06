@@ -38,6 +38,7 @@ tsiklida yashovchilar, pul tejash, xarajatlarni kuzatish va moliyaviy maqsadlarg
     demo: 'https://moliyachi-web.vercel.app/',
     docs: 'https://fast-forward-apty.onrender.com/docs/',
     landing: 'https://moliyachi.vercel.app/',
+    github: 'https://github.com/khasanrashidov/Fast-Forward-AI500',
   },
 
   // Sample questions for chat UI (multilingual)
@@ -157,6 +158,7 @@ LINKS:
 - Demo App: ${config.links.demo}
 - API Documentation: ${config.links.docs}
 - Landing Page: ${config.links.landing}
+- GitHub Repository: ${config.links.github}
 `;
 }
 
