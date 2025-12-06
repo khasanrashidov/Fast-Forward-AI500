@@ -102,11 +102,11 @@ export default function TransactionsPage() {
                                         </Badge>
                                     </TableCell>
                                     <TableCell>
-                                        <Badge variant={transaction.status === 'Completed' ? 'secondary' : 'outline'} className={transaction.status === 'Completed' ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-100' : 'text-zinc-500'}>
+                                        <Badge variant={transaction.status === 'Completed' ? 'secondary' : 'outline'} className={transaction.status === 'Completed' ? 'bg-[color-mix(in_srgb,var(--primary)_12%,transparent)] text-[var(--primary)] hover:bg-[color-mix(in_srgb,var(--primary)_12%,transparent)]' : 'text-zinc-500'}>
                                             {transaction.status}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className={`text-right font-bold ${transaction.amount > 0 ? 'text-emerald-600' : 'text-zinc-900 dark:text-zinc-100'}`}>
+                                    <TableCell className={`text-right font-bold ${transaction.amount > 0 ? 'text-[var(--primary)]' : 'text-zinc-900 dark:text-zinc-100'}`}>
                                         {transaction.amount > 0 ? '+' : ''}{transaction.amount.toFixed(2)}
                                     </TableCell>
                                 </TableRow>

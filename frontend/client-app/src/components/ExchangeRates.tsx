@@ -15,10 +15,10 @@ export default function ExchangeRates() {
                 <div key={rate.currency} className="bg-white/70 backdrop-blur-xl border border-white/40 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center text-center">
                     <div className="flex items-center gap-2 mb-1">
                         <span className="font-bold text-gray-900">{rate.currency}</span>
-                        {rate.isUp ? <TrendingUp size={14} className="text-emerald-500" /> : <TrendingDown size={14} className="text-red-500" />}
+                        {rate.isUp ? <TrendingUp size={14} className="text-[var(--primary)]" /> : <TrendingDown size={14} className="text-red-500" />}
                     </div>
                     <p className="text-sm font-bold text-gray-900">{rate.value}</p>
-                    <p className={`text-[10px] font-medium ${rate.isUp ? "text-emerald-500" : "text-red-500"}`}>
+                    <p className={`text-[10px] font-medium ${rate.isUp ? "text-[var(--primary)]" : "text-red-500"}`}>
                         {rate.change}
                     </p>
                 </div>

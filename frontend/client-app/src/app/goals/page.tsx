@@ -9,7 +9,7 @@ const goals = [
     { id: 1, name: "New House", target: 300000, current: 45000, icon: Home, color: "text-blue-500" },
     { id: 2, name: "Dream Car", target: 50000, current: 12500, icon: Car, color: "text-red-500" },
     { id: 3, name: "Summer Vacation", target: 5000, current: 3200, icon: Plane, color: "text-yellow-500" },
-    { id: 4, name: "Emergency Fund", target: 10000, current: 8000, icon: Target, color: "text-emerald-500" },
+    { id: 4, name: "Emergency Fund", target: 10000, current: 8000, icon: Target, color: "text-[var(--primary)]" },
 ]
 
 export default function GoalsPage() {

@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, ArrowRightLeft, Target, Sparkles, Store } from "lucide-react";
+import { LayoutDashboard, ArrowRightLeft, Rocket, Sparkles, Store } from "lucide-react";
 
 const navItems = [
     { name: "Home", href: "/", icon: LayoutDashboard },
     { name: "Transactions", href: "/transactions", icon: ArrowRightLeft },
-    { name: "Goals", href: "/goals", icon: Target },
+    { name: "Goals", href: "/goals", icon: Rocket },
     { name: "Insights", href: "/insights", icon: Sparkles },
 ];
 
@@ -24,7 +24,7 @@ export default function BottomNav() {
                         <Link
                             key={item.name}
                             href={item.href}
-                            className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${isActive ? "text-emerald-600" : "text-gray-500 hover:text-gray-900"
+                            className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${isActive ? "text-[var(--primary)]" : "text-gray-500 hover:text-gray-900"
                                 }`}
                         >
                             <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />

@@ -10,15 +10,23 @@ import {
 
 type CategoryEntry = { name: string; value: number };
 
-const chartColors = [
-  "var(--chart-1)",
-  "var(--chart-2)",
-  "var(--chart-3)",
-  "var(--chart-4)",
-  "var(--chart-5)",
+// Diverse, high-contrast palette to keep each category visually distinct.
+const defaultChartColors = [
+  "#2563eb", // blue
+  "#f97316", // orange
+  "#22c55e", // green
+  "#a855f7", // purple
+  "#ec4899", // pink
+  "#14b8a6", // teal
+  "#f59e0b", // amber
+  "#e11d48", // rose
+  "#6366f1", // indigo
+  "#0ea5e9", // sky
+  "#84cc16", // lime
+  "#d946ef", // fuchsia
 ] as const;
 
-export const CATEGORY_COLORS = chartColors;
+export const CATEGORY_COLORS = defaultChartColors;
 
 export function SpendingCategoryRadial({
   categories,
@@ -35,11 +43,11 @@ export function SpendingCategoryRadial({
   currency?: string;
   subLabel?: string;
 }) {
-  const limited = categories.slice(0, chartColors.length);
-  const total = limited.reduce((sum, item) => sum + item.value, 0);
+  const palette = (colors.length ? colors : defaultChartColors) as readonly string[];
+  const total = categories.reduce((sum, item) => sum + item.value, 0);
 
   const chartData = [
-    limited.reduce(
+    categories.reduce(
       (acc, item, idx) => {
         const key = `c${idx}`;
         acc[key] = item.value;
@@ -49,11 +57,11 @@ export function SpendingCategoryRadial({
     ),
   ];
 
-  const chartConfig = limited.reduce((acc, item, idx) => {
+  const chartConfig = categories.reduce((acc, item, idx) => {
     const key = `c${idx}`;
     acc[key] = {
       label: item.name,
-      color: colors[idx % colors.length],
+      color: palette[idx % palette.length],
     };
     return acc;
   }, {} as ChartConfig);
@@ -99,7 +107,7 @@ export function SpendingCategoryRadial({
           />
         </PolarRadiusAxis>
 
-        {limited.map((_, idx) => {
+        {categories.map((_, idx) => {
           const key = `c${idx}`;
           return (
             <RadialBar

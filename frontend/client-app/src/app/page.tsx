@@ -3,13 +3,14 @@ import { SpendingCategoryRadial } from "@/components/SpendingCategoryRadial";
 import { getDashboard } from "@/lib/services/dashboard";
 import { getUser } from "@/lib/services/users";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   AlertTriangle,
   ArrowDownRight,
   ArrowUpRight,
   Coins,
   HeartPulse,
-  Lightbulb,
+  Sparkles,
   Wallet,
 } from "lucide-react";
 
@@ -25,7 +26,29 @@ export default async function DashboardPage() {
   let data;
   let user;
 
-  const palette = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"];
+  const basePalette = [
+    "#2563eb",
+    "#f97316",
+    "#22c55e",
+    "#a855f7",
+    "#ec4899",
+    "#14b8a6",
+    "#f59e0b",
+    "#e11d48",
+    "#6366f1",
+    "#0ea5e9",
+    "#84cc16",
+    "#d946ef",
+  ];
+
+  const makePalette = (count: number) => {
+    if (count <= basePalette.length) return basePalette.slice(0, count);
+    const extra = Array.from({ length: count - basePalette.length }, (_, idx) => {
+      const hue = Math.round((idx / (count - basePalette.length + 1)) * 360);
+      return `hsl(${hue}deg 70% 55%)`;
+    });
+    return [...basePalette, ...extra];
+  };
 
   try {
     [data, user] = await Promise.all([getDashboard(), getUser()]);
@@ -56,13 +79,15 @@ export default async function DashboardPage() {
     return { name, value, prev, diff, pct };
   });
 
+  const palette = makePalette(deltas.length || 1);
+
   const monthLabel = new Date().toLocaleString("default", { month: "long", year: "numeric" });
   const monthOnly = new Date().toLocaleString("default", { month: "long" });
 
   const healthTone = (health_score.color || "").toLowerCase();
   const healthBadge =
     healthTone === "green"
-      ? { className: "bg-emerald-100 border border-emerald-200 text-emerald-700" }
+      ? { className: "border text-[var(--primary)] bg-white", style: { borderColor: "color-mix(in srgb, var(--primary) 20%, transparent)", backgroundColor: "color-mix(in srgb, var(--primary) 8%, transparent)" } }
       : healthTone === "yellow"
         ? { className: "bg-amber-100 border border-amber-200 text-amber-700" }
         : healthTone === "red"
@@ -70,7 +95,7 @@ export default async function DashboardPage() {
           : null;
   const healthIcon =
     healthTone === "green"
-      ? "text-emerald-600"
+      ? "text-[var(--primary)]"
       : healthTone === "yellow"
         ? "text-amber-500"
         : healthTone === "red"
@@ -80,20 +105,28 @@ export default async function DashboardPage() {
   return (
     <div className="p-6 space-y-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight">
-          {user ? `${user.first_name} ${user.last_name}` : "Welcome"}
-        </h1>
+        <div className="flex items-center gap-3">
+          <Avatar className="h-10 w-10 bg-[color-mix(in_srgb,var(--primary)_10%,transparent)] text-[var(--primary)]">
+            <AvatarImage src="/user_avatar.png" alt="User avatar" />
+            <AvatarFallback>
+              {user ? `${user.first_name?.[0] ?? ""}${user.last_name?.[0] ?? ""}` : "U"}
+            </AvatarFallback>
+          </Avatar>
+          <h1 className="text-3xl font-bold tracking-tight text-[var(--primary)]">
+            {user ? `${user.first_name} ${user.last_name}` : "Welcome"}
+          </h1>
+        </div>
         <p className="text-zinc-500">Here is your latest financial overview.</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Income</CardTitle>
-            <ArrowUpRight className="h-5 w-5 text-emerald-600" />
+            <ArrowUpRight className="h-5 w-5 text-[var(--primary)]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-emerald-600">
+            <div className="text-2xl font-bold text-[var(--primary)]">
               {formatCurrency(summary.total_income)}
             </div>
             <p className="text-xs text-zinc-500">From all sources</p>
@@ -110,7 +143,7 @@ export default async function DashboardPage() {
               {formatCurrency(summary.total_spending)}
             </div>
             <p className="text-xs text-zinc-500">
-              Prev month: {formatCurrency(summary.previous_month_spending)}
+              Previous month: {formatCurrency(summary.previous_month_spending)}
             </p>
             <p className="text-xs text-zinc-500">
               Difference: {formatPercent(summary.spending_change_percent)}
@@ -121,7 +154,7 @@ export default async function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Savings Potential</CardTitle>
-            <Coins className="h-5 w-5 text-emerald-600" />
+            <Coins className="h-5 w-5 text-[var(--primary)]" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatCurrency(summary.savings_potential)}</div>
@@ -138,7 +171,7 @@ export default async function DashboardPage() {
             <div className="text-2xl font-bold">{health_score.score} / 100 </div>
             {healthBadge && health_score.status && (
               <div className="mt-2">
-                <Badge className={`text-[11px] font-semibold ${healthBadge.className}`}>
+                <Badge className={`text-[11px] font-semibold ${healthBadge.className}`} style={healthBadge.style}>
                   {health_score.status}
                 </Badge>
               </div>
@@ -173,15 +206,15 @@ export default async function DashboardPage() {
                   {deltas.map(({ name, value, prev, pct, diff }, idx) => (
                     <div key={name} className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-2">
-                        <span
-                          className="inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium"
+                        <Badge
+                          className="rounded-full px-2.5 py-1 text-[11px] font-semibold"
                           style={{
-                            borderColor: palette[idx % palette.length],
-                            color: palette[idx % palette.length],
+                            backgroundColor: palette[idx % palette.length],
+                            color: "#ffffff",
                           }}
                         >
                           {name}
-                        </span>
+                        </Badge>
                         <div>
                           {prev > 0 && (
                             <p className="text-xs text-zinc-500">
@@ -209,7 +242,7 @@ export default async function DashboardPage() {
           <Card className="flex flex-col">
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2">
-                <Lightbulb className="h-4 w-4 text-amber-500" />
+                <Sparkles className="h-4 w-4 text-amber-500" />
                 AI Insights
               </CardTitle>
             </CardHeader>
