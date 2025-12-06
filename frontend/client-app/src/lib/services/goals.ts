@@ -33,6 +33,88 @@ const goalResponseSchema = z.object({
   errors: z.array(z.string()).optional().nullable(),
 });
 
+const singleGoalResponseSchema = z.object({
+  is_success: z.boolean(),
+  message: z.string(),
+  data: goalSchema.extend({
+    created_at: z.string(),
+  }),
+  errors: z.array(z.string()).optional().nullable(),
+});
+
+const monteCarloResultSchema = z.object({
+  p10: z.number(),
+  p50: z.number(),
+  p90: z.number(),
+  deterministic_months: z.number().optional(),
+  success_probability: z.number().optional(),
+});
+
+const timelineDataPointSchema = z.object({
+  month: z.number(),
+  deterministic: z.number(),
+  p10_optimistic: z.number(),
+  p50_median: z.number(),
+  p90_pessimistic: z.number(),
+});
+
+const goalTimelineSchema = z.object({
+  goal: z
+    .object({
+      name: z.string(),
+      target_amount: z.number(),
+      current_amount: z.number(),
+      remaining_amount: z.number(),
+      currency: z.string(),
+    })
+    .optional(),
+  financial_summary: z
+    .object({
+      income: z.number(),
+      monthly_spending: z.number(),
+      real_contribution: z.number(),
+    })
+    .optional(),
+  monte_carlo_results: monteCarloResultSchema.optional(),
+  // Some responses use `monte_carlo` instead of `monte_carlo_results`.
+  monte_carlo: monteCarloResultSchema.optional(),
+  deterministic_months: z.number().optional(),
+  success_probability: z.number().optional(),
+  real_monthly_contribution: z.number().optional(),
+  ai_interpretation: z.string().optional(),
+  interpretation: z.string().optional(),
+  timeline_data: z.array(timelineDataPointSchema),
+});
+
+const goalTimelineResponseSchema = z.object({
+  is_success: z.boolean(),
+  message: z.string(),
+  data: goalTimelineSchema,
+  errors: z.array(z.string()).optional().nullable(),
+});
+
+const goalRecommendationsSchema = z.object({
+  recommendations: z.array(
+    z.object({
+      product_name: z.string(),
+      reason: z.string().optional(),
+      benefit: z.string().optional(),
+      category: z.string().optional(),
+      description: z.string().optional(),
+      link: z.string().optional(),
+      product_id: z.string().optional(),
+      type: z.string().optional(),
+    })
+  ),
+});
+
+const goalRecommendationsResponseSchema = z.object({
+  is_success: z.boolean(),
+  message: z.string(),
+  data: goalRecommendationsSchema,
+  errors: z.array(z.string()).optional().nullable(),
+});
+
 const createGoalBodySchema = z.object({
   user_id: z.string(),
   name: z.string(),
@@ -47,6 +129,7 @@ const createGoalBodySchema = z.object({
 
 const updateGoalBodySchema = z.object({
   goal_id: z.string(),
+  user_id: z.string(),
   name: z.string().optional(),
   target_amount: z.number().optional(),
   current_amount: z.number().optional(),
@@ -60,6 +143,9 @@ const updateGoalBodySchema = z.object({
 export type Goal = z.infer<typeof goalSchema>;
 export type CreateGoalBody = z.infer<typeof createGoalBodySchema>;
 export type UpdateGoalBody = z.infer<typeof updateGoalBodySchema>;
+export type GoalTimeline = z.infer<typeof goalTimelineSchema>;
+export type GoalRecommendations = z.infer<typeof goalRecommendationsSchema>;
+export type SingleGoal = z.infer<typeof goalSchema>;
 
 export async function getGoals(username = DEFAULT_USERNAME): Promise<Goal[]> {
   const result = await apiFetch<unknown>(`/api/goals/?username=${username}`, {
@@ -67,6 +153,21 @@ export async function getGoals(username = DEFAULT_USERNAME): Promise<Goal[]> {
   });
 
   const parsed = goalsResponseSchema.parse(result);
+  return parsed.data;
+}
+
+export async function getGoalById(
+  goalId: string,
+  username = DEFAULT_USERNAME
+): Promise<SingleGoal> {
+  const result = await apiFetch<unknown>(
+    `/api/goals/${goalId}?username=${username}`,
+    {
+      method: "GET",
+    }
+  );
+
+  const parsed = singleGoalResponseSchema.parse(result);
   return parsed.data;
 }
 
@@ -79,6 +180,36 @@ export async function createGoal(payload: CreateGoalBody): Promise<Goal> {
   });
 
   const parsed = goalResponseSchema.parse(result);
+  return parsed.data;
+}
+
+export async function getGoalTimeline(
+  goalId: string,
+  username = DEFAULT_USERNAME
+): Promise<GoalTimeline> {
+  const result = await apiFetch<unknown>(
+    `/api/goals/${goalId}/timeline?username=${username}`,
+    {
+      method: "GET",
+    }
+  );
+
+  const parsed = goalTimelineResponseSchema.parse(result);
+  return parsed.data;
+}
+
+export async function getGoalRecommendations(
+  goalId: string,
+  username = DEFAULT_USERNAME
+): Promise<GoalRecommendations> {
+  const result = await apiFetch<unknown>(
+    `/api/goals/${goalId}/recommendations?username=${username}`,
+    {
+      method: "GET",
+    }
+  );
+
+  const parsed = goalRecommendationsResponseSchema.parse(result);
   return parsed.data;
 }
 

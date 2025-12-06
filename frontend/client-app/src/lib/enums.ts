@@ -1,13 +1,18 @@
 export const CARD_TYPES = ["Uzcard", "Humo", "Visa", "Mastercard"] as const;
 export type CardType = (typeof CARD_TYPES)[number];
 
-export const GOAL_PRIORITIES = ["Low", "Medium", "High", "LOW", "MEDIUM", "HIGH"] as const;
+export const GOAL_PRIORITIES = ["Low", "Medium", "High"] as const;
 export type GoalPriority = (typeof GOAL_PRIORITIES)[number];
 
-export const GOAL_STATUSES = ["Active", "Achieved", "Cancelled", "ACTIVE", "ACHIEVED", "CANCELLED"] as const;
+export const GOAL_STATUSES = ["Active", "Achieved", "Cancelled"] as const;
 export type GoalStatus = (typeof GOAL_STATUSES)[number];
 
-export const PARTY_TYPES = ["CARD", "WALLET", "MERCHANT", "BANK_ACCOUNT"] as const;
+export const PARTY_TYPES = [
+  "CARD",
+  "WALLET",
+  "MERCHANT",
+  "BANK_ACCOUNT",
+] as const;
 export type PartyType = (typeof PARTY_TYPES)[number];
 
 export const TRANSACTION_CATEGORIES = [
@@ -54,6 +59,9 @@ export const TRANSACTION_TYPES = [
 ] as const;
 export type TransactionType = (typeof TRANSACTION_TYPES)[number];
 
-export const USER_ROLES = ["Client", "Admin", "Super Admin", "CLIENT", "ADMIN", "SUPER_ADMIN"] as const;
+export const USER_ROLES = ["Client", "Admin", "Super Admin"] as const;
 export type UserRole = (typeof USER_ROLES)[number];
 
+// currency UZS and USD are supported
+export const CURRENCIES = ["UZS", "USD"] as const;
+export type Currency = (typeof CURRENCIES)[number];
