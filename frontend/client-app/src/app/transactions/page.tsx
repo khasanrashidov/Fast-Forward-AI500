@@ -1,120 +1,180 @@
-"use client"
-
-import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Search } from "lucide-react"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { SpendingCategoryRadial } from "@/components/SpendingCategoryRadial";
+import { getTransactions } from "@/lib/services/transactions";
 
-// Mock Data
-const transactions = [
-    { id: "1", date: "2025-10-24", description: "Grocery Store", category: "Food", amount: -120.50, status: "Completed" },
-    { id: "2", date: "2025-10-23", description: "Salary Deposit", category: "Income", amount: 3200.00, status: "Completed" },
-    { id: "3", date: "2025-10-24", description: "Netflix", category: "Entertainment", amount: -15.00, status: "Pending" },
-    { id: "4", date: "2025-10-22", description: "Shell Station", category: "Transport", amount: -45.00, status: "Completed" },
-    { id: "5", date: "2025-10-20", description: "Electric Bill", category: "Utilities", amount: -150.00, status: "Completed" },
-    { id: "6", date: "2025-10-18", description: "Freelance Work", category: "Income", amount: 450.00, status: "Completed" },
-    { id: "7", date: "2025-10-15", description: "Cafe Latte", category: "Food", amount: -5.50, status: "Completed" },
-    { id: "8", date: "2025-10-12", description: "Cinema Ticket", category: "Entertainment", amount: -18.00, status: "Completed" },
-]
+type StatusTone = "primary" | "warn" | "error" | "muted";
 
-export default function TransactionsPage() {
-    const [filter, setFilter] = useState("All")
-    const [searchTerm, setSearchTerm] = useState("")
+function formatAmount(amount: number, direction?: string, currency?: string) {
+  const signed = direction === "INCOMING" ? Math.abs(amount) : -Math.abs(amount);
+  const formatted = `${signed > 0 ? "+" : ""}${Math.abs(signed).toLocaleString("en-US")} ${
+    currency ?? "UZS"
+  }`;
+  return { signed, formatted };
+}
 
-    const filteredTransactions = transactions.filter((t) => {
-        const matchesCategory = filter === "All" || t.category === filter
-        const matchesSearch = t.description.toLowerCase().includes(searchTerm.toLowerCase())
-        return matchesCategory && matchesSearch
-    })
+function statusStyle(status: string): { tone: StatusTone; label: string } {
+  const s = status.toUpperCase();
+  if (s === "APPROVED" || s === "SETTLED" || s === "SUCCESS" || s === "COMPLETED") {
+    return { tone: "primary", label: status };
+  }
+  if (s === "PENDING") return { tone: "warn", label: status };
+  if (s === "DECLINED" || s === "CANCELED" || s === "VOIDED" || s === "REFUNDED") {
+    return { tone: "error", label: status };
+  }
+  return { tone: "muted", label: status };
+}
 
+function toneBadge(tone: StatusTone, label: string) {
+  const map: Record<StatusTone, string> = {
+    primary: "bg-[color-mix(in_srgb,var(--primary)_12%,transparent)] text-[var(--primary)]",
+    warn: "bg-amber-100 text-amber-700",
+    error: "bg-rose-100 text-rose-700",
+    muted: "bg-zinc-100 text-zinc-700",
+  };
+  return <Badge className={`font-semibold ${map[tone]}`}>{label}</Badge>;
+}
+
+function formatDate(date: string) {
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return date;
+  return d.toLocaleString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export default async function TransactionsPage() {
+  let transactions = [];
+  try {
+    transactions = await getTransactions();
+  } catch (error) {
     return (
-        <div className="p-6 space-y-6">
-            <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-bold tracking-tight">Transactions</h1>
-                <p className="text-zinc-500">View and manage all your financial transactions.</p>
-            </div>
+      <div className="p-6 space-y-4">
+        <h1 className="text-3xl font-bold tracking-tight">Transactions</h1>
+        <Card>
+          <CardContent className="py-6">
+            <p className="text-sm text-rose-600">Failed to load transactions.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
-            <Card>
-                <CardHeader>
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                        <CardTitle>History</CardTitle>
-                        <div className="flex items-center gap-2 w-full md:w-auto">
-                            <div className="relative w-full md:w-64">
-                                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-500" />
-                                <Input
-                                    className="pl-8"
-                                    placeholder="Search transactions..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                />
-                            </div>
-                            <Select value={filter} onValueChange={setFilter}>
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue placeholder="Category" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="All">All Categories</SelectItem>
-                                    <SelectItem value="Food">Food</SelectItem>
-                                    <SelectItem value="Transport">Transport</SelectItem>
-                                    <SelectItem value="Utilities">Utilities</SelectItem>
-                                    <SelectItem value="Entertainment">Entertainment</SelectItem>
-                                    <SelectItem value="Income">Income</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Date</TableHead>
-                                <TableHead>Description</TableHead>
-                                <TableHead>Category</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead className="text-right">Amount</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {filteredTransactions.map((transaction) => (
-                                <TableRow key={transaction.id}>
-                                    <TableCell>{transaction.date}</TableCell>
-                                    <TableCell className="font-medium">{transaction.description}</TableCell>
-                                    <TableCell>
-                                        <Badge variant="outline" className="font-normal text-zinc-600">
-                                            {transaction.category}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant={transaction.status === 'Completed' ? 'secondary' : 'outline'} className={transaction.status === 'Completed' ? 'bg-[color-mix(in_srgb,var(--primary)_12%,transparent)] text-[var(--primary)] hover:bg-[color-mix(in_srgb,var(--primary)_12%,transparent)]' : 'text-zinc-500'}>
-                                            {transaction.status}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell className={`text-right font-bold ${transaction.amount > 0 ? 'text-[var(--primary)]' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                                        {transaction.amount > 0 ? '+' : ''}{transaction.amount.toFixed(2)}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
-        </div>
-    )
+  // Group by month-year for table rendering
+  const groups = transactions.reduce<Record<string, any[]>>((acc, tx) => {
+    const key = tx.created_at || tx.date;
+    const d = new Date(key);
+    const label = Number.isNaN(d.getTime())
+      ? "Unknown"
+      : d.toLocaleString("en-US", { month: "long", year: "numeric" });
+    if (!acc[label]) acc[label] = [];
+    acc[label].push(tx);
+    return acc;
+  }, {});
+
+  const monthOrder = Object.keys(groups).sort((a, b) => {
+    const da = new Date(groups[a][0]?.created_at || groups[a][0]?.date || "");
+    const db = new Date(groups[b][0]?.created_at || groups[b][0]?.date || "");
+    return db.getTime() - da.getTime();
+  });
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold tracking-tight">Transactions</h1>
+        <p className="text-zinc-500">Latest activity from your linked accounts.</p>
+      </div>
+
+      {monthOrder.length === 0 ? (
+        <Card>
+          <CardContent className="py-6">
+            <p className="text-sm text-zinc-500 text-center">No transactions yet.</p>
+          </CardContent>
+        </Card>
+      ) : (
+        monthOrder.map((month) => (
+          <Card key={month}>
+            <CardHeader>
+              <CardTitle>{month}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-4">
+                <div className="flex items-center justify-center">
+                  {(() => {
+                    const grouped = groups[month].reduce<Record<string, number>>((acc, t) => {
+                      acc[t.category] = (acc[t.category] ?? 0) + Math.abs(t.amount);
+                      return acc;
+                    }, {});
+                    const categories = Object.entries(grouped).map(([name, value]) => ({ name, value }));
+                    return (
+                      <SpendingCategoryRadial
+                        categories={categories}
+                        sizeClassName="w-[180px] max-w-full"
+                        centerLabel="UZS"
+                        subLabel={month}
+                        currency="UZS"
+                      />
+                    );
+                  })()}
+                </div>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Merchant</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {groups[month].map((transaction: any) => {
+                    const { tone, label } = statusStyle(transaction.status);
+                    const { formatted, signed } = formatAmount(
+                      transaction.amount,
+                      transaction.transaction_direction,
+                      transaction.currency
+                    );
+                    const displayDate = transaction.created_at || transaction.date;
+                    return (
+                      <TableRow key={transaction.id}>
+                        <TableCell>{formatDate(displayDate)}</TableCell>
+                        <TableCell className="font-medium">{transaction.merchant}</TableCell>
+                        <TableCell>
+                          <Badge className="bg-zinc-100 text-zinc-700 font-semibold">
+                            {transaction.category}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{toneBadge(tone, label)}</TableCell>
+                        <TableCell
+                          className={`text-right font-bold ${
+                            signed >= 0 ? "text-[var(--primary)]" : "text-zinc-900"
+                          }`}
+                        >
+                          {formatted}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        ))
+      )}
+    </div>
+  );
 }

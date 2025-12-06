@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, ArrowRightLeft, Rocket, Sparkles, Store } from "lucide-react";
+import { Home, ArrowRightLeft, Rocket, Sparkles, GalleryVerticalEnd } from "lucide-react";
 
 const navItems = [
-    { name: "Home", href: "/", icon: LayoutDashboard },
+    { name: "Home", href: "/", icon: Home },
     { name: "Transactions", href: "/transactions", icon: ArrowRightLeft },
     { name: "Goals", href: "/goals", icon: Rocket },
     { name: "Insights", href: "/insights", icon: Sparkles },
+    { name: "Showcase", href: "/showcase", icon: GalleryVerticalEnd },
 ];
 
 export default function BottomNav() {

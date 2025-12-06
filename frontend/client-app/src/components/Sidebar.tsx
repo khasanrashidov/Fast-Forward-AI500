@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight,
   UserRoundCheck,
+  GalleryVerticalEnd,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -26,6 +27,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
         { icon: CreditCard, label: "Transactions", href: "/transactions" },
         { icon: Rocket, label: "Goals", href: "/goals" },
         { icon: Sparkles, label: "Insights", href: "/insights" },
+        { icon: GalleryVerticalEnd, label: "Showcase", href: "/showcase" },
     ];
 
     return (

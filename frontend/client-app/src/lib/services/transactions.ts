@@ -18,27 +18,27 @@ const partyInfoSchema = z.object({
 
 const transactionSchema = z.object({
   id: z.string(),
-  user_id: z.string(),
+  user_id: z.string().optional().nullable(),
   amount: z.number(),
-  currency: z.string(),
-  merchant: z.string(),
+  currency: z.string().optional().nullable(),
+  merchant: z.string().optional().nullable(),
   date: z.string(),
-  category: z.enum(TRANSACTION_CATEGORIES),
-  card_id: z.string(),
-  status: z.enum(TRANSACTION_STATUSES),
-  external_id: z.string(),
-  transaction_type: z.enum(TRANSACTION_TYPES),
-  transaction_direction: z.enum(TRANSACTION_DIRECTIONS),
-  fee: z.number(),
-  processed_at: z.string(),
-  sender_info: partyInfoSchema,
-  receiver_info: partyInfoSchema,
-  metadata: z.record(z.any()),
-  gateway: z.string(),
-  rrn: z.string(),
-  description: z.string(),
-  is_recurring: z.boolean(),
-  created_at: z.string(),
+  category: z.string(),
+  card_id: z.string().optional().nullable(),
+  status: z.string(),
+  external_id: z.string().optional().nullable(),
+  transaction_type: z.string().optional().nullable(),
+  transaction_direction: z.string().optional().nullable(),
+  fee: z.number().optional().nullable(),
+  processed_at: z.string().optional().nullable(),
+  sender_info: partyInfoSchema.optional().nullable(),
+  receiver_info: partyInfoSchema.optional().nullable(),
+  metadata: z.record(z.string(), z.any()).optional().nullable(),
+  gateway: z.string().optional().nullable(),
+  rrn: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  is_recurring: z.boolean().optional().nullable(),
+  created_at: z.string().optional().nullable(),
 });
 
 const transactionsResponseSchema = z.object({
@@ -52,11 +52,13 @@ export type Transaction = z.infer<typeof transactionSchema>;
 export async function getTransactions(
   username = DEFAULT_USERNAME
 ): Promise<Transaction[]> {
-  const result = await apiFetch<unknown>(`/api/transactions/?username=${username}`, {
-    method: "GET",
-  });
+  const result = await apiFetch<unknown>(
+    `/api/transactions/?username=${username}`,
+    {
+      method: "GET",
+    }
+  );
 
   const parsed = transactionsResponseSchema.parse(result);
   return parsed.data;
 }
-

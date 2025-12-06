@@ -45,19 +45,21 @@ export async function apiFetch<T>(
   try {
     body = await response.json();
   } catch (error) {
-    throw new ApiError({
+    const err = new ApiError({
       status: response.status,
       message: "Invalid JSON response from API.",
       url,
     });
+    throw err;
   }
 
   if (!response.ok || !body?.is_success) {
-    throw new ApiError({
+    const err = new ApiError({
       status: response.status,
       message: body?.message ?? "API request failed.",
       url,
     });
+    throw err;
   }
 
   return body;
