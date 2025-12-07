@@ -23,9 +23,13 @@ export type TipSlide = {
 
 type Props = {
   tips: TipSlide[];
+  viewIllustrations: string;
+  swipeThrough: string;
+  prev: string;
+  next: string;
 };
 
-export function TipsDialog({ tips }: Props) {
+export function TipsDialog({ tips, viewIllustrations, swipeThrough, prev, next }: Props) {
   const slides = useMemo(() => tips.filter(Boolean), [tips]);
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
@@ -33,8 +37,8 @@ export function TipsDialog({ tips }: Props) {
 
   const current = slides[index] ?? slides[0];
 
-  const goNext = () => setIndex((prev) => (prev + 1) % slides.length);
-  const goPrev = () => setIndex((prev) => (prev - 1 + slides.length) % slides.length);
+  const goNext = () => setIndex((p) => (p + 1) % slides.length);
+  const goPrev = () => setIndex((p) => (p - 1 + slides.length) % slides.length);
 
   const handlePointerDown = (clientX: number) => setStartX(clientX);
   const handlePointerUp = (clientX: number) => {
@@ -56,13 +60,13 @@ export function TipsDialog({ tips }: Props) {
       <DialogTrigger asChild>
         <Button variant="default" size="sm" className="flex items-center gap-2 shadow-sm">
           <Sparkles className="h-4 w-4" />
-          View illustrations
+          {viewIllustrations}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>{current?.title}</DialogTitle>
-          <DialogDescription>Swipe through the tips with illustrations.</DialogDescription>
+          <DialogDescription>{swipeThrough}</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col items-center gap-4">
           <div
@@ -92,13 +96,13 @@ export function TipsDialog({ tips }: Props) {
         <DialogFooter className="flex items-center justify-between">
           <Button variant="ghost" size="sm" onClick={goPrev} className="gap-2">
             <ChevronLeft className="h-4 w-4" />
-            Prev
+            {prev}
           </Button>
           <div className="text-xs text-muted-foreground">
             {index + 1} / {slides.length}
           </div>
           <Button variant="ghost" size="sm" onClick={goNext} className="gap-2">
-            Next
+            {next}
             <ChevronRight className="h-4 w-4" />
           </Button>
         </DialogFooter>

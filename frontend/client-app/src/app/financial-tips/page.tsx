@@ -12,6 +12,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TipsDialog, type TipSlide } from './tips-dialog';
+import { getTranslations } from 'next-intl/server';
 
 type Tip = {
   title: string;
@@ -21,149 +22,121 @@ type Tip = {
   icon: React.ComponentType<{ className?: string }>;
 };
 
-const tips: Tip[] = [
-  {
-    title: 'Start With a Clear Budget',
-    description:
-      'Track income and expenses monthly. Use mobile tools to monitor activity, savings, and repayments automatically. Follow the 50/30/20 rule.',
-    tip: '50% needs, 30% wants, 20% savings or debt repayment.',
-    badge: 'Budgeting',
-    icon: NotebookPen,
-  },
-  {
-    title: 'Build an Emergency Fund',
-    description:
-      'Save 3–6 months of expenses in reliable deposits (e.g., “Comfort” or “Sandiq” ~21% in UZS) to cover job loss or unexpected costs.',
-    badge: 'Safety',
-    icon: ShieldCheck,
-  },
-  {
-    title: 'Apply the FIRE Principle',
-    description:
-      'Spend less than you earn, save/invest aggressively (50–70% if possible), and aim for passive income via deposits, investments, or business.',
-    badge: 'FIRE',
-    icon: Rocket,
-  },
-  {
-    title: 'Avoid Bad Debt — Use Loans Wisely',
-    description:
-      'Use education loans or microloans for productive goals, not consumption. Borrow only if it increases your earning capacity.',
-    badge: 'Smart Debt',
-    icon: Target,
-  },
-  {
-    title: 'Automate Your Savings',
-    description:
-      'Auto-transfer part of your salary to a deposit each month. Automation builds consistency and reduces impulse spending.',
-    badge: 'Automation',
-    icon: HandCoins,
-  },
-  {
-    title: 'Invest Early and Regularly',
-    description:
-      'Small, regular deposits grow through compounding (e.g., “Progress” deposit with top-ups). Time in the market beats timing the market.',
-    badge: 'Investing',
-    icon: Coins,
-  },
-  {
-    title: 'Educate Yourself Constantly',
-    description:
-      'Learn from free platforms (Coursera, Khan Academy, Investopedia) and bank resources. Ask consultants for tailored advice.',
-    badge: 'Learning',
-    icon: Lightbulb,
-  },
-  {
-    title: 'Plan for Retirement Early',
-    description:
-      'Start now, even with small amounts. Compound growth and long-term deposits accelerate financial independence.',
-    badge: 'Retirement',
-    icon: Landmark,
-  },
-  {
-    title: 'Diversify Your Assets',
-    description:
-      'Mix high-yield deposits, long-term investments (real estate, pension funds, business), and FX deposits for currency protection.',
-    badge: 'Diversification',
-    icon: Boxes,
-  },
-  {
-    title: 'Set SMART Financial Goals',
-    description:
-      'Make goals Specific, Measurable, Achievable, Relevant, and Time-bound (e.g., save 20M UZS in 12 months for a business fund).',
-    badge: 'Goals',
-    icon: Target,
-  },
+const icons = [
+  NotebookPen,
+  ShieldCheck,
+  Rocket,
+  Target,
+  HandCoins,
+  Coins,
+  Lightbulb,
+  Landmark,
+  Boxes,
+  Target,
 ];
 
-export const dynamic = 'force-static';
+const illustrations = [
+  '/undraw_wallet_diag.svg',
+  '/undraw_vault_tyfh.svg',
+  '/undraw_investing_uzcu.svg',
+  '/undraw_finance_m6vw.svg',
+  '/undraw_success-factors_i417.svg',
+  '/undraw_revenue_kv38.svg',
+  '/undraw_brainstorming_gny9.svg',
+  '/undraw_personal-finance_xpqg.svg',
+  '/undraw_houses_owky.svg',
+  '/undraw_target_d6hf.svg',
+];
 
-export default function FinancialTipsPage() {
-  const slides: TipSlide[] = [
+export default async function FinancialTipsPage() {
+  const t = await getTranslations('financialTips');
+
+  const tips: Tip[] = [
     {
-      title: 'Start With a Clear Budget',
-      description: tips[0].description,
-      illustration: '/undraw_wallet_diag.svg',
+      title: t('tip1Title'),
+      description: t('tip1Desc'),
+      tip: t('tip1Tip'),
+      badge: t('tip1Badge'),
+      icon: icons[0],
     },
     {
-      title: 'Build an Emergency Fund',
-      description: tips[1].description,
-      illustration: '/undraw_vault_tyfh.svg',
+      title: t('tip2Title'),
+      description: t('tip2Desc'),
+      badge: t('tip2Badge'),
+      icon: icons[1],
     },
     {
-      title: 'Apply the FIRE Principle',
-      description: tips[2].description,
-      illustration: '/undraw_investing_uzcu.svg',
+      title: t('tip3Title'),
+      description: t('tip3Desc'),
+      badge: t('tip3Badge'),
+      icon: icons[2],
     },
     {
-      title: 'Avoid Bad Debt — Use Loans Wisely',
-      description: tips[3].description,
-      illustration: '/undraw_finance_m6vw.svg',
+      title: t('tip4Title'),
+      description: t('tip4Desc'),
+      badge: t('tip4Badge'),
+      icon: icons[3],
     },
     {
-      title: 'Automate Your Savings',
-      description: tips[4].description,
-      illustration: '/undraw_success-factors_i417.svg',
+      title: t('tip5Title'),
+      description: t('tip5Desc'),
+      badge: t('tip5Badge'),
+      icon: icons[4],
     },
     {
-      title: 'Invest Early and Regularly',
-      description: tips[5].description,
-      illustration: '/undraw_revenue_kv38.svg',
+      title: t('tip6Title'),
+      description: t('tip6Desc'),
+      badge: t('tip6Badge'),
+      icon: icons[5],
     },
     {
-      title: 'Educate Yourself Constantly',
-      description: tips[6].description,
-      illustration: '/undraw_brainstorming_gny9.svg',
+      title: t('tip7Title'),
+      description: t('tip7Desc'),
+      badge: t('tip7Badge'),
+      icon: icons[6],
     },
     {
-      title: 'Plan for Retirement Early',
-      description: tips[7].description,
-      illustration: '/undraw_personal-finance_xpqg.svg',
+      title: t('tip8Title'),
+      description: t('tip8Desc'),
+      badge: t('tip8Badge'),
+      icon: icons[7],
     },
     {
-      title: 'Diversify Your Assets',
-      description: tips[8].description,
-      illustration: '/undraw_houses_owky.svg',
+      title: t('tip9Title'),
+      description: t('tip9Desc'),
+      badge: t('tip9Badge'),
+      icon: icons[8],
     },
     {
-      title: 'Set SMART Financial Goals',
-      description: tips[9].description,
-      illustration: '/undraw_target_d6hf.svg',
+      title: t('tip10Title'),
+      description: t('tip10Desc'),
+      badge: t('tip10Badge'),
+      icon: icons[9],
     },
   ];
+
+  const slides: TipSlide[] = tips.map((tip, i) => ({
+    title: tip.title,
+    description: tip.description,
+    illustration: illustrations[i],
+  }));
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="space-y-1">
           <h1 className="text-3xl font-semibold tracking-tight text-[var(--primary)]">
-            Financial Tips
+            {t('title')}
           </h1>
-          <p className="text-muted-foreground">
-            Quick, actionable guidance to strengthen your finances. Swipe through illustrations in
-            the dialog.
-          </p>
+          <p className="text-muted-foreground">{t('subtitle')}</p>
         </div>
-        <TipsDialog tips={slides} />
+        <TipsDialog
+          tips={slides}
+          viewIllustrations={t('viewIllustrations')}
+          swipeThrough={t('swipeThrough')}
+          prev={t('prev')}
+          next={t('next')}
+        />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -193,7 +166,8 @@ export default function FinancialTipsPage() {
                 <p className="leading-relaxed">{tip.description}</p>
                 {tip.tip ? (
                   <div className="rounded-md border border-primary/20 bg-white/70 px-3 py-2 text-[13px] text-foreground">
-                    <span className="font-semibold text-[var(--primary)]">Tip:</span> {tip.tip}
+                    <span className="font-semibold text-[var(--primary)]">{t('tip')}</span>{' '}
+                    {tip.tip}
                   </div>
                 ) : null}
               </CardContent>
