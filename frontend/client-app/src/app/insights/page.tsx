@@ -110,7 +110,16 @@ export default async function InsightsPage() {
           </CardHeader>
           <CardContent className="space-y-2 flex-1">
             {alerts.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No alerts at this time.</p>
+              <div className="flex flex-col items-center gap-2 text-sm text-zinc-500">
+                <div className="h-50 w-50">
+                  <img
+                    src="/done-checking.svg"
+                    alt="No alerts illustration"
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+                <p>No alerts at this time.</p>
+              </div>
             ) : (
               alerts.map((alert, idx) => (
                 <div key={idx} className="text-sm text-foreground">
