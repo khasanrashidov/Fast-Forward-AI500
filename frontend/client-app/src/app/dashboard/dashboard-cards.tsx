@@ -123,32 +123,43 @@ export function DashboardCards({ initialCards, username }: Props) {
         {cards.length === 0 ? (
           <p className="text-sm text-muted-foreground">No cards yet.</p>
         ) : (
-          cards.map((card) => (
-            <div
-              key={card.id}
-              className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/12 via-primary/8 to-accent/12 p-4 text-foreground shadow-sm"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <div className="text-sm font-semibold">{card.card_name}</div>
-                <Badge variant="outline" className="text-[11px] border-primary/40 text-primary">
-                  {card.card_type}
-                </Badge>
-              </div>
-              <div className="mt-1 text-lg font-semibold tracking-widest">{maskCard(card.card_number)}</div>
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>{card.currency}</span>
-                <span>Exp: {card.expiration_date}</span>
-              </div>
-              <div className="mt-3 flex items-center justify-between text-sm">
-                <div className="space-y-0.5">
-                  <p className="text-xs text-muted-foreground">Balance</p>
-                  <p className="text-base font-semibold text-foreground">
-                    {formatAmount(card.balance, card.currency)}
-                  </p>
+          cards.map((card, idx) => {
+            const gradients = [
+              "from-primary/12 via-primary/8 to-accent/12",
+              "from-purple-500/15 via-primary/10 to-blue-500/15",
+              "from-amber-400/15 via-primary/10 to-lime-400/15",
+              "from-rose-500/15 via-primary/10 to-orange-400/15",
+            ];
+            const gradient = gradients[idx % gradients.length];
+            return (
+              <div
+                key={card.id}
+                className={`rounded-xl border border-primary/20 bg-gradient-to-br ${gradient} p-4 text-foreground shadow-sm`}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-sm font-semibold">{card.card_name}</div>
+                  <Badge className="text-[11px] bg-blue-500/15 text-blue-700 border border-blue-500/30">
+                    {card.card_type}
+                  </Badge>
+                </div>
+                <div className="mt-1 text-lg font-semibold tracking-widest">
+                  {maskCard(card.card_number)}
+                </div>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{card.currency}</span>
+                  <span>Exp: {card.expiration_date}</span>
+                </div>
+                <div className="mt-3 flex items-center justify-between text-sm">
+                  <div className="space-y-0.5">
+                    <p className="text-xs text-muted-foreground">Balance</p>
+                    <p className="text-base font-semibold text-foreground">
+                      {formatAmount(card.balance, card.currency)}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
