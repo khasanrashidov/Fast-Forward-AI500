@@ -24,6 +24,14 @@ type FormState = {
   family_size: string;
 };
 
+const formatNumberInput = (value: string) => {
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return "";
+  const number = Number(digits);
+  if (Number.isNaN(number)) return "";
+  return number.toLocaleString("en-US");
+};
+
 export default function OnboardingPage() {
   const router = useRouter();
   const [formData, setFormData] = useState<FormState>({
@@ -56,7 +64,7 @@ export default function OnboardingPage() {
     setError(null);
     try {
       await updateUser(undefined, {
-        salary: Number(formData.salary || 0),
+        salary: Number((formData.salary || "0").replace(/,/g, "")),
         age: Number(formData.age || 0),
         family_size: Number(formData.family_size || 0),
       });
@@ -73,7 +81,11 @@ export default function OnboardingPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "salary") {
+      setFormData((prev) => ({ ...prev, [name]: formatNumberInput(value) }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   return (
@@ -99,8 +111,7 @@ export default function OnboardingPage() {
               <Input
                 id="salary"
                 name="salary"
-                type="number"
-                min="0"
+                type="text"
                 inputMode="numeric"
                 placeholder="3,500,000"
                 value={formData.salary}

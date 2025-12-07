@@ -50,6 +50,14 @@ const createCardSchema = z.object({
   expiration_date: z.string().min(1, "Expiration date is required"),
 });
 
+const formatNumberInput = (value: string) => {
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return "";
+  const number = Number(digits);
+  if (Number.isNaN(number)) return "";
+  return number.toLocaleString("en-US");
+};
+
 function maskCard(cardNumber: string) {
   if (!cardNumber) return "**** **** ****";
   const first4 = cardNumber.slice(0, 4);
@@ -200,7 +208,9 @@ export function DashboardCards({ initialCards, username }: Props) {
                     inputMode="decimal"
                     placeholder="1,000,000"
                     value={form.balance}
-                    onChange={(e) => setForm((p) => ({ ...p, balance: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((p) => ({ ...p, balance: formatNumberInput(e.target.value) }))
+                    }
                   />
                 </div>
                 <div className="space-y-2">

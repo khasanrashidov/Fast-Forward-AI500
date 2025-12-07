@@ -80,7 +80,7 @@ const createGoalSchema = z.object({
     .min(1, "Target amount is required")
     .transform((val) => Number(val.replace(/,/g, "")))
     .refine((val) => Number.isFinite(val) && val > 0, "Enter a valid amount"),
-  currency: z.enum(CURRENCIES, { required_error: "Currency is required" }),
+  currency: z.enum(CURRENCIES),
   priority: z.enum(GOAL_PRIORITIES),
   target_date: z.string().optional(),
   description: z.string().optional(),
@@ -97,6 +97,14 @@ const addFundsSchema = z.object({
 function formatAmount(value: number, currency: string) {
   return `${value.toLocaleString("en-US")} ${currency}`;
 }
+
+const formatNumberInput = (value: string) => {
+  const digits = value.replace(/\D/g, "");
+  if (!digits) return "";
+  const number = Number(digits);
+  if (Number.isNaN(number)) return "";
+  return number.toLocaleString("en-US");
+};
 
 function goalPercent(goal: Goal) {
   if (!goal.target_amount) return 0;
@@ -143,6 +151,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
         target_amount: parsed.data.target_amount,
         current_amount: 0,
         currency: parsed.data.currency,
+        status: "Active" as Goal["status"],
         priority: parsed.data.priority,
         target_date: parsed.data.target_date || undefined,
         description: parsed.data.description || undefined,
@@ -244,10 +253,13 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                     id="goal-amount"
                     inputMode="decimal"
                     placeholder="10,000,000"
-                    value={createForm.target_amount}
-                    onChange={(e) =>
-                      setCreateForm((p) => ({ ...p, target_amount: e.target.value }))
-                    }
+                  value={createForm.target_amount}
+                  onChange={(e) =>
+                    setCreateForm((p) => ({
+                      ...p,
+                      target_amount: formatNumberInput(e.target.value),
+                    }))
+                  }
                   />
                 </div>
                 <div className="space-y-2">
@@ -443,8 +455,8 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                 id="funds-amount"
                 inputMode="decimal"
                 placeholder="1,000,000"
-                value={fundsForm.amount}
-                onChange={(e) => setFundsForm({ amount: e.target.value })}
+                  value={fundsForm.amount}
+                  onChange={(e) => setFundsForm({ amount: formatNumberInput(e.target.value) })}
               />
             </div>
             {fundsOpenFor ? (
