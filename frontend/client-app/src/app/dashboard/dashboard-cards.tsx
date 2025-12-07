@@ -52,8 +52,9 @@ const createCardSchema = z.object({
 
 function maskCard(cardNumber: string) {
   if (!cardNumber) return "**** **** ****";
+  const first4 = cardNumber.slice(0, 4);
   const last4 = cardNumber.slice(-4);
-  return `**** **** **** ${last4}`;
+  return `${first4} **** **** ${last4}`;
 }
 
 function formatAmount(value: number, currency: string) {
