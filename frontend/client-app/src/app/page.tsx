@@ -123,7 +123,9 @@ export default async function DashboardPage() {
             {user ? `${user.first_name} ${user.last_name}` : 'Welcome'}
           </h1>
         </div>
-        <p className="text-sm sm:text-base text-zinc-500">Here is your latest financial overview.</p>
+        <p className="text-sm sm:text-base text-zinc-500">
+          Here is your latest financial overview.
+        </p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-12">
@@ -138,7 +140,9 @@ export default async function DashboardPage() {
                 <div className="text-lg sm:text-2xl font-bold text-[var(--primary)]">
                   {formatCurrency(summary.total_income)}
                 </div>
-                <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">From all sources</p>
+                <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">
+                  From all sources
+                </p>
               </CardContent>
             </Card>
 
@@ -169,7 +173,9 @@ export default async function DashboardPage() {
                 <div className="text-lg sm:text-2xl font-bold">
                   {formatCurrency(summary.savings_potential)}
                 </div>
-                <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">After spend & obligations</p>
+                <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">
+                  After spend & obligations
+                </p>
               </CardContent>
             </Card>
 
@@ -216,7 +222,10 @@ export default async function DashboardPage() {
                     </div>
                     <div className="space-y-1.5 sm:space-y-2">
                       {deltas.map(({ name, value, prev, pct, diff }, idx) => (
-                        <div key={name} className="flex items-center justify-between gap-2 sm:gap-4">
+                        <div
+                          key={name}
+                          className="flex items-center justify-between gap-2 sm:gap-4"
+                        >
                           <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                             <Badge
                               className="rounded-full px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-[11px] font-semibold shrink-0"
@@ -241,7 +250,9 @@ export default async function DashboardPage() {
                               )}
                             </div>
                           </div>
-                          <p className="text-xs sm:text-sm font-semibold shrink-0">{formatCurrency(value)}</p>
+                          <p className="text-xs sm:text-sm font-semibold shrink-0">
+                            {formatCurrency(value)}
+                          </p>
                         </div>
                       ))}
                     </div>
