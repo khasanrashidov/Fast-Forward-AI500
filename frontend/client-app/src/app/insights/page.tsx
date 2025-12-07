@@ -1,8 +1,10 @@
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { getDashboard } from '@/lib/services/dashboard';
 import { getUser } from '@/lib/services/users';
-import { AlertTriangle, ShieldCheck, Sparkles } from 'lucide-react';
+import { AlertTriangle, ArrowRight, ShieldCheck, ShoppingBag, Sparkles } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,21 +32,23 @@ export default async function InsightsPage() {
         <p className="text-muted-foreground">Smart analysis of your financial health.</p>
       </div>
 
+      {/* All three cards in one row */}
       <div className="grid gap-4 md:grid-cols-12">
-        <Card className="md:col-span-4 bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+        {/* Financial Health - 3 cols */}
+        <Card className="md:col-span-3 bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
               <ShieldCheck className="h-5 w-5 text-[var(--primary)]" />
               Financial Health
-              {healthBadge && (
-                <Badge className={`text-xs font-semibold ${healthBadge.className}`}>
-                  {healthBadge.label}
-                </Badge>
-              )}
             </CardTitle>
+            {healthBadge && (
+              <Badge className={`text-xs font-semibold w-fit ${healthBadge.className}`}>
+                {healthBadge.label}
+              </Badge>
+            )}
           </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="text-4xl font-bold">{health_score.score} / 100</div>
+          <CardContent className="space-y-2">
+            <div className="text-3xl font-bold">{health_score.score} / 100</div>
             <div className="text-sm text-muted-foreground">
               <span className="text-[var(--primary)] font-semibold">User:</span>{' '}
               <span className="text-foreground">
@@ -74,14 +78,15 @@ export default async function InsightsPage() {
           </CardContent>
         </Card>
 
-        <Card className="md:col-span-8 flex flex-col bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
+        {/* AI Insights - 6 cols */}
+        <Card className="md:col-span-6 flex flex-col bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-[var(--primary)]" />
               AI Insights
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-3 flex-1">
             {insights.length === 0 ? (
               <p className="text-sm text-muted-foreground">No insights yet.</p>
             ) : (
@@ -96,23 +101,48 @@ export default async function InsightsPage() {
             )}
           </CardContent>
         </Card>
+
+        {/* Alerts - 3 cols */}
+        <Card className="md:col-span-3 flex flex-col">
+          <CardHeader className="flex items-center gap-2 pb-2">
+            <AlertTriangle className="h-4 w-4 text-amber-600" />
+            <CardTitle>Alerts</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 flex-1">
+            {alerts.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No alerts at this time.</p>
+            ) : (
+              alerts.map((alert, idx) => (
+                <div key={idx} className="text-sm text-foreground">
+                  {alert}
+                </div>
+              ))
+            )}
+          </CardContent>
+        </Card>
       </div>
 
-      <Card className="flex flex-col">
-        <CardHeader className="flex items-center gap-2 pb-2">
-          <AlertTriangle className="h-4 w-4 text-amber-600" />
-          <CardTitle>Alerts</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {alerts.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No alerts at this time.</p>
-          ) : (
-            alerts.map((alert, idx) => (
-              <div key={idx} className="text-sm text-foreground">
-                {alert}
-              </div>
-            ))
-          )}
+      {/* AI Shop Assistant promo card */}
+      <Card className="border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10">
+        <CardContent className="flex flex-col md:flex-row items-center justify-between gap-4 py-6">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-primary/15 border border-primary/20">
+              <ShoppingBag className="h-6 w-6 text-primary" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-lg font-semibold text-foreground">AI Shop Assistant</h3>
+              <p className="text-sm text-muted-foreground">
+                Find the perfect product with AI-powered recommendations. Get installment options via
+                Opencard by Agrobank.
+              </p>
+            </div>
+          </div>
+          <Button asChild className="shrink-0">
+            <Link href="/ai-shop" className="flex items-center gap-2">
+              Try AI Shop
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
         </CardContent>
       </Card>
     </div>
