@@ -90,7 +90,13 @@ export async function apiFetch<T>(
     console.log("[apiFetch] success", { url, status: response.status });
   }
 
-  return body;
+  // If the API didn't return a body, synthesize an empty success response
+  // to satisfy the return type and avoid undefined.
+  return (body ?? {
+    is_success: true,
+    message: "OK",
+    data: null as unknown as T,
+  }) as ApiResponse<T>;
 }
 
 export type { ApiResponse };
