@@ -605,9 +605,15 @@ HTML_TEMPLATE = """
                  <p class="section-title">Request Body:</p>
                  <pre>{
   "goal_id": "uuid",
+  "user_id": "user-uuid",
   "name": "New Laptop Pro",
   "target_amount": 15000000,
-  "priority": "MEDIUM"
+  "current_amount": 1000000,
+  "currency": "UZS",
+  "target_date": "2025-12-31T00:00:00",
+  "status": "ACTIVE",
+  "priority": "MEDIUM",
+  "description": "For work"
 }</pre>
                 <p class="section-title">Response (200 OK):</p>
                 <pre>{
@@ -623,6 +629,34 @@ HTML_TEMPLATE = """
     "target_date": "2025-12-31T00:00:00",
     "status": "ACTIVE",
     "priority": "MEDIUM",
+    "description": "For work",
+    "created_at": "2023-11-01T10:00:00"
+  }
+}</pre>
+            </div>
+            
+            <div class="endpoint">
+                <div class="header">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/goals/&lt;goal_id&gt;?username=&lt;username&gt;</span>
+                </div>
+                <div class="desc"><strong>Get Goal By ID</strong></div>
+                <p class="section-title">Query Parameters:</p>
+                <pre>username (string) - required</pre>
+                <p class="section-title">Response (200 OK):</p>
+                <pre>{
+  "is_success": true,
+  "message": "Goal retrieved successfully.",
+  "data": {
+    "id": "uuid",
+    "user_id": "user-uuid",
+    "name": "New Laptop",
+    "target_amount": 10000000,
+    "current_amount": 1000000,
+    "currency": "UZS",
+    "target_date": "2025-12-31T00:00:00",
+    "status": "ACTIVE",
+    "priority": "HIGH",
     "description": "For work",
     "created_at": "2023-11-01T10:00:00"
   }

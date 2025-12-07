@@ -109,3 +109,16 @@ def get_product_recommendations(goal_id):
     response = GoalService.get_product_recommendations(goal_id, username)
     return jsonify(response.dict()), 200 if response.is_success else 500
 
+
+@goals_bp.route("/<goal_id>", methods=["GET"])
+def get_goal_by_id(goal_id):
+    """Get a single goal by id for a user (requires `username` query param)."""
+    username = request.args.get("username")
+
+    if not username:
+        return jsonify({"is_success": False, "message": "username is required"}), 400
+
+    logger.info(f"Getting goal {goal_id} for user: {username}")
+    response = GoalService.get_goal_by_id(goal_id, username)
+    return jsonify(response.dict()), 200 if response.is_success else 500
+

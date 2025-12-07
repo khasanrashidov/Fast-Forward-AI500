@@ -130,12 +130,21 @@ class GoalService:
     def update_goal(goal_model: GoalUpdateModel) -> BaseResponse:
         """Update an existing goal."""
         try:
-            goal = Goal.query.filter_by(id=goal_model.goal_id).first()
+            # Ensure we search by string id to match stored DB format
+            goal = Goal.query.filter_by(id=str(goal_model.goal_id)).first()
             if not goal:
                 return BaseResponse(
                     is_success=False,
                     message="Goal not found.",
                     errors=["Goal not found."],
+                )
+
+            # Verify ownership: ensure the provided user_id matches the goal owner
+            if str(goal.user_id) != str(goal_model.user_id):
+                return BaseResponse(
+                    is_success=False,
+                    message="Unauthorized access.",
+                    errors=["Goal does not belong to user."],
                 )
 
             goal.name = goal_model.name
@@ -388,6 +397,48 @@ class GoalService:
             return BaseResponse(
                 is_success=False,
                 message="Failed to predict goal timeline.",
+                errors=[str(e)],
+            )
+
+    @staticmethod
+    def get_goal_by_id(goal_id: str, username: str) -> BaseResponse:
+        """Retrieve a single goal by id for a specific user (ownership enforced)."""
+        try:
+            user = User.query.filter_by(username=username).first()
+            if not user:
+                return BaseResponse(
+                    is_success=False,
+                    message="User not found.",
+                    errors=["User not found."],
+                )
+
+            # Ensure id formats align
+            goal = Goal.query.filter_by(id=str(goal_id)).first()
+            if not goal:
+                return BaseResponse(
+                    is_success=False,
+                    message="Goal not found.",
+                    errors=["Goal not found."],
+                )
+
+            # Verify ownership
+            if str(goal.user_id) != str(user.id):
+                return BaseResponse(
+                    is_success=False,
+                    message="Unauthorized access.",
+                    errors=["Goal does not belong to user."],
+                )
+
+            return BaseResponse(
+                is_success=True,
+                message="Goal retrieved successfully.",
+                data=goal.to_dict(),
+            )
+        except Exception as e:
+            logger.error(f"Error retrieving goal: {str(e)}")
+            return BaseResponse(
+                is_success=False,
+                message="Failed to retrieve goal.",
                 errors=[str(e)],
             )
 

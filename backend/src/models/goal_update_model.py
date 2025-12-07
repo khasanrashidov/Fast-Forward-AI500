@@ -10,6 +10,7 @@ from enums import GoalPriorityEnum, GoalStatusEnum
 class GoalUpdateModel(BaseModel):
     goal_id: UUID
     name: str
+    user_id: UUID
     target_amount: float
     current_amount: Optional[float] = 0.0
     currency: Optional[str] = "UZS"
