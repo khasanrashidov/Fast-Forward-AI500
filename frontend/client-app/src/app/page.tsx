@@ -267,23 +267,32 @@ export default async function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="flex flex-col w-full lg:basis-[25%]">
-              <CardHeader className="flex items-center gap-2 pb-2">
-                <AlertTriangle className="h-4 w-4 text-amber-600" />
-                <CardTitle>Alerts</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                {alerts.length === 0 ? (
-                  <p className="text-sm text-zinc-500">No alerts at this time.</p>
-                ) : (
-                  alerts.map((alert, idx) => (
-                    <div key={idx} className="text-sm text-zinc-700 dark:text-zinc-200">
-                      {alert}
-                    </div>
-                  ))
-                )}
-              </CardContent>
-            </Card>
+          <Card className="flex flex-col w-full lg:basis-[25%]">
+            <CardHeader className="flex items-center gap-2 pb-2">
+              <AlertTriangle className="h-4 w-4 text-amber-600" />
+              <CardTitle>Alerts</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {alerts.length === 0 ? (
+                <div className="flex flex-col items-center gap-2 text-sm text-zinc-500">
+                  <div className="h-50 w-50">
+                    <img
+                      src="/done-checking.svg"
+                      alt="No alerts illustration"
+                      className="h-full w-full object-contain"
+                    />
+                  </div>
+                  <p>No alerts at this time.</p>
+                </div>
+              ) : (
+                alerts.map((alert, idx) => (
+                  <div key={idx} className="text-sm text-zinc-700 dark:text-zinc-200">
+                    {alert}
+                  </div>
+                ))
+              )}
+            </CardContent>
+          </Card>
       </div>
         </div>
 
