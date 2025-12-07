@@ -21,7 +21,9 @@ export default function ClientLayout({
                 className={`min-h-screen pb-20 md:pb-0 transition-all duration-300 ${isSidebarCollapsed ? "md:ml-20" : "md:ml-64"
                     }`}
             >
-                {children}
+                <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-5 md:px-6 lg:px-8">
+                    {children}
+                </div>
             </main>
             <BottomNav />
         </>

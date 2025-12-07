@@ -178,6 +178,29 @@ export default async function GoalDetailPage({
           </CardContent>
         </Card>
 
+        <Card className="bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
+          <CardHeader className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-primary" />
+            <CardTitle>AI Insights</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {insights?.insights?.length ? (
+              insights.insights.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-md border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/6 to-accent/10 p-3 text-sm text-foreground"
+                >
+                  {item}
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-muted-foreground">No insights available.</p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Timeline (Monte Carlo)</CardTitle>
@@ -201,29 +224,6 @@ export default async function GoalDetailPage({
                 {timeline.ai_interpretation ?? timeline.interpretation}
               </div>
             ) : null}
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card className="bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
-          <CardHeader className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
-            <CardTitle>AI Insights</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {insights?.insights?.length ? (
-              insights.insights.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="rounded-md border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/6 to-accent/10 p-3 text-sm text-foreground"
-                >
-                  {item}
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-muted-foreground">No insights available.</p>
-            )}
           </CardContent>
         </Card>
 
