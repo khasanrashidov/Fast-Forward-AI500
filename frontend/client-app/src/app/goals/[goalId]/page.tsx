@@ -170,7 +170,9 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
                 <span className="text-foreground text-sm sm:text-base">
                   {predictedFinishDate
                     ? `${predictedFinishDate.toLocaleDateString(locale)}${
-                        predictedMonths ? ` (${t('inMonths', { months: Math.ceil(predictedMonths) })})` : ''
+                        predictedMonths
+                          ? ` (${t('inMonths', { months: Math.ceil(predictedMonths) })})`
+                          : ''
                       }`
                     : t('notAvailable')}
                 </span>

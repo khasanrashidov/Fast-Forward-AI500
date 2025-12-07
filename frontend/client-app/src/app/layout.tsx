@@ -40,7 +40,7 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <GlobalLoader />
-        <ClientLayout>{children}</ClientLayout>
+          <ClientLayout>{children}</ClientLayout>
           <Toaster />
         </NextIntlClientProvider>
       </body>

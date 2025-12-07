@@ -74,11 +74,7 @@ type MonthGroup = {
   }[];
 };
 
-export default function TransactionsClient({
-  monthGroups,
-}: {
-  monthGroups: MonthGroup[];
-}) {
+export default function TransactionsClient({ monthGroups }: { monthGroups: MonthGroup[] }) {
   const t = useTranslations('transactions');
   const [index, setIndex] = useState(0);
   const [search, setSearch] = useState('');

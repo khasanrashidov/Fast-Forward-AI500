@@ -58,7 +58,7 @@ export default async function DashboardPage() {
   try {
     [data, user, cards] = await Promise.all([getDashboard(), getUser(), getCards()]);
   } catch {
-  return (
+    return (
       <div className="p-6 space-y-4">
         <h1 className="text-3xl font-bold tracking-tight">{t('welcome')}</h1>
         <Card>
@@ -133,9 +133,7 @@ export default async function DashboardPage() {
           <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
-                <CardTitle className="text-xs sm:text-sm font-medium">
-                  {t('totalIncome')}
-                </CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-medium">{t('totalIncome')}</CardTitle>
                 <ArrowUpRight className="h-4 w-4 sm:h-5 sm:w-5 text-[var(--primary)]" />
               </CardHeader>
               <CardContent className="pt-0 sm:pt-0">
@@ -148,13 +146,13 @@ export default async function DashboardPage() {
               </CardContent>
             </Card>
 
-        <Card>
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
                 <CardTitle className="text-xs sm:text-sm font-medium">
                   {t('totalSpending')}
                 </CardTitle>
                 <ArrowDownRight className="h-4 w-4 sm:h-5 sm:w-5 text-rose-500" />
-          </CardHeader>
+              </CardHeader>
               <CardContent className="pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-rose-600">
                   {formatCurrency(summary.total_spending)}
@@ -165,16 +163,16 @@ export default async function DashboardPage() {
                 <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">
                   {t('difference')}: {formatPercent(summary.spending_change_percent)}
                 </p>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
-        <Card>
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
                 <CardTitle className="text-xs sm:text-sm font-medium">
                   {t('savingsPotential')}
                 </CardTitle>
                 <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-[var(--primary)]" />
-          </CardHeader>
+              </CardHeader>
               <CardContent className="pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold">
                   {formatCurrency(summary.savings_potential)}
@@ -182,16 +180,14 @@ export default async function DashboardPage() {
                 <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">
                   {t('afterSpendObligations')}
                 </p>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
-        <Card>
+            <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
-                <CardTitle className="text-xs sm:text-sm font-medium">
-                  {t('healthScore')}
-                </CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-medium">{t('healthScore')}</CardTitle>
                 <HeartPulse className={`h-4 w-4 sm:h-5 sm:w-5 ${healthIcon}`} />
-          </CardHeader>
+              </CardHeader>
               <CardContent className="pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold">{health_score.score} / 100</div>
                 {healthBadge && health_score.status && (
@@ -204,9 +200,9 @@ export default async function DashboardPage() {
                     </Badge>
                   </div>
                 )}
-          </CardContent>
-        </Card>
-      </div>
+              </CardContent>
+            </Card>
+          </div>
 
           <div className="flex flex-col lg:flex-row gap-4">
             <Card className="w-full lg:basis-[40%]">
@@ -214,7 +210,7 @@ export default async function DashboardPage() {
                 <CardTitle className="text-base sm:text-lg">
                   {t('spendingIn', { month: monthLabel })}
                 </CardTitle>
-          </CardHeader>
+              </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
                 {deltas.length === 0 ? (
                   <p className="text-sm text-zinc-500">{t('noCategoryData')}</p>
@@ -265,11 +261,11 @@ export default async function DashboardPage() {
                           </p>
                         </div>
                       ))}
-            </div>
+                    </div>
                   </>
                 )}
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
             <Card className="flex flex-col bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20 w-full lg:basis-[35%]">
               <CardHeader className="pb-2">
@@ -277,7 +273,7 @@ export default async function DashboardPage() {
                   <Sparkles className="h-4 w-4 text-[var(--primary)]" />
                   {t('aiInsights')}
                 </CardTitle>
-          </CardHeader>
+              </CardHeader>
               <CardContent className="space-y-3">
                 {insights.length === 0 ? (
                   <p className="text-sm text-zinc-500">{t('noInsights')}</p>
@@ -320,12 +316,12 @@ export default async function DashboardPage() {
                 )}
               </CardContent>
             </Card>
-                  </div>
-                </div>
+          </div>
+        </div>
 
         <div className="col-span-12 lg:col-span-3">
           <DashboardCards initialCards={cards} username={user.username} />
-            </div>
+        </div>
       </div>
     </div>
   );
