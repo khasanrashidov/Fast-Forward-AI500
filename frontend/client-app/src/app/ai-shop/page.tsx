@@ -213,6 +213,7 @@ export default function AIShopPage() {
                                 fill
                                 className="object-contain"
                                 sizes="(max-width:768px) 100vw, 300px"
+                                unoptimized
                               />
                             </div>
                             <CardTitle className="text-base font-semibold leading-snug">
