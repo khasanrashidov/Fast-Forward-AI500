@@ -45,8 +45,8 @@ const createCardSchema = z.object({
     .min(1, "Balance is required")
     .transform((val) => Number(val.replace(/,/g, "")))
     .refine((val) => Number.isFinite(val), "Enter a valid number"),
-  currency: z.enum(CURRENCIES, { required_error: "Currency is required" }),
-  card_type: z.enum(CARD_TYPES, { required_error: "Card type is required" }),
+  currency: z.enum(CURRENCIES),
+  card_type: z.enum(CARD_TYPES),
   expiration_date: z.string().min(1, "Expiration date is required"),
 });
 
@@ -118,9 +118,41 @@ export function DashboardCards({ initialCards, username }: Props) {
           <CreditCard className="h-4 w-4 text-[var(--primary)]" />
           My cards
         </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {cards.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No cards yet.</p>
+        ) : (
+          cards.map((card) => (
+            <div
+              key={card.id}
+              className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/12 via-primary/8 to-accent/12 p-4 text-foreground shadow-sm"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <div className="text-sm font-semibold">{card.card_name}</div>
+                <Badge variant="outline" className="text-[11px] border-primary/40 text-primary">
+                  {card.card_type}
+                </Badge>
+              </div>
+              <div className="mt-1 text-lg font-semibold tracking-widest">{maskCard(card.card_number)}</div>
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <span>{card.currency}</span>
+                <span>Exp: {card.expiration_date}</span>
+              </div>
+              <div className="mt-3 flex items-center justify-between text-sm">
+                <div className="space-y-0.5">
+                  <p className="text-xs text-muted-foreground">Balance</p>
+                  <p className="text-base font-semibold text-foreground">
+                    {formatAmount(card.balance, card.currency)}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button size="sm">
+            <Button variant="outline" className="w-full mt-2">
               <Plus className="h-4 w-4" />
               Add card
             </Button>
@@ -223,39 +255,6 @@ export function DashboardCards({ initialCards, username }: Props) {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        {cards.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No cards yet.</p>
-        ) : (
-          cards.map((card) => (
-            <div
-              key={card.id}
-              className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/12 via-primary/8 to-accent/12 p-4 text-foreground shadow-sm"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <div className="text-sm font-semibold">{card.card_name}</div>
-                <Badge variant="outline" className="text-[11px] border-primary/40 text-primary">
-                  {card.card_type}
-                </Badge>
-              </div>
-              <div className="mt-1 text-lg font-semibold tracking-widest">{maskCard(card.card_number)}</div>
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>{card.currency}</span>
-                <span>Exp: {card.expiration_date}</span>
-              </div>
-              <div className="mt-3 flex items-center justify-between text-sm">
-                <div className="space-y-0.5">
-                  <p className="text-xs text-muted-foreground">Balance</p>
-                  <p className="text-base font-semibold text-foreground">
-                    {formatAmount(card.balance, card.currency)}
-                  </p>
-                </div>
-                <div className="h-10 w-10 rounded-full border border-primary/25 bg-primary/10 shadow-inner" />
-              </div>
-            </div>
-          ))
-        )}
       </CardContent>
     </UiCard>
   );
