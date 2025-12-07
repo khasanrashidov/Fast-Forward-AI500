@@ -116,74 +116,74 @@ export default async function DashboardPage() {
           : 'text-indigo-500';
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-3">
-          <h1 className="text-3xl font-semibold tracking-tight text-[var(--primary)]">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[var(--primary)]">
             {user ? `${user.first_name} ${user.last_name}` : 'Welcome'}
           </h1>
         </div>
-        <p className="text-zinc-500">Here is your latest financial overview.</p>
+        <p className="text-sm sm:text-base text-zinc-500">Here is your latest financial overview.</p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-12">
         <div className="col-span-12 lg:col-span-9 grid gap-4">
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Income</CardTitle>
-                <ArrowUpRight className="h-5 w-5 text-[var(--primary)]" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+                <CardTitle className="text-xs sm:text-sm font-medium">Total Income</CardTitle>
+                <ArrowUpRight className="h-4 w-4 sm:h-5 sm:w-5 text-[var(--primary)]" />
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-[var(--primary)]">
+              <CardContent className="pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-[var(--primary)]">
                   {formatCurrency(summary.total_income)}
                 </div>
-                <p className="text-xs text-zinc-500">From all sources</p>
+                <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">From all sources</p>
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total Spending</CardTitle>
-                <ArrowDownRight className="h-5 w-5 text-rose-500" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+                <CardTitle className="text-xs sm:text-sm font-medium">Total Spending</CardTitle>
+                <ArrowDownRight className="h-4 w-4 sm:h-5 sm:w-5 text-rose-500" />
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-rose-600">
+              <CardContent className="pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold text-rose-600">
                   {formatCurrency(summary.total_spending)}
                 </div>
-                <p className="text-xs text-zinc-500">
-                  Previous month: {formatCurrency(summary.previous_month_spending)}
+                <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">
+                  Prev: {formatCurrency(summary.previous_month_spending)}
                 </p>
-                <p className="text-xs text-zinc-500">
-                  Difference: {formatPercent(summary.spending_change_percent)}
+                <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">
+                  Diff: {formatPercent(summary.spending_change_percent)}
                 </p>
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Savings Potential</CardTitle>
-                <Coins className="h-5 w-5 text-[var(--primary)]" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+                <CardTitle className="text-xs sm:text-sm font-medium">Savings Potential</CardTitle>
+                <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-[var(--primary)]" />
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
+              <CardContent className="pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold">
                   {formatCurrency(summary.savings_potential)}
                 </div>
-                <p className="text-xs text-zinc-500">After spend & obligations</p>
+                <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">After spend & obligations</p>
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Health Score</CardTitle>
-                <HeartPulse className={`h-5 w-5 ${healthIcon}`} />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
+                <CardTitle className="text-xs sm:text-sm font-medium">Health Score</CardTitle>
+                <HeartPulse className={`h-4 w-4 sm:h-5 sm:w-5 ${healthIcon}`} />
               </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{health_score.score} / 100 </div>
+              <CardContent className="pt-0 sm:pt-0">
+                <div className="text-lg sm:text-2xl font-bold">{health_score.score} / 100</div>
                 {healthBadge && health_score.status && (
-                  <div className="mt-2">
+                  <div className="mt-1 sm:mt-2">
                     <Badge
-                      className={`text-[11px] font-semibold ${healthBadge.className}`}
+                      className={`text-[10px] sm:text-[11px] font-semibold ${healthBadge.className}`}
                       style={healthBadge.style}
                     >
                       {health_score.status}
@@ -208,18 +208,18 @@ export default async function DashboardPage() {
                       <SpendingCategoryRadial
                         categories={deltas.map(({ name, value }) => ({ name, value }))}
                         colors={palette}
-                        sizeClassName="w-[200px] max-w-full"
+                        sizeClassName="w-[160px] sm:w-[200px] max-w-full"
                         centerLabel="UZS"
                         subLabel={monthOnly}
                         currency="UZS"
                       />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1.5 sm:space-y-2">
                       {deltas.map(({ name, value, prev, pct, diff }, idx) => (
-                        <div key={name} className="flex items-center justify-between gap-4">
-                          <div className="flex items-center gap-2">
+                        <div key={name} className="flex items-center justify-between gap-2 sm:gap-4">
+                          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
                             <Badge
-                              className="rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                              className="rounded-full px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-[11px] font-semibold shrink-0"
                               style={{
                                 backgroundColor: palette[idx % palette.length],
                                 color: '#ffffff',
@@ -227,7 +227,7 @@ export default async function DashboardPage() {
                             >
                               {name}
                             </Badge>
-                            <div>
+                            <div className="hidden sm:block">
                               {prev > 0 && (
                                 <p className="text-xs text-zinc-500">
                                   Previous month: {formatCurrency(prev)}
@@ -241,7 +241,7 @@ export default async function DashboardPage() {
                               )}
                             </div>
                           </div>
-                          <p className="text-sm font-semibold shrink-0">{formatCurrency(value)}</p>
+                          <p className="text-xs sm:text-sm font-semibold shrink-0">{formatCurrency(value)}</p>
                         </div>
                       ))}
                     </div>
