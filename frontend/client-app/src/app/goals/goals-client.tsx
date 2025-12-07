@@ -414,13 +414,6 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                     </span>
                   </div>
 
-                  {goal.estimated_months !== undefined ? (
-                    <div className="text-xs text-muted-foreground">
-                      Est. months to reach:{" "}
-                      <span className="text-foreground font-medium">{goal.estimated_months}</span>
-                    </div>
-                  ) : null}
-
                   <Button
                     variant="outline"
                     size="sm"

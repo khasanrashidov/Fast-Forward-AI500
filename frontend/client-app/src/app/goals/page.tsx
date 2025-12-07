@@ -5,6 +5,8 @@ import { getGoals } from "@/lib/services/goals";
 import { getUser } from "@/lib/services/users";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+export const dynamic = "force-dynamic";
+
 export default async function GoalsPage() {
   try {
     const [goals, user] = await Promise.all([getGoals(), getUser()]);

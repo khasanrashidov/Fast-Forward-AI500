@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ArrowRightLeft, Rocket, Sparkles, GalleryVerticalEnd } from "lucide-react";
+import { Home, ArrowRightLeft, Rocket, Sparkles, GalleryVerticalEnd, BookOpen } from "lucide-react";
 
 const navItems = [
     { name: "Home", href: "/", icon: Home },
     { name: "Transactions", href: "/transactions", icon: ArrowRightLeft },
     { name: "Goals", href: "/goals", icon: Rocket },
     { name: "Insights", href: "/insights", icon: Sparkles },
+    { name: "Tips", href: "/financial-tips", icon: BookOpen },
     { name: "Showcase", href: "/showcase", icon: GalleryVerticalEnd },
 ];
 

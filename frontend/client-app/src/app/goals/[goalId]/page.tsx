@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { TimelineChart } from "./timeline-chart";
 
+export const dynamic = "force-dynamic";
+
 function formatAmount(value: number, currency: string) {
   return `${value.toLocaleString("en-US")} ${currency}`;
 }
