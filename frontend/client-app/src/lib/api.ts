@@ -65,7 +65,10 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<Api
 
   const method = (init?.method ?? 'GET').toString().toUpperCase();
   // More retries for GET requests, and also retry POST for AI endpoints
-  const isAIEndpoint = path.includes('/shop/search') || path.includes('/insights') || path.includes('/recommendations');
+  const isAIEndpoint =
+    path.includes('/shop/search') ||
+    path.includes('/insights') ||
+    path.includes('/recommendations');
   const maxAttempts = method === 'GET' ? 5 : isAIEndpoint ? 3 : 1;
   // Longer timeout for AI endpoints (60s), normal timeout (30s)
   const timeoutMs = isAIEndpoint ? 60000 : 30000;
@@ -166,9 +169,7 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<Api
 
       // Check if we should retry
       const shouldRetry =
-        !isLast &&
-        (method === 'GET' || isAIEndpoint) &&
-        isRetryableError(error, lastStatus);
+        !isLast && (method === 'GET' || isAIEndpoint) && isRetryableError(error, lastStatus);
 
       if (!shouldRetry) {
         // Only log on final failure to reduce noise

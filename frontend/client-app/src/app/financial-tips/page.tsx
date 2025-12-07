@@ -176,7 +176,7 @@ export default function FinancialTipsPage() {
             >
               <CardHeader className="flex flex-row items-start justify-between gap-3 pb-3">
                 <div className="flex items-center gap-2">
-                  <div className="h-9 w-9 rounded-full bg-white/70 border border-white/50 flex items-center justify-center shadow-sm">
+                  <div className="h-9 w-9 shrink-0 rounded-full bg-white/70 border border-white/50 flex items-center justify-center shadow-sm">
                     <Icon className="h-4 w-4 text-[var(--primary)]" />
                   </div>
                   <CardTitle className="text-base font-semibold leading-snug">

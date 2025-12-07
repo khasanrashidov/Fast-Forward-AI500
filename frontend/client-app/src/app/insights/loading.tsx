@@ -44,10 +44,7 @@ export default function InsightsLoading() {
           </CardHeader>
           <CardContent className="space-y-3 flex-1">
             {Array.from({ length: 4 }).map((_, idx) => (
-              <div
-                key={idx}
-                className="rounded-md border border-primary/25 bg-white/80 p-3"
-              >
+              <div key={idx} className="rounded-md border border-primary/25 bg-white/80 p-3">
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-3/4 mt-1" />
               </div>

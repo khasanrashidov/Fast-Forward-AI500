@@ -20,42 +20,48 @@ import {
 const features = [
   {
     title: 'AI Spending Insights',
-    description: 'Short, actionable explanations of where your money goes. Understand your spending patterns with AI-powered analysis.',
+    description:
+      'Short, actionable explanations of where your money goes. Understand your spending patterns with AI-powered analysis.',
     icon: BarChart3,
     href: '/transactions',
     badge: 'Analytics',
   },
   {
     title: 'Smart Monthly Planning',
-    description: 'Warnings when spending is too fast & balance predictions. Stay on track with intelligent alerts.',
+    description:
+      'Warnings when spending is too fast & balance predictions. Stay on track with intelligent alerts.',
     icon: CalendarClock,
     href: '/',
     badge: 'Dashboard',
   },
   {
     title: 'Financial Health Score',
-    description: 'One simple score (0–100) explaining your stability. Know exactly where you stand financially.',
+    description:
+      'One simple score (0–100) explaining your stability. Know exactly where you stand financially.',
     icon: HeartPulse,
     href: '/insights',
     badge: 'Insights',
   },
   {
     title: 'Goal Planning',
-    description: 'AI calculates timelines and suggests improvements. Set goals and track your progress with Monte Carlo simulations.',
+    description:
+      'AI calculates timelines and suggests improvements. Set goals and track your progress with Monte Carlo simulations.',
     icon: Target,
     href: '/goals',
     badge: 'Goals',
   },
   {
     title: 'Personalized Recommendations',
-    description: 'Based on spending patterns, habits, income, and goals. Get tailored advice to improve your finances.',
+    description:
+      'Based on spending patterns, habits, income, and goals. Get tailored advice to improve your finances.',
     icon: Lightbulb,
     href: '/financial-tips',
     badge: 'Tips',
   },
   {
     title: 'Agrobank Product Matching',
-    description: 'AI suggests Microloans, Deposits, Savings, and Installment options. Find the right products for your needs.',
+    description:
+      'AI suggests Microloans, Deposits, Savings, and Installment options. Find the right products for your needs.',
     icon: ShoppingBag,
     href: '/ai-shop',
     badge: 'AI Shop',
@@ -76,8 +82,8 @@ export default function ShowcasePage() {
             Meet <span className="text-primary">Moliyachi</span>
           </h1>
           <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-            A smart financial assistant fully embedded into Agrobank Mobile that transforms it from a
-            transaction tool into a{' '}
+            A smart financial assistant fully embedded into Agrobank Mobile that transforms it from
+            a transaction tool into a{' '}
             <span className="text-foreground font-medium">financial partner</span>.
           </p>
           <div className="flex flex-wrap gap-3">
@@ -125,7 +131,7 @@ export default function ShowcasePage() {
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:bg-primary/15 transition-colors">
+                      <div className="h-10 w-10 shrink-0 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:bg-primary/15 transition-colors">
                         <Icon className="h-5 w-5 text-primary" />
                       </div>
                       <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">
@@ -159,7 +165,7 @@ export default function ShowcasePage() {
       <Card className="border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10">
         <CardContent className="flex flex-col md:flex-row items-center justify-between gap-6 py-8">
           <div className="flex items-center gap-4">
-            <div className="relative h-16 w-16 overflow-hidden rounded-xl border border-primary/20 bg-white shadow-sm">
+            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-primary/20 bg-white shadow-sm">
               <Image
                 src="/logo.png"
                 alt="Moliyachi"

@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { Info, Lightbulb, Sparkles, TrendingUp } from 'lucide-react';
+import { CheckCircle, Info, Lightbulb, Sparkles, TrendingUp } from 'lucide-react';
 
 import { getGoalById, getGoalRecommendations, getGoalTimeline } from '@/lib/services/goals';
 import { getGoalInsights } from '@/lib/services/dashboard';
@@ -25,7 +25,7 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
 
   if (!goalId || goalId === 'undefined') {
     return (
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <Card className="border-destructive/20">
           <CardHeader className="flex items-center gap-2 text-destructive">
             <Info className="h-4 w-4" />
@@ -45,7 +45,7 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
   } catch (error) {
     console.error(error);
     return (
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <Card className="border-destructive/20">
           <CardHeader className="flex items-center gap-2 text-destructive">
             <Info className="h-4 w-4" />
@@ -97,179 +97,243 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-semibold tracking-tight">{goal.name}</h1>
-        <p className="text-muted-foreground">Goal details, insights, and recommendations.</p>
+      {/* Header */}
+      <div className="flex flex-col gap-1 sm:gap-2">
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">{goal.name}</h1>
+        <p className="text-sm sm:text-base text-muted-foreground">
+          Goal details, insights, and recommendations.
+        </p>
       </div>
 
+      {/* Progress + AI Insights */}
       <div className="grid gap-4 lg:grid-cols-3">
+        {/* Progress Card */}
         <Card className="lg:col-span-2">
-          <CardHeader className="space-y-1">
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-primary" />
+          <CardHeader className="space-y-2 sm:space-y-1 pb-3 sm:pb-4">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
               Progress
             </CardTitle>
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-              <Badge className="bg-primary/12 text-primary border border-primary/20">
+              <Badge className="bg-primary/12 text-primary border border-primary/20 text-xs">
                 {goal.status}
               </Badge>
-              <Badge variant="outline">{goal.priority} priority</Badge>
+              <Badge variant="outline" className="text-xs">
+                {goal.priority} priority
+              </Badge>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between text-sm text-muted-foreground">
-              <span>Current</span>
-              <span className="text-foreground font-medium">
-                {formatAmount(goal.current_amount, goal.currency)}
-              </span>
+          <CardContent className="space-y-3 sm:space-y-4">
+            {/* Progress bar section */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs sm:text-sm text-muted-foreground">
+                <span>Current</span>
+                <span className="text-foreground font-medium">
+                  {formatAmount(goal.current_amount, goal.currency)}
+                </span>
+              </div>
+              <Progress value={percent} className="h-2" />
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <span>{percent}%</span>
+                <span>Target: {formatAmount(goal.target_amount, goal.currency)}</span>
+              </div>
             </div>
-            <Progress value={percent} className="h-2" />
-            <div className="flex items-center justify-between text-xs text-muted-foreground">
-              <span>{percent}%</span>
-              <span>Target: {formatAmount(goal.target_amount, goal.currency)}</span>
-            </div>
-            <div className="space-y-3 text-base">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-primary font-semibold">Remaining amount:</span>
+
+            {/* Details - stacked on mobile */}
+            <div className="space-y-2 sm:space-y-3 text-sm sm:text-base">
+              <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-0.5 sm:gap-2">
+                <span className="text-primary font-semibold text-xs sm:text-base">
+                  Remaining amount:
+                </span>
                 <span className="text-foreground font-medium">
                   {formatAmount(remaining, goal.currency)}
                 </span>
               </div>
+
               {goal.target_date ? (
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-primary font-semibold">Target date:</span>
+                <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-0.5 sm:gap-2">
+                  <span className="text-primary font-semibold text-xs sm:text-base">
+                    Target date:
+                  </span>
                   <span className="text-foreground">
                     {new Date(goal.target_date).toLocaleDateString()}
                   </span>
                 </div>
               ) : null}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-primary font-semibold inline-flex items-center gap-1">
-                  <Sparkles className="h-4 w-4" />
-                  Predicted goal finish:
+
+              <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-0.5 sm:gap-2">
+                <span className="text-primary font-semibold text-xs sm:text-base inline-flex items-center gap-1">
+                  <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
+                  Predicted finish:
                 </span>
-                <span className="text-foreground">
+                <span className="text-foreground text-sm sm:text-base">
                   {predictedFinishDate
                     ? `${predictedFinishDate.toLocaleDateString()}${
-                        predictedMonths ? ` (in ${Math.ceil(predictedMonths)} months)` : ''
+                        predictedMonths ? ` (in ${Math.ceil(predictedMonths)} mo)` : ''
                       }`
                     : 'N/A'}
                 </span>
-              </div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-primary font-semibold">Goal was created at:</span>
-                <span className="text-foreground">
-                  {new Date(goal.created_at).toLocaleString()}
+                <span className="text-primary font-semibold text-xs sm:text-base inline-flex items-center gap-1">
+                  <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                  Success rate: {`${successProbability}%`}
                 </span>
               </div>
-              <div className="flex flex-wrap items-start gap-2">
-                <span className="text-primary font-semibold">Description:</span>
-                <span className="text-foreground">
-                  {goal.description ? goal.description : 'No description provided.'}
+
+              <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-0.5 sm:gap-2">
+                <span className="text-primary font-semibold text-xs sm:text-base">Created:</span>
+                <span className="text-foreground text-sm sm:text-base">
+                  {new Date(goal.created_at).toLocaleDateString()}
                 </span>
               </div>
+
+              {goal.description ? (
+                <div className="flex flex-col gap-1 pt-1">
+                  <span className="text-primary font-semibold text-xs sm:text-base">
+                    Description:
+                  </span>
+                  <span className="text-foreground text-sm sm:text-base leading-relaxed">
+                    {goal.description}
+                  </span>
+                </div>
+              ) : null}
             </div>
           </CardContent>
         </Card>
 
+        {/* AI Insights Card */}
         <Card className="bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
-          <CardHeader className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
-            <CardTitle>AI Insights</CardTitle>
+          <CardHeader className="flex items-center gap-2 pb-3">
+            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <CardTitle className="text-base sm:text-lg">AI Insights</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {insights?.insights?.length ? (
               insights.insights.map((item, idx) => (
                 <div
                   key={idx}
-                  className="rounded-md border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/6 to-accent/10 p-3 text-sm text-foreground"
+                  className="rounded-md border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/6 to-accent/10 p-2.5 sm:p-3 text-xs sm:text-sm text-foreground"
                 >
                   {item}
                 </div>
               ))
             ) : (
-              <p className="text-sm text-muted-foreground">No insights available.</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">No insights available.</p>
             )}
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      {/* Timeline + Recommendations */}
+      <div className="grid gap-3 sm:gap-4 lg:grid-cols-2">
+        {/* Timeline Card */}
         <Card>
-          <CardHeader>
-            <CardTitle>Timeline (Monte Carlo)</CardTitle>
+          <CardHeader className="pb-2 sm:pb-3 px-3 sm:px-6 pt-3 sm:pt-6">
+            <CardTitle className="text-sm sm:text-lg">Timeline</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 text-sm text-muted-foreground">
-            {deterministicMonths !== undefined ? (
-              <div className="flex items-center justify-between">
-                <span>Deterministic months</span>
-                <span className="text-foreground font-medium">{deterministicMonths}</span>
+          <CardContent className="space-y-2 sm:space-y-3 text-[11px] sm:text-sm text-muted-foreground px-3 sm:px-6 pb-3 sm:pb-6">
+            {/* Stats row - compact on mobile */}
+            <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] sm:text-xs">
+              {deterministicMonths !== undefined ? (
+                <div className="flex items-center gap-1">
+                  <span>Est:</span>
+                  <span className="text-foreground font-medium">{deterministicMonths}mo</span>
+                </div>
+              ) : null}
+              {successProbability !== undefined ? (
+                <div className="flex items-center gap-1">
+                  <span>Success:</span>
+                  <span className="text-foreground font-medium">{successProbability}%</span>
+                </div>
+              ) : null}
+            </div>
+
+            {/* Chart */}
+            <div className="w-full overflow-x-auto -mx-1 px-1">
+              <div className="min-w-[240px]">
+                <TimelineChart timeline={timeline ?? undefined} currency={goal.currency} />
               </div>
-            ) : null}
-            {successProbability !== undefined ? (
-              <div className="flex items-center justify-between">
-                <span>Success probability</span>
-                <span className="text-foreground font-medium">{successProbability}%</span>
-              </div>
-            ) : null}
-            <TimelineChart timeline={timeline ?? undefined} currency={goal.currency} />
+            </div>
+
+            {/* AI Interpretation */}
             {timeline?.ai_interpretation || timeline?.interpretation ? (
-              <div className="rounded-md border bg-muted/40 p-3 text-xs text-foreground">
+              <div className="rounded border bg-muted/40 p-2 sm:p-3 text-[10px] sm:text-xs text-foreground leading-relaxed">
                 {timeline.ai_interpretation ?? timeline.interpretation}
               </div>
             ) : null}
           </CardContent>
         </Card>
 
+        {/* Recommendations Card */}
         <Card>
-          <CardHeader className="flex items-center gap-2">
-            <Lightbulb className="h-5 w-5 text-primary" />
-            <CardTitle>Agrobank Product Recommendations</CardTitle>
+          <CardHeader className="flex items-center gap-1.5 sm:gap-2 pb-2 sm:pb-3 px-3 sm:px-6 pt-3 sm:pt-6">
+            <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+            <CardTitle className="text-sm sm:text-lg">
+              <span className="hidden sm:inline">Agrobank </span>Recommendations
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-2 sm:space-y-3 px-3 sm:px-6 pb-3 sm:pb-6">
             {recommendations?.recommendations?.length ? (
               recommendations.recommendations.map((rec, idx) => (
                 <div
                   key={idx}
-                  className="rounded-md border border-border/70 bg-muted/40 p-3 text-sm space-y-2"
+                  className="rounded border border-border/70 bg-muted/40 p-2.5 sm:p-3 text-xs sm:text-sm space-y-1.5 sm:space-y-2"
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="font-semibold text-foreground">{rec.product_name}</div>
+                  {/* Product name + ID */}
+                  <div className="flex items-start justify-between gap-1.5">
+                    <div className="font-semibold text-foreground text-sm sm:text-base leading-tight">
+                      {rec.product_name}
+                    </div>
                     {rec.product_id ? (
-                      <span className="text-[11px] text-muted-foreground">
-                        ID: {rec.product_id}
+                      <span className="text-[10px] sm:text-[11px] text-muted-foreground shrink-0">
+                        {rec.product_id}
                       </span>
                     ) : null}
                   </div>
-                  <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-                    {rec.category ? (
-                      <span className="rounded border border-border/60 px-2 py-1">
-                        {rec.category}
-                      </span>
-                    ) : null}
-                    {rec.type ? (
-                      <span className="rounded border border-border/60 px-2 py-1">{rec.type}</span>
-                    ) : null}
-                  </div>
+
+                  {/* Category/Type badges */}
+                  {(rec.category || rec.type) && (
+                    <div className="flex flex-wrap gap-1 text-[10px] sm:text-xs text-muted-foreground">
+                      {rec.category ? (
+                        <span className="rounded border border-border/60 px-1.5 py-0.5">
+                          {rec.category}
+                        </span>
+                      ) : null}
+                      {rec.type ? (
+                        <span className="rounded border border-border/60 px-1.5 py-0.5">
+                          {rec.type}
+                        </span>
+                      ) : null}
+                    </div>
+                  )}
+
+                  {/* Description - hidden on mobile, shown on desktop */}
                   {rec.description ? (
-                    <div className="text-foreground text-sm leading-relaxed">{rec.description}</div>
-                  ) : null}
-                  {rec.reason ? (
-                    <div className="text-muted-foreground text-xs">
-                      <span className="font-semibold text-primary">Reason:</span> {rec.reason}
+                    <div className="hidden sm:block text-foreground text-sm leading-relaxed">
+                      {rec.description}
                     </div>
                   ) : null}
+
+                  {/* Reason - truncated on mobile */}
+                  {rec.reason ? (
+                    <div className="text-muted-foreground text-xs sm:text-xs line-clamp-2 sm:line-clamp-none">
+                      <span className="font-semibold text-primary">Why:</span> {rec.reason}
+                    </div>
+                  ) : null}
+
+                  {/* Benefit - hidden on mobile */}
                   {rec.benefit ? (
-                    <div className="text-muted-foreground text-xs">
+                    <div className="hidden sm:block text-muted-foreground text-xs">
                       <span className="font-semibold text-primary">Benefit:</span> {rec.benefit}
                     </div>
                   ) : null}
+
+                  {/* Link */}
                   {rec.link ? (
                     <a
                       href={rec.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-primary text-xs underline underline-offset-4"
+                      className="inline-block text-primary text-xs sm:text-xs underline underline-offset-2"
                     >
                       Learn more
                     </a>
@@ -277,7 +341,9 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
                 </div>
               ))
             ) : (
-              <p className="text-sm text-muted-foreground">No recommendations available.</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                No recommendations available.
+              </p>
             )}
           </CardContent>
         </Card>

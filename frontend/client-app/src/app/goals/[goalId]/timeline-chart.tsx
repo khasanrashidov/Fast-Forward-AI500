@@ -45,22 +45,26 @@ export function TimelineChart({ timeline, currency }: Props) {
   const formatCurrency = (value: number) => `${value.toLocaleString('en-US')} ${currency}`;
 
   return (
-    <ChartContainer config={config} className="h-64 w-full">
-      <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+    <ChartContainer config={config} className="h-36 sm:h-64 w-full">
+      <LineChart data={data} margin={{ top: 5, right: 5, left: -15, bottom: 0 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
         <XAxis
           dataKey="month"
           tickLine={false}
           axisLine={false}
-          tickMargin={8}
+          tickMargin={4}
           stroke="var(--muted-foreground)"
+          tick={{ fontSize: 9 }}
+          interval="preserveStartEnd"
         />
         <YAxis
           tickLine={false}
           axisLine={false}
-          tickMargin={8}
+          tickMargin={2}
           stroke="var(--muted-foreground)"
           tickFormatter={(v) => `${Math.round(v / 1_000_000)}m`}
+          tick={{ fontSize: 9 }}
+          width={28}
         />
         <ChartTooltip
           content={
@@ -87,7 +91,7 @@ export function TimelineChart({ timeline, currency }: Props) {
           type="monotone"
           dataKey="p10_optimistic"
           stroke="var(--color-p10_optimistic)"
-          strokeWidth={2}
+          strokeWidth={1}
           dot={false}
           isAnimationActive={false}
         />
@@ -95,7 +99,7 @@ export function TimelineChart({ timeline, currency }: Props) {
           type="monotone"
           dataKey="p50_median"
           stroke="var(--color-p50_median)"
-          strokeWidth={2}
+          strokeWidth={1}
           dot={false}
           isAnimationActive={false}
         />
@@ -103,7 +107,7 @@ export function TimelineChart({ timeline, currency }: Props) {
           type="monotone"
           dataKey="p90_pessimistic"
           stroke="var(--color-p90_pessimistic)"
-          strokeWidth={2}
+          strokeWidth={1}
           dot={false}
           isAnimationActive={false}
         />

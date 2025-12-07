@@ -15,7 +15,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64'
         }`}
       >
-        <div className="mx-auto w-full max-w-[1500px] px-4 sm:px-5 md:px-6 lg:px-8">{children}</div>
+        <div className="mx-auto w-full max-w-[1500px] px-0 sm:px-5 md:px-6 lg:px-8">{children}</div>
       </main>
       <BottomNav />
     </>

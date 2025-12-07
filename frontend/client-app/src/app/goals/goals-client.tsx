@@ -226,7 +226,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
         </div>
         <Dialog open={createOpen} onOpenChange={setCreateOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button className="w-full sm:w-auto">
               <Plus className="h-4 w-4" />
               Add goal
             </Button>

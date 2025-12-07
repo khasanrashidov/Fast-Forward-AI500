@@ -166,7 +166,7 @@ export default function AIShopPage() {
                       d="M0 43h21.23L0 21.5V43ZM42.461 43V21.5L21.231 43h21.23ZM21.23 0l21.231 21.5V0h-21.23ZM0 0v21.5L21.23 0H0Z"
                       fill="currentColor"
                     />
-                </svg>
+                  </svg>
                   Agrobank products
                 </Badge>
               </div>

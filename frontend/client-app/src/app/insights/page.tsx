@@ -126,14 +126,14 @@ export default async function InsightsPage() {
       <Card className="border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10">
         <CardContent className="flex flex-col md:flex-row items-center justify-between gap-4 py-6">
           <div className="flex items-center gap-4">
-            <div className="flex items-center justify-center h-12 w-12 rounded-xl bg-primary/15 border border-primary/20">
+            <div className="flex items-center justify-center h-12 w-12 shrink-0 rounded-xl bg-primary/15 border border-primary/20">
               <ShoppingBag className="h-6 w-6 text-primary" />
             </div>
             <div className="space-y-1">
               <h3 className="text-lg font-semibold text-foreground">AI Shop Assistant</h3>
               <p className="text-sm text-muted-foreground">
-                Find the perfect product with AI-powered recommendations. Get installment options via
-                Opencard by Agrobank.
+                Find the perfect product with AI-powered recommendations. Get installment options
+                via Opencard by Agrobank.
               </p>
             </div>
           </div>

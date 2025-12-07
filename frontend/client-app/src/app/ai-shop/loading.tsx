@@ -21,10 +21,7 @@ export default function AIShopLoading() {
             {/* Sample prompts grid skeleton */}
             <div className="grid grid-cols-2 gap-3 w-full max-w-lg mt-4">
               {Array.from({ length: 4 }).map((_, idx) => (
-                <div
-                  key={idx}
-                  className="rounded-xl border border-border bg-card p-4 space-y-2"
-                >
+                <div key={idx} className="rounded-xl border border-border bg-card p-4 space-y-2">
                   <Skeleton className="h-4 w-24" />
                   <Skeleton className="h-3 w-full" />
                 </div>
@@ -55,4 +52,3 @@ export default function AIShopLoading() {
     </div>
   );
 }
-
