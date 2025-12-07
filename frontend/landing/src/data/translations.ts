@@ -17,11 +17,19 @@ export interface Translations {
     aboutTitle: string;
     whatIsTitle: string;
     whatIsDesc: string;
-    featuresTitle: string;
-    features: string[];
+    problemConnectionTitle: string;
+    problemConnectionDesc: string;
+    solutionConnectionTitle: string;
+    solutionConnectionDesc: string;
     techStackTitle: string;
+    aiTechTitle: string;
+    aiTechItems: string[];
+    otherTechTitle: string;
     currentStageTitle: string;
     currentStage: string;
+    currentStageDesc: string;
+    nextStepsTitle: string;
+    nextSteps: string[];
     hackathonSubmission: string;
     tryAppTitle: string;
     tryAppSubtitle: string;
@@ -108,21 +116,36 @@ export const translations: Record<Language, Translations> = {
     demo: {
       title: 'Demo Recording',
       videoPlaceholder: 'Video Placeholder (1-5 mins)',
-      aboutTitle: 'About Moliyachi',
+      aboutTitle: 'Description',
       whatIsTitle: 'What is Moliyachi?',
       whatIsDesc:
         'An AI-powered personal finance assistant that lives inside Agrobank Mobile. It transforms your banking app into an intelligent financial companion.',
-      featuresTitle: 'Key Features',
-      features: [
-        'AI spending insights & categorization',
-        'Financial health score (0-100)',
-        'Agrobank product recommendations',
-        'Goal tracking with AI predictions',
-        'Personalized recommendations',
-      ],
+      problemConnectionTitle: 'The Problem We Solve',
+      problemConnectionDesc:
+        'Many Agrobank customers live paycheck to paycheck, facing aggressive spending after salary arrival, mid-month financial stress, and no visibility into their spending behavior. Current banking apps show transactions but lack intelligence — users need to understand their financial behavior, not just view balances.',
+      solutionConnectionTitle: 'Our Solution',
+      solutionConnectionDesc:
+        'Moliyachi transforms Agrobank Mobile from a transaction tool into a financial partner. Using AI, we provide spending insights, smart monthly planning with balance predictions, a Financial Health Score (0-100), goal planning with AI timelines, and personalized Agrobank product recommendations.',
       techStackTitle: 'Tech Stack',
+      aiTechTitle: 'AI & Intelligence Layer',
+      aiTechItems: [
+        'LangChain — AI orchestration framework',
+        'OpenAI GPT-5.1/4.1/4o — Large Language Models',
+        'RAG — Retrieval-Augmented Generation',
+        'Machine Learning — Behavioral modeling & predictions',
+        'Open-source LLMs — On-premise deployment option',
+        'LangSmith — AI observability & monitoring',
+      ],
+      otherTechTitle: 'Full Stack',
       currentStageTitle: 'Current Stage',
       currentStage: 'MVP',
+      currentStageDesc: 'Fully functional prototype with core AI features implemented',
+      nextStepsTitle: 'Next Steps',
+      nextSteps: [
+        'Final UI/UX polishing',
+        'Performance optimization',
+        'Edge case handling improvements',
+      ],
       hackathonSubmission: 'AI500 Hackathon Submission',
       tryAppTitle: 'Try the App',
       tryAppSubtitle: 'Interactive preview',
@@ -373,6 +396,7 @@ export const translations: Record<Language, Translations> = {
             'Open-source LLM models for on-premise deployment',
             'Custom Rules and Instructions',
             'Machine Learning',
+            'RAG',
           ],
         },
         {
@@ -448,21 +472,36 @@ export const translations: Record<Language, Translations> = {
     demo: {
       title: 'Demo Yozuvi',
       videoPlaceholder: "Video O'rni (1-5 daqiqa)",
-      aboutTitle: 'Moliyachi haqida',
+      aboutTitle: 'Tavsif',
       whatIsTitle: 'Moliyachi nima?',
       whatIsDesc:
         'Agrobank Mobile ichida joylashgan AI asosidagi shaxsiy moliyaviy yordamchi. U bank ilovangizni aqlli moliyaviy hamrohga aylantiradi.',
-      featuresTitle: 'Asosiy Imkoniyatlar',
-      features: [
-        'AI xarajatlar tahlili va toifalash',
-        "Moliyaviy sog'lik balli (0-100)",
-        'Agrobank mahsulotlari tavsiyalari',
-        'AI bashoratlari bilan maqsadlarni kuzatish',
-        'Shaxsiy tavsiyalar',
-      ],
+      problemConnectionTitle: 'Biz hal qilayotgan muammo',
+      problemConnectionDesc:
+        "Ko'plab Agrobank mijozlari oylikdan oylikkacha yashaydi, oylik kelgandan keyin agressiv sarflanish, oy o'rtasida moliyaviy stress va xarajatlar bo'yicha tushunarli ko'rinishning yo'qligi bilan duch kelishadi. Hozirgi bank ilovalari faqat tranzaksiyalarni ko'rsatadi, lekin intellekt yo'q — foydalanuvchilarga balansni ko'rish emas, moliyaviy xatti-harakatlarini tushunish kerak.",
+      solutionConnectionTitle: 'Bizning yechimimiz',
+      solutionConnectionDesc:
+        "Moliyachi Agrobank Mobile-ni tranzaksion vositadan moliyaviy hamkorga aylantiradi. AI yordamida biz xarajatlar tahlili, balans prognozlari bilan aqlli oylik rejalashtirish, Moliyaviy Sog'lik Balli (0-100), AI muddatlari bilan maqsad rejalashtirish va shaxsiylashtirilgan Agrobank mahsulotlari tavsiyalarini taqdim etamiz.",
       techStackTitle: 'Texnologiyalar',
+      aiTechTitle: 'AI va Intellekt Qatlami',
+      aiTechItems: [
+        'LangChain — AI orkestratsiya freymvorki',
+        'OpenAI GPT-5.1/4.1/4o — Katta Til Modellari',
+        'RAG — Retrieval-Augmented Generation',
+        'Machine Learning — Xulq-atvor modellash va bashoratlar',
+        "Open-source LLM'lar — On-premise joylashtirish imkoniyati",
+        'LangSmith — AI kuzatuv va monitoring',
+      ],
+      otherTechTitle: "To'liq Stack",
       currentStageTitle: 'Hozirgi Bosqich',
       currentStage: 'MVP',
+      currentStageDesc: "Asosiy AI funksiyalari amalga oshirilgan to'liq ishlaydigan prototip",
+      nextStepsTitle: 'Keyingi Qadamlar',
+      nextSteps: [
+        'Yakuniy UI/UX polishing',
+        'Ishlash samaradorligini optimallashtirish',
+        'Chekka holatlarni qayta ishlashni yaxshilash',
+      ],
       hackathonSubmission: 'AI500 Xakaton Loyihasi',
       tryAppTitle: "Ilovani Sinab Ko'ring",
       tryAppSubtitle: "Interaktiv ko'rinish",
@@ -789,21 +828,36 @@ export const translations: Record<Language, Translations> = {
     demo: {
       title: 'Демо Запись',
       videoPlaceholder: 'Место для видео (1-5 мин)',
-      aboutTitle: 'О Moliyachi',
+      aboutTitle: 'Описание',
       whatIsTitle: 'Что такое Moliyachi?',
       whatIsDesc:
         'Персональный финансовый помощник на базе ИИ внутри Agrobank Mobile. Он превращает ваше банковское приложение в умного финансового партнера.',
-      featuresTitle: 'Ключевые Особенности',
-      features: [
-        'ИИ анализ расходов и категоризация',
-        'Оценка финансового здоровья (0-100)',
-        'Рекомендации продуктов Агробанка',
-        'Отслеживание целей с ИИ прогнозами',
-        'Персональные рекомендации',
-      ],
+      problemConnectionTitle: 'Проблема, которую мы решаем',
+      problemConnectionDesc:
+        'Многие клиенты Agrobank живут от зарплаты до зарплаты, сталкиваясь с агрессивными тратами после получения зарплаты, финансовым стрессом в середине месяца и отсутствием прозрачности в расходах. Текущие банковские приложения показывают транзакции, но не дают интеллекта — пользователям нужно понимать своё финансовое поведение, а не просто видеть баланс.',
+      solutionConnectionTitle: 'Наше решение',
+      solutionConnectionDesc:
+        'Moliyachi превращает Agrobank Mobile из инструмента транзакций в финансового партнёра. С помощью ИИ мы предоставляем анализ расходов, умное месячное планирование с прогнозами баланса, Оценку Финансового Здоровья (0-100), планирование целей с ИИ-сроками и персонализированные рекомендации продуктов Agrobank.',
       techStackTitle: 'Стек Технологий',
+      aiTechTitle: 'ИИ и Интеллектуальный Слой',
+      aiTechItems: [
+        'LangChain — фреймворк оркестрации ИИ',
+        'OpenAI GPT-5.1/4.1/4o — Большие Языковые Модели',
+        'RAG — Retrieval-Augmented Generation',
+        'Machine Learning — Поведенческое моделирование и прогнозы',
+        'Open-source LLM — Вариант on-premise развёртывания',
+        'LangSmith — Наблюдаемость и мониторинг ИИ',
+      ],
+      otherTechTitle: 'Полный Стек',
       currentStageTitle: 'Текущая Стадия',
       currentStage: 'MVP',
+      currentStageDesc: 'Полностью функциональный прототип с реализованными основными ИИ-функциями',
+      nextStepsTitle: 'Следующие Шаги',
+      nextSteps: [
+        'Финальная полировка UI/UX',
+        'Оптимизация производительности',
+        'Улучшение обработки краевых случаев',
+      ],
       hackathonSubmission: 'Проект AI500 Хакатон',
       tryAppTitle: 'Попробовать Приложение',
       tryAppSubtitle: 'Интерактивный предпросмотр',
@@ -1054,6 +1108,7 @@ export const translations: Record<Language, Translations> = {
             'Open-source LLM models for on-premise deployment',
             'Custom Rules and Instructions',
             'Machine Learning',
+            'RAG',
           ],
         },
         {
