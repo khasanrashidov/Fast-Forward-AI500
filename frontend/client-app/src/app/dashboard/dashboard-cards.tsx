@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { CreditCard, Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Card as UiCard, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -34,18 +35,19 @@ type Props = {
   username: string;
 };
 
-const createCardSchema = z.object({
-  card_name: z.string().min(1, 'Name is required'),
-  card_number: z.string().min(12, 'Card number is required').max(32, 'Too long'),
-  balance: z
-    .string()
-    .min(1, 'Balance is required')
-    .transform((val) => Number(val.replace(/,/g, '')))
-    .refine((val) => Number.isFinite(val), 'Enter a valid number'),
-  currency: z.enum(CURRENCIES),
-  card_type: z.enum(CARD_TYPES),
-  expiration_date: z.string().min(1, 'Expiration date is required'),
-});
+const createCardSchema = (t: (key: string) => string) =>
+  z.object({
+    card_name: z.string().min(1, t('nameRequired')),
+    card_number: z.string().min(12, t('cardNumberRequired')).max(32, t('tooLong')),
+    balance: z
+      .string()
+      .min(1, t('balanceRequired'))
+      .transform((val) => Number(val.replace(/,/g, '')))
+      .refine((val) => Number.isFinite(val), t('enterValidNumber')),
+    currency: z.enum(CURRENCIES),
+    card_type: z.enum(CARD_TYPES),
+    expiration_date: z.string().min(1, t('expirationRequired')),
+  });
 
 const formatNumberInput = (value: string) => {
   const digits = value.replace(/\D/g, '');
@@ -67,6 +69,7 @@ function formatAmount(value: number, currency: string) {
 }
 
 export function DashboardCards({ initialCards, username }: Props) {
+  const t = useTranslations('dashboard');
   const [cards, setCards] = useState<Card[]>(initialCards);
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -80,9 +83,9 @@ export function DashboardCards({ initialCards, username }: Props) {
   });
 
   const handleCreate = async () => {
-    const parsed = createCardSchema.safeParse(form);
+    const parsed = createCardSchema(t).safeParse(form);
     if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? 'Invalid form');
+      toast.error(parsed.error.issues[0]?.message ?? t('invalidForm'));
       return;
     }
 
@@ -98,7 +101,7 @@ export function DashboardCards({ initialCards, username }: Props) {
         expiration_date: parsed.data.expiration_date,
       });
       setCards((prev) => [created, ...prev]);
-      toast.success('Card added');
+      toast.success(t('cardAdded'));
       setForm({
         card_name: '',
         card_number: '',
@@ -110,7 +113,7 @@ export function DashboardCards({ initialCards, username }: Props) {
       setOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error('Failed to add card');
+      toast.error(t('failedToAddCard'));
     } finally {
       setSubmitting(false);
     }
@@ -121,12 +124,12 @@ export function DashboardCards({ initialCards, username }: Props) {
       <CardHeader className="flex items-center justify-between gap-2 pb-2">
         <CardTitle className="flex items-center gap-2 text-base font-semibold">
           <CreditCard className="h-4 w-4 text-[var(--primary)]" />
-          My cards
+          {t('myCards')}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         {cards.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No cards yet.</p>
+          <p className="text-sm text-muted-foreground">{t('noCards')}</p>
         ) : (
           cards.map((card, idx) => {
             const gradients = [
@@ -152,11 +155,13 @@ export function DashboardCards({ initialCards, username }: Props) {
                 </div>
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>{card.currency}</span>
-                  <span>Exp: {card.expiration_date}</span>
+                  <span>
+                    {t('exp')}: {card.expiration_date}
+                  </span>
                 </div>
                 <div className="mt-3 flex items-center justify-between text-sm">
                   <div className="space-y-0.5">
-                    <p className="text-xs text-muted-foreground">Balance</p>
+                    <p className="text-xs text-muted-foreground">{t('balance')}</p>
                     <p className="text-base font-semibold text-foreground">
                       {formatAmount(card.balance, card.currency)}
                     </p>
@@ -170,36 +175,36 @@ export function DashboardCards({ initialCards, username }: Props) {
           <DialogTrigger asChild>
             <Button variant="outline" className="w-full mt-2">
               <Plus className="h-4 w-4" />
-              Add card
+              {t('addCard')}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Add new card</DialogTitle>
-              <DialogDescription>Provide card details to create it.</DialogDescription>
+              <DialogTitle>{t('addNewCard')}</DialogTitle>
+              <DialogDescription>{t('provideCardDetails')}</DialogDescription>
             </DialogHeader>
             <div className="space-y-3">
               <div className="space-y-2">
-                <Label htmlFor="card-name">Card name</Label>
+                <Label htmlFor="card-name">{t('cardName')}</Label>
                 <Input
                   id="card-name"
-                  placeholder="Salary Card"
+                  placeholder={t('cardNamePlaceholder')}
                   value={form.card_name}
                   onChange={(e) => setForm((p) => ({ ...p, card_name: e.target.value }))}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="card-number">Card number</Label>
+                <Label htmlFor="card-number">{t('cardNumber')}</Label>
                 <Input
                   id="card-number"
-                  placeholder="8600 1234 1234 1234"
+                  placeholder={t('cardNumberPlaceholder')}
                   value={form.card_number}
                   onChange={(e) => setForm((p) => ({ ...p, card_number: e.target.value }))}
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <Label htmlFor="balance">Balance</Label>
+                  <Label htmlFor="balance">{t('balance')}</Label>
                   <Input
                     id="balance"
                     inputMode="decimal"
@@ -211,7 +216,7 @@ export function DashboardCards({ initialCards, username }: Props) {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Currency</Label>
+                  <Label>{t('currency')}</Label>
                   <Select
                     value={form.currency}
                     onValueChange={(value) =>
@@ -219,7 +224,7 @@ export function DashboardCards({ initialCards, username }: Props) {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Currency" />
+                      <SelectValue placeholder={t('currency')} />
                     </SelectTrigger>
                     <SelectContent>
                       {CURRENCIES.map((c) => (
@@ -233,7 +238,7 @@ export function DashboardCards({ initialCards, username }: Props) {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <Label>Card type</Label>
+                  <Label>{t('cardType')}</Label>
                   <Select
                     value={form.card_type}
                     onValueChange={(value) =>
@@ -241,19 +246,19 @@ export function DashboardCards({ initialCards, username }: Props) {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Type" />
+                      <SelectValue placeholder={t('cardType')} />
                     </SelectTrigger>
                     <SelectContent>
-                      {CARD_TYPES.map((t) => (
-                        <SelectItem key={t} value={t}>
-                          {t}
+                      {CARD_TYPES.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="expiry">Expiration date</Label>
+                  <Label htmlFor="expiry">{t('expirationDate')}</Label>
                   <Input
                     id="expiry"
                     placeholder="12/28"
@@ -265,10 +270,10 @@ export function DashboardCards({ initialCards, username }: Props) {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setOpen(false)}>
-                Cancel
+                {t('cancel')}
               </Button>
               <Button onClick={handleCreate} disabled={submitting}>
-                {submitting ? 'Saving...' : 'Create card'}
+                {submitting ? t('saving') : t('createCard')}
               </Button>
             </DialogFooter>
           </DialogContent>

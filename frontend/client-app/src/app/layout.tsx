@@ -4,6 +4,8 @@ import './globals.css';
 import ClientLayout from '@/components/ClientLayout';
 import { Toaster } from '@/components/ui/sonner';
 import { GlobalLoader } from '@/components/GlobalLoader';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -23,19 +25,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body
         className={`${inter.variable} ${outfit.variable} antialiased bg-white text-gray-900 font-sans`}
       >
-        <GlobalLoader />
+        <NextIntlClientProvider messages={messages}>
+          <GlobalLoader />
         <ClientLayout>{children}</ClientLayout>
-        <Toaster />
+          <Toaster />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

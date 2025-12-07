@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import { CheckCircle, Info, Lightbulb, Sparkles, TrendingUp } from 'lucide-react';
+import { getTranslations, getLocale } from 'next-intl/server';
 
 import { getGoalById, getGoalRecommendations, getGoalTimeline } from '@/lib/services/goals';
 import { getGoalInsights } from '@/lib/services/dashboard';
@@ -22,6 +23,8 @@ function addMonths(date: Date, months: number) {
 
 export default async function GoalDetailPage({ params }: { params: Promise<{ goalId: string }> }) {
   const { goalId } = await params;
+  const t = await getTranslations('goalDetail');
+  const locale = await getLocale();
 
   if (!goalId || goalId === 'undefined') {
     return (
@@ -29,10 +32,10 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
         <Card className="border-destructive/20">
           <CardHeader className="flex items-center gap-2 text-destructive">
             <Info className="h-4 w-4" />
-            <CardTitle>Goal not found.</CardTitle>
+            <CardTitle>{t('goalNotFound')}</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            The goal ID in the URL is missing or invalid.
+            {t('goalNotFoundDescription')}
           </CardContent>
         </Card>
       </div>
@@ -49,11 +52,9 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
         <Card className="border-destructive/20">
           <CardHeader className="flex items-center gap-2 text-destructive">
             <Info className="h-4 w-4" />
-            <CardTitle>Failed to load goal.</CardTitle>
+            <CardTitle>{t('failedToLoad')}</CardTitle>
           </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            Please try again shortly.
-          </CardContent>
+          <CardContent className="text-sm text-muted-foreground">{t('tryAgain')}</CardContent>
         </Card>
       </div>
     );
@@ -100,9 +101,7 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
       {/* Header */}
       <div className="flex flex-col gap-1 sm:gap-2">
         <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">{goal.name}</h1>
-        <p className="text-sm sm:text-base text-muted-foreground">
-          Goal details, insights, and recommendations.
-        </p>
+        <p className="text-sm sm:text-base text-muted-foreground">{t('subtitle')}</p>
       </div>
 
       {/* Progress + AI Insights */}
@@ -112,14 +111,14 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
           <CardHeader className="space-y-2 sm:space-y-1 pb-3 sm:pb-4">
             <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
               <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-              Progress
+              {t('progress')}
             </CardTitle>
             <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
               <Badge className="bg-primary/12 text-primary border border-primary/20 text-xs">
                 {goal.status}
               </Badge>
               <Badge variant="outline" className="text-xs">
-                {goal.priority} priority
+                {goal.priority}
               </Badge>
             </div>
           </CardHeader>
@@ -127,7 +126,7 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
             {/* Progress bar section */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs sm:text-sm text-muted-foreground">
-                <span>Current</span>
+                <span>{t('current')}</span>
                 <span className="text-foreground font-medium">
                   {formatAmount(goal.current_amount, goal.currency)}
                 </span>
@@ -135,7 +134,9 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
               <Progress value={percent} className="h-2" />
               <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <span>{percent}%</span>
-                <span>Target: {formatAmount(goal.target_amount, goal.currency)}</span>
+                <span>
+                  {t('target')}: {formatAmount(goal.target_amount, goal.currency)}
+                </span>
               </div>
             </div>
 
@@ -143,7 +144,7 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
             <div className="space-y-2 sm:space-y-3 text-sm sm:text-base">
               <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-0.5 sm:gap-2">
                 <span className="text-primary font-semibold text-xs sm:text-base">
-                  Remaining amount:
+                  {t('remainingAmount')}
                 </span>
                 <span className="text-foreground font-medium">
                   {formatAmount(remaining, goal.currency)}
@@ -153,10 +154,10 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
               {goal.target_date ? (
                 <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-0.5 sm:gap-2">
                   <span className="text-primary font-semibold text-xs sm:text-base">
-                    Target date:
+                    {t('targetDate')}
                   </span>
                   <span className="text-foreground">
-                    {new Date(goal.target_date).toLocaleDateString()}
+                    {new Date(goal.target_date).toLocaleDateString(locale)}
                   </span>
                 </div>
               ) : null}
@@ -164,32 +165,34 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
               <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-0.5 sm:gap-2">
                 <span className="text-primary font-semibold text-xs sm:text-base inline-flex items-center gap-1">
                   <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
-                  Predicted finish:
+                  {t('predictedFinish')}
                 </span>
                 <span className="text-foreground text-sm sm:text-base">
                   {predictedFinishDate
-                    ? `${predictedFinishDate.toLocaleDateString()}${
-                        predictedMonths ? ` (in ${Math.ceil(predictedMonths)} mo)` : ''
+                    ? `${predictedFinishDate.toLocaleDateString(locale)}${
+                        predictedMonths ? ` (${t('inMonths', { months: Math.ceil(predictedMonths) })})` : ''
                       }`
-                    : 'N/A'}
+                    : t('notAvailable')}
                 </span>
                 <span className="text-primary font-semibold text-xs sm:text-base inline-flex items-center gap-1">
                   <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4" />
-                  Success rate: {`${successProbability}%`}
+                  {t('successRate')} {`${successProbability}%`}
                 </span>
               </div>
 
               <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-0.5 sm:gap-2">
-                <span className="text-primary font-semibold text-xs sm:text-base">Created:</span>
+                <span className="text-primary font-semibold text-xs sm:text-base">
+                  {t('created')}
+                </span>
                 <span className="text-foreground text-sm sm:text-base">
-                  {new Date(goal.created_at).toLocaleDateString()}
+                  {new Date(goal.created_at).toLocaleDateString(locale)}
                 </span>
               </div>
 
               {goal.description ? (
                 <div className="flex flex-col gap-1 pt-1">
                   <span className="text-primary font-semibold text-xs sm:text-base">
-                    Description:
+                    {t('descriptionLabel')}
                   </span>
                   <span className="text-foreground text-sm sm:text-base leading-relaxed">
                     {goal.description}
@@ -204,7 +207,7 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
         <Card className="bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
           <CardHeader className="flex items-center gap-2 pb-3">
             <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-            <CardTitle className="text-base sm:text-lg">AI Insights</CardTitle>
+            <CardTitle className="text-base sm:text-lg">{t('aiInsights')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {insights?.insights?.length ? (
@@ -217,7 +220,7 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
                 </div>
               ))
             ) : (
-              <p className="text-xs sm:text-sm text-muted-foreground">No insights available.</p>
+              <p className="text-xs sm:text-sm text-muted-foreground">{t('noInsights')}</p>
             )}
           </CardContent>
         </Card>
@@ -228,20 +231,20 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
         {/* Timeline Card */}
         <Card>
           <CardHeader className="pb-2 sm:pb-3 px-3 sm:px-6 pt-3 sm:pt-6">
-            <CardTitle className="text-sm sm:text-lg">Timeline</CardTitle>
+            <CardTitle className="text-sm sm:text-lg">{t('timeline')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 sm:space-y-3 text-[11px] sm:text-sm text-muted-foreground px-3 sm:px-6 pb-3 sm:pb-6">
             {/* Stats row - compact on mobile */}
             <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] sm:text-xs">
               {deterministicMonths !== undefined ? (
                 <div className="flex items-center gap-1">
-                  <span>Est:</span>
+                  <span>{t('estimated')}</span>
                   <span className="text-foreground font-medium">{deterministicMonths}mo</span>
                 </div>
               ) : null}
               {successProbability !== undefined ? (
                 <div className="flex items-center gap-1">
-                  <span>Success:</span>
+                  <span>{t('success')}</span>
                   <span className="text-foreground font-medium">{successProbability}%</span>
                 </div>
               ) : null}
@@ -268,7 +271,8 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
           <CardHeader className="flex items-center gap-1.5 sm:gap-2 pb-2 sm:pb-3 px-3 sm:px-6 pt-3 sm:pt-6">
             <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
             <CardTitle className="text-sm sm:text-lg">
-              <span className="hidden sm:inline">Agrobank </span>Recommendations
+              <span className="hidden sm:inline">{t('agrobankRecommendations')}</span>
+              <span className="sm:hidden">{t('recommendations')}</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 sm:space-y-3 px-3 sm:px-6 pb-3 sm:pb-6">
@@ -316,14 +320,15 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
                   {/* Reason - truncated on mobile */}
                   {rec.reason ? (
                     <div className="text-muted-foreground text-xs sm:text-xs line-clamp-2 sm:line-clamp-none">
-                      <span className="font-semibold text-primary">Why:</span> {rec.reason}
+                      <span className="font-semibold text-primary">{t('why')}</span> {rec.reason}
                     </div>
                   ) : null}
 
                   {/* Benefit - hidden on mobile */}
                   {rec.benefit ? (
                     <div className="hidden sm:block text-muted-foreground text-xs">
-                      <span className="font-semibold text-primary">Benefit:</span> {rec.benefit}
+                      <span className="font-semibold text-primary">{t('benefit')}</span>{' '}
+                      {rec.benefit}
                     </div>
                   ) : null}
 
@@ -335,15 +340,13 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
                       rel="noreferrer"
                       className="inline-block text-primary text-xs sm:text-xs underline underline-offset-2"
                     >
-                      Learn more
+                      {t('learnMore')}
                     </a>
                   ) : null}
                 </div>
               ))
             ) : (
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                No recommendations available.
-              </p>
+              <p className="text-xs sm:text-sm text-muted-foreground">{t('noRecommendations')}</p>
             )}
           </CardContent>
         </Card>

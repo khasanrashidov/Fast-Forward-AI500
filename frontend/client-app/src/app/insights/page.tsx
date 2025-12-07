@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -9,27 +10,28 @@ import { AlertTriangle, ArrowRight, ShieldCheck, ShoppingBag, Sparkles } from 'l
 export const dynamic = 'force-dynamic';
 
 export default async function InsightsPage() {
+  const t = await getTranslations('insights');
   const [dashboard, user] = await Promise.all([getDashboard(), getUser()]);
   const { insights, alerts, health_score } = dashboard;
 
   const healthTone = (health_score.color || '').toLowerCase();
   const healthBadge =
     healthTone === 'green'
-      ? { className: 'bg-green-100 text-green-700 border border-green-200', label: 'On Track' }
+      ? { className: 'bg-green-100 text-green-700 border border-green-200', label: t('onTrack') }
       : healthTone === 'yellow'
         ? {
             className: 'bg-amber-100 text-amber-700 border border-amber-200',
-            label: 'Needs Attention',
+            label: t('needsAttention'),
           }
         : healthTone === 'red'
-          ? { className: 'bg-rose-100 text-rose-700 border border-rose-200', label: 'Critical' }
+          ? { className: 'bg-rose-100 text-rose-700 border border-rose-200', label: t('critical') }
           : null;
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-semibold tracking-tight text-[var(--primary)]">AI Insights</h1>
-        <p className="text-muted-foreground">Smart analysis of your financial health.</p>
+        <h1 className="text-3xl font-semibold tracking-tight text-[var(--primary)]">{t('title')}</h1>
+        <p className="text-muted-foreground">{t('subtitle')}</p>
       </div>
 
       {/* All three cards in one row */}
@@ -39,7 +41,7 @@ export default async function InsightsPage() {
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base">
               <ShieldCheck className="h-5 w-5 text-[var(--primary)]" />
-              Financial Health
+              {t('financialHealth')}
             </CardTitle>
             {healthBadge && (
               <Badge className={`text-xs font-semibold w-fit ${healthBadge.className}`}>
@@ -50,29 +52,29 @@ export default async function InsightsPage() {
           <CardContent className="space-y-2">
             <div className="text-3xl font-bold">{health_score.score} / 100</div>
             <div className="text-sm text-muted-foreground">
-              <span className="text-[var(--primary)] font-semibold">User:</span>{' '}
+              <span className="text-[var(--primary)] font-semibold">{t('user')}</span>{' '}
               <span className="text-foreground">
                 {user.first_name} {user.last_name}
               </span>
             </div>
             <div className="text-sm text-muted-foreground">
-              <span className="text-[var(--primary)] font-semibold">Email:</span>{' '}
+              <span className="text-[var(--primary)] font-semibold">{t('email')}</span>{' '}
               <span className="text-foreground">{user.email}</span>
             </div>
             <div className="text-sm text-muted-foreground">
-              <span className="text-[var(--primary)] font-semibold">Status:</span>{' '}
+              <span className="text-[var(--primary)] font-semibold">{t('status')}</span>{' '}
               <span className="text-foreground">{health_score.status}</span>
             </div>
             <div className="text-sm text-muted-foreground">
-              <span className="text-[var(--primary)] font-semibold">Age:</span>{' '}
+              <span className="text-[var(--primary)] font-semibold">{t('age')}</span>{' '}
               <span className="text-foreground">{user.age}</span>
             </div>
             <div className="text-sm text-muted-foreground">
-              <span className="text-[var(--primary)] font-semibold">Family Size:</span>{' '}
+              <span className="text-[var(--primary)] font-semibold">{t('familySize')}</span>{' '}
               <span className="text-foreground">{user.family_size}</span>
             </div>
             <div className="text-sm text-muted-foreground">
-              <span className="text-[var(--primary)] font-semibold">Location:</span>{' '}
+              <span className="text-[var(--primary)] font-semibold">{t('location')}</span>{' '}
               <span className="text-foreground">{user.location}</span>
             </div>
           </CardContent>
@@ -83,12 +85,12 @@ export default async function InsightsPage() {
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-[var(--primary)]" />
-              AI Insights
+              {t('aiInsights')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 flex-1">
             {insights.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No insights yet.</p>
+              <p className="text-sm text-muted-foreground">{t('noInsights')}</p>
             ) : (
               insights.map((item, idx) => (
                 <div
@@ -106,7 +108,7 @@ export default async function InsightsPage() {
         <Card className="md:col-span-3 flex flex-col">
           <CardHeader className="flex items-center gap-2 pb-2">
             <AlertTriangle className="h-4 w-4 text-amber-600" />
-            <CardTitle>Alerts</CardTitle>
+            <CardTitle>{t('alerts')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 flex-1">
             {alerts.length === 0 ? (
@@ -118,7 +120,7 @@ export default async function InsightsPage() {
                     className="h-full w-full object-contain"
                   />
                 </div>
-                <p>No alerts at this time.</p>
+                <p>{t('noAlerts')}</p>
               </div>
             ) : (
               alerts.map((alert, idx) => (
@@ -131,7 +133,7 @@ export default async function InsightsPage() {
         </Card>
       </div>
 
-      {/* AI Shop Assistant promo card */}
+      {/* AI Shop Agent promo card */}
       <Card className="border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10">
         <CardContent className="flex flex-col md:flex-row items-center justify-between gap-4 py-6">
           <div className="flex items-center gap-4">
@@ -139,16 +141,13 @@ export default async function InsightsPage() {
               <ShoppingBag className="h-6 w-6 text-primary" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-lg font-semibold text-foreground">AI Shop Assistant</h3>
-              <p className="text-sm text-muted-foreground">
-                Find the perfect product with AI-powered recommendations. Get installment options
-                via Opencard by Agrobank.
-              </p>
+              <h3 className="text-lg font-semibold text-foreground">{t('aiShopAgent')}</h3>
+              <p className="text-sm text-muted-foreground">{t('aiShopDescription')}</p>
             </div>
           </div>
           <Button asChild className="shrink-0">
             <Link href="/ai-shop" className="flex items-center gap-2">
-              Try AI Shop
+              {t('tryAIShop')}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>

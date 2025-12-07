@@ -4,7 +4,6 @@ import { getDashboard } from '@/lib/services/dashboard';
 import { getUser } from '@/lib/services/users';
 import { getCards } from '@/lib/services/cards';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DashboardCards } from './dashboard/dashboard-cards';
 import {
   AlertTriangle,
@@ -13,8 +12,8 @@ import {
   Coins,
   HeartPulse,
   Sparkles,
-  Wallet,
 } from 'lucide-react';
+import { getTranslations, getLocale } from 'next-intl/server';
 
 function formatCurrency(amount: number) {
   return `${amount.toLocaleString('en-US')} UZS`;
@@ -25,6 +24,9 @@ function formatPercent(value: number) {
 }
 
 export default async function DashboardPage() {
+  const t = await getTranslations('dashboard');
+  const locale = await getLocale();
+
   let data;
   let user;
   let cards = [];
@@ -55,13 +57,13 @@ export default async function DashboardPage() {
 
   try {
     [data, user, cards] = await Promise.all([getDashboard(), getUser(), getCards()]);
-  } catch (error) {
-    return (
+  } catch {
+  return (
       <div className="p-6 space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight">Welcome</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('welcome')}</h1>
         <Card>
           <CardContent className="py-6">
-            <p className="text-sm text-rose-600">Failed to load dashboard data.</p>
+            <p className="text-sm text-rose-600">{t('failedToLoad')}</p>
           </CardContent>
         </Card>
       </div>
@@ -88,8 +90,8 @@ export default async function DashboardPage() {
 
   const palette = makePalette(deltas.length || 1);
 
-  const monthLabel = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
-  const monthOnly = new Date().toLocaleString('default', { month: 'long' });
+  const monthLabel = new Date().toLocaleString(locale, { month: 'long', year: 'numeric' });
+  const monthOnly = new Date().toLocaleString(locale, { month: 'long' });
 
   const healthTone = (health_score.color || '').toLowerCase();
   const healthBadge =
@@ -120,12 +122,10 @@ export default async function DashboardPage() {
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[var(--primary)]">
-            {user ? `${user.first_name} ${user.last_name}` : 'Welcome'}
+            {user ? `${user.first_name} ${user.last_name}` : t('welcome')}
           </h1>
         </div>
-        <p className="text-sm sm:text-base text-zinc-500">
-          Here is your latest financial overview.
-        </p>
+        <p className="text-sm sm:text-base text-zinc-500">{t('overview')}</p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-12">
@@ -133,7 +133,9 @@ export default async function DashboardPage() {
           <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
-                <CardTitle className="text-xs sm:text-sm font-medium">Total Income</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-medium">
+                  {t('totalIncome')}
+                </CardTitle>
                 <ArrowUpRight className="h-4 w-4 sm:h-5 sm:w-5 text-[var(--primary)]" />
               </CardHeader>
               <CardContent className="pt-0 sm:pt-0">
@@ -141,49 +143,55 @@ export default async function DashboardPage() {
                   {formatCurrency(summary.total_income)}
                 </div>
                 <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">
-                  From all sources
+                  {t('fromAllSources')}
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
+        <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
-                <CardTitle className="text-xs sm:text-sm font-medium">Total Spending</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-medium">
+                  {t('totalSpending')}
+                </CardTitle>
                 <ArrowDownRight className="h-4 w-4 sm:h-5 sm:w-5 text-rose-500" />
-              </CardHeader>
+          </CardHeader>
               <CardContent className="pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold text-rose-600">
                   {formatCurrency(summary.total_spending)}
                 </div>
                 <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">
-                  Prev: {formatCurrency(summary.previous_month_spending)}
+                  {t('previousMonth')}: {formatCurrency(summary.previous_month_spending)}
                 </p>
                 <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">
-                  Diff: {formatPercent(summary.spending_change_percent)}
+                  {t('difference')}: {formatPercent(summary.spending_change_percent)}
                 </p>
-              </CardContent>
-            </Card>
+          </CardContent>
+        </Card>
 
-            <Card>
+        <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
-                <CardTitle className="text-xs sm:text-sm font-medium">Savings Potential</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-medium">
+                  {t('savingsPotential')}
+                </CardTitle>
                 <Coins className="h-4 w-4 sm:h-5 sm:w-5 text-[var(--primary)]" />
-              </CardHeader>
+          </CardHeader>
               <CardContent className="pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold">
                   {formatCurrency(summary.savings_potential)}
                 </div>
                 <p className="text-[10px] sm:text-xs text-zinc-500 hidden sm:block">
-                  After spend & obligations
+                  {t('afterSpendObligations')}
                 </p>
-              </CardContent>
-            </Card>
+          </CardContent>
+        </Card>
 
-            <Card>
+        <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2">
-                <CardTitle className="text-xs sm:text-sm font-medium">Health Score</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-medium">
+                  {t('healthScore')}
+                </CardTitle>
                 <HeartPulse className={`h-4 w-4 sm:h-5 sm:w-5 ${healthIcon}`} />
-              </CardHeader>
+          </CardHeader>
               <CardContent className="pt-0 sm:pt-0">
                 <div className="text-lg sm:text-2xl font-bold">{health_score.score} / 100</div>
                 {healthBadge && health_score.status && (
@@ -196,25 +204,27 @@ export default async function DashboardPage() {
                     </Badge>
                   </div>
                 )}
-              </CardContent>
-            </Card>
-          </div>
+          </CardContent>
+        </Card>
+      </div>
 
           <div className="flex flex-col lg:flex-row gap-4">
             <Card className="w-full lg:basis-[40%]">
-              <CardHeader>
-                <CardTitle>Spending in {monthLabel}</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
+              <CardHeader className="pb-2 sm:pb-4">
+                <CardTitle className="text-base sm:text-lg">
+                  {t('spendingIn', { month: monthLabel })}
+                </CardTitle>
+          </CardHeader>
+              <CardContent className="space-y-3 sm:space-y-4">
                 {deltas.length === 0 ? (
-                  <p className="text-sm text-zinc-500">No category data yet.</p>
+                  <p className="text-sm text-zinc-500">{t('noCategoryData')}</p>
                 ) : (
                   <>
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center py-2">
                       <SpendingCategoryRadial
                         categories={deltas.map(({ name, value }) => ({ name, value }))}
                         colors={palette}
-                        sizeClassName="w-[160px] sm:w-[200px] max-w-full"
+                        sizeClassName="w-[180px] sm:w-[200px] max-w-full"
                         centerLabel="UZS"
                         subLabel={monthOnly}
                         currency="UZS"
@@ -239,7 +249,7 @@ export default async function DashboardPage() {
                             <div className="hidden sm:block">
                               {prev > 0 && (
                                 <p className="text-xs text-zinc-500">
-                                  Previous month: {formatCurrency(prev)}
+                                  {t('previousMonthFull')}: {formatCurrency(prev)}
                                   {pct !== null && (
                                     <span className="ml-2">
                                       ({diff >= 0 ? '+' : ''}
@@ -255,22 +265,22 @@ export default async function DashboardPage() {
                           </p>
                         </div>
                       ))}
-                    </div>
+            </div>
                   </>
                 )}
-              </CardContent>
-            </Card>
+          </CardContent>
+        </Card>
 
             <Card className="flex flex-col bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20 w-full lg:basis-[35%]">
               <CardHeader className="pb-2">
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-[var(--primary)]" />
-                  AI Insights
+                  {t('aiInsights')}
                 </CardTitle>
-              </CardHeader>
+          </CardHeader>
               <CardContent className="space-y-3">
                 {insights.length === 0 ? (
-                  <p className="text-sm text-zinc-500">No insights yet.</p>
+                  <p className="text-sm text-zinc-500">{t('noInsights')}</p>
                 ) : (
                   insights.map((item, idx) => (
                     <div
@@ -287,7 +297,7 @@ export default async function DashboardPage() {
             <Card className="flex flex-col w-full lg:basis-[25%]">
               <CardHeader className="flex items-center gap-2 pb-2">
                 <AlertTriangle className="h-4 w-4 text-amber-600" />
-                <CardTitle>Alerts</CardTitle>
+                <CardTitle>{t('alerts')}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 {alerts.length === 0 ? (
@@ -295,11 +305,11 @@ export default async function DashboardPage() {
                     <div className="h-50 w-50">
                       <img
                         src="/done-checking.svg"
-                        alt="No alerts illustration"
+                        alt={t('noAlerts')}
                         className="h-full w-full object-contain"
                       />
                     </div>
-                    <p>No alerts at this time.</p>
+                    <p>{t('noAlerts')}</p>
                   </div>
                 ) : (
                   alerts.map((alert, idx) => (
@@ -310,12 +320,12 @@ export default async function DashboardPage() {
                 )}
               </CardContent>
             </Card>
-          </div>
-        </div>
+                  </div>
+                </div>
 
         <div className="col-span-12 lg:col-span-3">
           <DashboardCards initialCards={cards} username={user.username} />
-        </div>
+            </div>
       </div>
     </div>
   );

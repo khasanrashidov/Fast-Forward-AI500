@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { ArrowUp, DollarSign, ExternalLink, ShoppingBag, Sparkles } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -27,6 +28,7 @@ const samplePrompts = [
 ];
 
 export default function AIShopPage() {
+  const t = useTranslations('aiShop');
   const [query, setQuery] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isPending, startTransition] = useTransition();
@@ -52,7 +54,7 @@ export default function AIShopPage() {
 
   const handleSearch = () => {
     if (!query.trim()) {
-      setError('Please enter a query');
+      setError(t('errorEnterQuery'));
       return;
     }
     setError(null);
@@ -66,7 +68,7 @@ export default function AIShopPage() {
         setMessages((prev) => [...prev, { role: 'assistant', result: data }]);
       } catch (err) {
         console.error(err);
-        setError('Failed to fetch recommendations. Please try again.');
+        setError(t('errorFailed'));
       }
     });
   };
@@ -93,24 +95,23 @@ export default function AIShopPage() {
 
               {/* Title */}
               <div className="space-y-3">
-                <h1 className="text-3xl font-semibold tracking-tight">AI Shop Assistant</h1>
+                <h1 className="text-3xl font-semibold tracking-tight">{t('title')}</h1>
                 <p className="text-muted-foreground text-base max-w-md">
-                  Find the perfect product with AI-powered recommendations. Get installment options
-                  via{' '}
+                  {t('description')}{' '}
                   <a
                     href="https://agrobank.uz/en/person/loans/open-karta"
                     target="_blank"
                     rel="noreferrer"
                     className="text-primary font-medium underline underline-offset-2 hover:opacity-80"
                   >
-                    Opencard by Agrobank
+                    {t('opencardByAgrobank')}
                   </a>
-                  , price comparisons, and personalized insights.
+                  {t('descriptionEnd')}
                 </p>
                 <div className="flex flex-col items-center gap-1 text-xs text-muted-foreground">
                   <span>
-                    <span className="font-medium text-foreground">Opencard:</span> Interest-free
-                    installments up to 82.4M UZS • No down payment • 12 months
+                    <span className="font-medium text-foreground">{t('opencard')}</span>{' '}
+                    {t('opencardInfo')}
                   </span>
                 </div>
               </div>
@@ -138,7 +139,7 @@ export default function AIShopPage() {
               <div className="flex flex-wrap justify-center gap-2 mt-4">
                 <Badge variant="secondary" className="text-xs font-normal">
                   <Sparkles className="h-3 w-3 mr-1" />
-                  AI-powered insights
+                  {t('aiPoweredInsights')}
                 </Badge>
                 <Badge variant="secondary" className="text-xs font-normal">
                   <Image
@@ -148,11 +149,11 @@ export default function AIShopPage() {
                     height={15}
                     className="mr-1"
                   />
-                  <span>Open Installment options</span>
+                  <span>{t('openInstallment')}</span>
                 </Badge>
                 <Badge variant="secondary" className="text-xs font-normal">
                   <DollarSign className="h-3 w-3 mr-1" />
-                  Price comparison
+                  {t('priceComparison')}
                 </Badge>
                 <Badge variant="secondary" className="text-xs font-normal">
                   <svg
@@ -167,7 +168,7 @@ export default function AIShopPage() {
                       fill="currentColor"
                     />
                   </svg>
-                  Agrobank products
+                  {t('agrobankProducts')}
                 </Badge>
               </div>
             </div>
@@ -193,7 +194,7 @@ export default function AIShopPage() {
                     <div className="text-base leading-relaxed text-foreground">
                       <span className="font-semibold text-[var(--primary)] flex items-center gap-1">
                         {' '}
-                        <Sparkles className="h-3 w-3 mr-1" /> AI Insight:
+                        <Sparkles className="h-3 w-3 mr-1" /> {t('aiInsight')}
                       </span>{' '}
                       {res.insight}
                     </div>
@@ -219,7 +220,7 @@ export default function AIShopPage() {
                           </CardHeader>
                           <CardContent className="flex flex-col gap-2 text-sm text-muted-foreground">
                             <div className="whitespace-nowrap">
-                              Price:{' '}
+                              {t('price')}{' '}
                               <span className="text-foreground font-semibold">
                                 {formatter(product.sale_price)}
                               </span>
@@ -253,10 +254,12 @@ export default function AIShopPage() {
                                     </span>
                                   </TooltipTrigger>
                                   <TooltipContent>
-                                    <p>Total: {formatter(product.opencard_total_price)}</p>
+                                    <p>
+                                      {t('total')} {formatter(product.opencard_total_price)}
+                                    </p>
                                   </TooltipContent>
                                 </Tooltip>
-                                <span className="text-xs shrink-0">/ mo</span>
+                                <span className="text-xs shrink-0">{t('perMonth')}</span>
                               </div>
                             </TooltipProvider>
                             <a
@@ -265,7 +268,7 @@ export default function AIShopPage() {
                               rel="noreferrer"
                               className="inline-flex items-center gap-1 text-[var(--primary)] text-sm underline underline-offset-4 hover:opacity-80 transition-opacity"
                             >
-                              View product
+                              {t('viewProduct')}
                               <ExternalLink className="h-3.5 w-3.5" />
                             </a>
                           </CardContent>
@@ -286,7 +289,7 @@ export default function AIShopPage() {
                     <span className="h-2 w-2 rounded-full bg-primary/60 animate-bounce [animation-delay:-0.15s]" />
                     <span className="h-2 w-2 rounded-full bg-primary/60 animate-bounce" />
                   </div>
-                  <span className="text-sm text-muted-foreground">Searching for products...</span>
+                  <span className="text-sm text-muted-foreground">{t('searching')}</span>
                 </div>
               </div>
             )}
@@ -304,7 +307,7 @@ export default function AIShopPage() {
               ref={textareaRef}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Ask about any product..."
+              placeholder={t('placeholder')}
               className="flex-1 resize-none bg-transparent px-4 py-3 text-sm outline-none placeholder:text-muted-foreground min-h-[48px] max-h-[200px]"
               rows={1}
               onKeyDown={(e) => {
@@ -322,14 +325,12 @@ export default function AIShopPage() {
                 className="h-9 w-9 rounded-xl shrink-0 transition-all disabled:opacity-50"
               >
                 <ArrowUp className="h-4 w-4" />
-                <span className="sr-only">Send</span>
+                <span className="sr-only">{t('send')}</span>
               </Button>
             </div>
           </div>
           {error && <p className="text-sm text-rose-600 mt-2 text-center">{error}</p>}
-          <p className="text-xs text-muted-foreground text-center mt-2">
-            AI Shop can make mistakes. Verify product details before purchase.
-          </p>
+          <p className="text-xs text-muted-foreground text-center mt-2">{t('disclaimer')}</p>
         </div>
       </div>
     </div>

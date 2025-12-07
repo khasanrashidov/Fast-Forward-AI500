@@ -1,6 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { getTransactions } from '@/lib/services/transactions';
 import TransactionsClient from './transactions-client';
+import { getTranslations, getLocale } from 'next-intl/server';
 
 type MonthGroup = {
   month: string;
@@ -9,6 +10,8 @@ type MonthGroup = {
   rows: {
     id: string;
     date: string;
+    dateFormatted: string;
+    dateShort: string;
     merchant?: string | null;
     category: string;
     status: string;
@@ -17,6 +20,29 @@ type MonthGroup = {
     currency?: string | null;
     categoryColor: string;
   }[];
+};
+
+const formatDateFull = (date: string, locale: string) => {
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return date;
+  return d.toLocaleString(locale, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
+
+const formatDateShort = (date: string, locale: string) => {
+  const d = new Date(date);
+  if (Number.isNaN(d.getTime())) return date;
+  return d.toLocaleString(locale, {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 };
 
 const CHART_PALETTE = [
@@ -35,16 +61,19 @@ const CHART_PALETTE = [
 ];
 
 export default async function TransactionsPage() {
+  const t = await getTranslations('transactions');
+  const locale = await getLocale();
+
   let transactions = [];
   try {
     transactions = await getTransactions();
-  } catch (error) {
+  } catch {
     return (
       <div className="p-6 space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight">Transactions</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
         <Card>
           <CardContent className="py-6">
-            <p className="text-sm text-rose-600">Failed to load transactions.</p>
+            <p className="text-sm text-rose-600">{t('failedToLoad')}</p>
           </CardContent>
         </Card>
       </div>
@@ -55,8 +84,8 @@ export default async function TransactionsPage() {
     const key = tx.created_at || tx.date;
     const d = new Date(key);
     const label = Number.isNaN(d.getTime())
-      ? 'Unknown'
-      : d.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+      ? t('unknown')
+      : d.toLocaleString(locale, { month: 'long', year: 'numeric' });
     if (!acc[label]) acc[label] = [];
     acc[label].push(tx);
     return acc;
@@ -79,17 +108,22 @@ export default async function TransactionsPage() {
       acc[cat.name] = palette[idx % palette.length] ?? 'var(--muted)';
       return acc;
     }, {});
-    const rows = groups[month].map((t: any) => ({
-      id: t.id,
-      date: t.created_at || t.date,
-      merchant: t.merchant,
-      category: t.category,
-      status: t.status,
-      amount: t.amount,
-      direction: t.transaction_direction,
-      currency: t.currency,
-      categoryColor: categoryColors[t.category] ?? 'var(--muted)',
-    }));
+    const rows = groups[month].map((tx: any) => {
+      const dateStr = tx.created_at || tx.date;
+      return {
+        id: tx.id,
+        date: dateStr,
+        dateFormatted: formatDateFull(dateStr, locale),
+        dateShort: formatDateShort(dateStr, locale),
+        merchant: tx.merchant,
+        category: tx.category,
+        status: tx.status,
+        amount: tx.amount,
+        direction: tx.transaction_direction,
+        currency: tx.currency,
+        categoryColor: categoryColors[tx.category] ?? 'var(--muted)',
+      };
+    });
     return { month, categories, palette, rows };
   });
 
@@ -97,9 +131,9 @@ export default async function TransactionsPage() {
     <div className="p-6 space-y-6">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-semibold tracking-tight text-[var(--primary)]">
-          Transactions
+          {t('title')}
         </h1>
-        <p className="text-zinc-500">Latest activity from your linked accounts.</p>
+        <p className="text-zinc-500">{t('subtitle')}</p>
       </div>
 
       <TransactionsClient monthGroups={monthGroups} />

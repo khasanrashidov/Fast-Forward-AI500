@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import {
   Home,
   ArrowRightLeft,
@@ -13,17 +14,18 @@ import {
 } from 'lucide-react';
 
 const navItems = [
-  { name: 'Home', href: '/', icon: Home },
-  { name: 'Transactions', href: '/transactions', icon: ArrowRightLeft },
-  { name: 'Goals', href: '/goals', icon: Rocket },
-  { name: 'Insights', href: '/insights', icon: Sparkles },
-  { name: 'AI Shop', href: '/ai-shop', icon: ShoppingBag },
-  { name: 'Tips', href: '/financial-tips', icon: BookOpen },
-  { name: 'Showcase', href: '/showcase', icon: GalleryVerticalEnd },
+  { labelKey: 'home', href: '/', icon: Home },
+  { labelKey: 'transactions', href: '/transactions', icon: ArrowRightLeft },
+  { labelKey: 'goals', href: '/goals', icon: Rocket },
+  { labelKey: 'insights', href: '/insights', icon: Sparkles },
+  { labelKey: 'aiShop', href: '/ai-shop', icon: ShoppingBag },
+  { labelKey: 'tips', href: '/financial-tips', icon: BookOpen },
+  { labelKey: 'showcase', href: '/showcase', icon: GalleryVerticalEnd },
 ];
 
 export default function BottomNav() {
   const pathname = usePathname();
+  const t = useTranslations('nav');
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 pb-safe md:hidden">
@@ -33,14 +35,14 @@ export default function BottomNav() {
           const isActive = pathname === item.href;
           return (
             <Link
-              key={item.name}
+              key={item.href}
               href={item.href}
               className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${
                 isActive ? 'text-[var(--primary)]' : 'text-gray-500 hover:text-gray-900'
               }`}
             >
               <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-              <span className="text-[10px] font-medium">{item.name}</span>
+              <span className="text-[10px] font-medium">{t(item.labelKey)}</span>
             </Link>
           );
         })}

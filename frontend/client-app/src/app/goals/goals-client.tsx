@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import Link from 'next/link';
 import { Flag, Plus, Wallet } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import { Goal, createGoal, updateGoal } from '@/lib/services/goals';
 import { CURRENCIES, GOAL_PRIORITIES, type Currency } from '@/lib/enums';
@@ -73,26 +74,28 @@ const PRIORITY_TONES: Record<Goal['priority'], GoalTone> = {
   },
 };
 
-const createGoalSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  target_amount: z
-    .string()
-    .min(1, 'Target amount is required')
-    .transform((val) => Number(val.replace(/,/g, '')))
-    .refine((val) => Number.isFinite(val) && val > 0, 'Enter a valid amount'),
-  currency: z.enum(CURRENCIES),
-  priority: z.enum(GOAL_PRIORITIES),
-  target_date: z.string().optional(),
-  description: z.string().optional(),
-});
+const createGoalSchema = (t: (key: string) => string) =>
+  z.object({
+    name: z.string().min(1, t('nameRequired')),
+    target_amount: z
+      .string()
+      .min(1, t('targetAmountRequired'))
+      .transform((val) => Number(val.replace(/,/g, '')))
+      .refine((val) => Number.isFinite(val) && val > 0, t('enterValidAmount')),
+    currency: z.enum(CURRENCIES),
+    priority: z.enum(GOAL_PRIORITIES),
+    target_date: z.string().optional(),
+    description: z.string().optional(),
+  });
 
-const addFundsSchema = z.object({
-  amount: z
-    .string()
-    .min(1, 'Amount is required')
-    .transform((val) => Number(val.replace(/,/g, '')))
-    .refine((val) => Number.isFinite(val) && val > 0, 'Enter a valid amount'),
-});
+const addFundsSchema = (t: (key: string) => string) =>
+  z.object({
+    amount: z
+      .string()
+      .min(1, t('amountRequired'))
+      .transform((val) => Number(val.replace(/,/g, '')))
+      .refine((val) => Number.isFinite(val) && val > 0, t('enterValidAmount')),
+  });
 
 function formatAmount(value: number, currency: string) {
   return `${value.toLocaleString('en-US')} ${currency}`;
@@ -112,6 +115,7 @@ function goalPercent(goal: Goal) {
 }
 
 export function GoalsClient({ initialGoals, userId }: Props) {
+  const t = useTranslations('goals');
   const [goals, setGoals] = useState<Goal[]>(initialGoals);
   const [createOpen, setCreateOpen] = useState(false);
   const [fundsOpenFor, setFundsOpenFor] = useState<Goal | null>(null);
@@ -136,9 +140,9 @@ export function GoalsClient({ initialGoals, userId }: Props) {
     PRIORITY_TONES[priority] ?? PRIORITY_TONES.Medium;
 
   const handleCreateGoal = async () => {
-    const parsed = createGoalSchema.safeParse(createForm);
+    const parsed = createGoalSchema(t).safeParse(createForm);
     if (!parsed.success) {
-      const message = parsed.error.issues[0]?.message ?? 'Invalid form data';
+      const message = parsed.error.issues[0]?.message ?? t('invalidForm');
       toast.error(message);
       return;
     }
@@ -159,7 +163,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
 
       const created = await createGoal(payload);
       setGoals((prev) => [created, ...prev]);
-      toast.success('Goal created');
+      toast.success(t('goalCreated'));
       setCreateForm({
         name: '',
         target_amount: '',
@@ -171,7 +175,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
       setCreateOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error('Failed to create goal');
+      toast.error(t('failedToCreate'));
     } finally {
       setCreateSubmitting(false);
     }
@@ -180,9 +184,9 @@ export function GoalsClient({ initialGoals, userId }: Props) {
   const handleAddFunds = async () => {
     if (!fundsOpenFor) return;
 
-    const parsed = addFundsSchema.safeParse(fundsForm);
+    const parsed = addFundsSchema(t).safeParse(fundsForm);
     if (!parsed.success) {
-      const message = parsed.error.issues[0]?.message ?? 'Invalid amount';
+      const message = parsed.error.issues[0]?.message ?? t('invalidAmount');
       toast.error(message);
       return;
     }
@@ -204,12 +208,12 @@ export function GoalsClient({ initialGoals, userId }: Props) {
       });
 
       setGoals((prev) => prev.map((g) => (g.id === updated.id ? updated : g)));
-      toast.success('Funds added');
+      toast.success(t('fundsAdded'));
       setFundsForm({ amount: '' });
       setFundsOpenFor(null);
     } catch (error) {
       console.error(error);
-      toast.error('Failed to add funds');
+      toast.error(t('failedToAddFunds'));
     } finally {
       setFundsSubmitting(false);
     }
@@ -219,36 +223,36 @@ export function GoalsClient({ initialGoals, userId }: Props) {
     <div className="p-6 space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-semibold tracking-tight text-[var(--primary)]">Goals</h1>
-          <p className="text-muted-foreground">
-            Track each goal&apos;s progress, priority, and status in real time.
-          </p>
+          <h1 className="text-3xl font-semibold tracking-tight text-[var(--primary)]">
+            {t('title')}
+          </h1>
+          <p className="text-muted-foreground">{t('subtitle')}</p>
         </div>
         <Dialog open={createOpen} onOpenChange={setCreateOpen}>
           <DialogTrigger asChild>
             <Button className="w-full sm:w-auto">
               <Plus className="h-4 w-4" />
-              Add goal
+              {t('addGoal')}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create goal</DialogTitle>
-              <DialogDescription>Set a target and start tracking progress.</DialogDescription>
+              <DialogTitle>{t('createGoal')}</DialogTitle>
+              <DialogDescription>{t('createGoalDescription')}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="goal-name">Name</Label>
+                <Label htmlFor="goal-name">{t('name')}</Label>
                 <Input
                   id="goal-name"
-                  placeholder="New Laptop"
+                  placeholder={t('namePlaceholder')}
                   value={createForm.name}
                   onChange={(e) => setCreateForm((p) => ({ ...p, name: e.target.value }))}
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <Label htmlFor="goal-amount">Target amount</Label>
+                  <Label htmlFor="goal-amount">{t('targetAmount')}</Label>
                   <Input
                     id="goal-amount"
                     inputMode="decimal"
@@ -263,7 +267,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="goal-currency">Currency</Label>
+                  <Label htmlFor="goal-currency">{t('currency')}</Label>
                   <Select
                     value={createForm.currency}
                     onValueChange={(value) =>
@@ -271,7 +275,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                     }
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select currency" />
+                      <SelectValue placeholder={t('selectCurrency')} />
                     </SelectTrigger>
                     <SelectContent>
                       {CURRENCIES.map((currency) => (
@@ -285,7 +289,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-2">
-                  <Label htmlFor="goal-priority">Priority</Label>
+                  <Label htmlFor="goal-priority">{t('priority')}</Label>
                   <Select
                     value={createForm.priority}
                     onValueChange={(value) =>
@@ -293,7 +297,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                     }
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select priority" />
+                      <SelectValue placeholder={t('selectPriority')} />
                     </SelectTrigger>
                     <SelectContent>
                       {GOAL_PRIORITIES.map((priority) => (
@@ -305,7 +309,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="goal-date">Target date (optional)</Label>
+                  <Label htmlFor="goal-date">{t('targetDate')}</Label>
                   <Input
                     id="goal-date"
                     type="date"
@@ -315,10 +319,10 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="goal-description">Description (optional)</Label>
+                <Label htmlFor="goal-description">{t('description')}</Label>
                 <textarea
                   id="goal-description"
-                  placeholder="Why is this goal important?"
+                  placeholder={t('descriptionPlaceholder')}
                   value={createForm.description}
                   onChange={(e) => setCreateForm((p) => ({ ...p, description: e.target.value }))}
                   className="flex min-h-[120px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 resize-y"
@@ -327,10 +331,10 @@ export function GoalsClient({ initialGoals, userId }: Props) {
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setCreateOpen(false)}>
-                Cancel
+                {t('cancel')}
               </Button>
               <Button onClick={handleCreateGoal} disabled={createSubmitting}>
-                {createSubmitting ? 'Creating...' : 'Create goal'}
+                {createSubmitting ? t('creating') : t('createGoal')}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -341,10 +345,10 @@ export function GoalsClient({ initialGoals, userId }: Props) {
         <Card>
           <CardHeader className="flex items-center gap-2">
             <Flag className="h-5 w-5 text-primary" />
-            <CardTitle>No goals yet</CardTitle>
+            <CardTitle>{t('noGoals')}</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            Create a goal to start tracking your progress.
+            {t('noGoalsDescription')}
           </CardContent>
         </Card>
       ) : (
@@ -386,14 +390,14 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                   <div className="flex items-center gap-2">
                     <Badge className={statusToneClasses.badgeClass}>{goal.status}</Badge>
                     <Badge className={priorityToneClasses.badgeClass}>
-                      {goal.priority} priority
+                      {t('priorityLabel', { priority: goal.priority })}
                     </Badge>
                   </div>
                 </CardHeader>
 
                 <CardContent className="space-y-3">
                   <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <span>Current</span>
+                    <span>{t('current')}</span>
                     <span className="text-foreground font-medium">
                       {formatAmount(goal.current_amount, goal.currency)}
                     </span>
@@ -403,11 +407,13 @@ export function GoalsClient({ initialGoals, userId }: Props) {
 
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
                     <span>{percent}%</span>
-                    <span>Target: {formatAmount(goal.target_amount, goal.currency)}</span>
+                    <span>
+                      {t('target')}: {formatAmount(goal.target_amount, goal.currency)}
+                    </span>
                   </div>
 
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span>Remaining</span>
+                    <span>{t('remaining')}</span>
                     <span className="text-foreground font-medium">
                       {formatAmount(
                         Math.max(goal.target_amount - goal.current_amount, 0),
@@ -426,7 +432,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                     }}
                   >
                     <Wallet className="h-4 w-4" />
-                    Add funds
+                    {t('addFunds')}
                   </Button>
                 </CardContent>
               </Card>
@@ -438,14 +444,12 @@ export function GoalsClient({ initialGoals, userId }: Props) {
       <Dialog open={!!fundsOpenFor} onOpenChange={(open) => !open && setFundsOpenFor(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add funds</DialogTitle>
-            <DialogDescription>
-              Increase the current amount for this goal. It will add on top of the existing balance.
-            </DialogDescription>
+            <DialogTitle>{t('addFunds')}</DialogTitle>
+            <DialogDescription>{t('addFundsDescription')}</DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-2">
-              <Label htmlFor="funds-amount">Amount</Label>
+              <Label htmlFor="funds-amount">{t('amount')}</Label>
               <Input
                 id="funds-amount"
                 inputMode="decimal"
@@ -456,16 +460,16 @@ export function GoalsClient({ initialGoals, userId }: Props) {
             </div>
             {fundsOpenFor ? (
               <p className="text-xs text-muted-foreground">
-                Current: {formatAmount(fundsOpenFor.current_amount, fundsOpenFor.currency)}
+                {t('current')}: {formatAmount(fundsOpenFor.current_amount, fundsOpenFor.currency)}
               </p>
             ) : null}
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setFundsOpenFor(null)}>
-              Cancel
+              {t('cancel')}
             </Button>
             <Button onClick={handleAddFunds} disabled={fundsSubmitting}>
-              {fundsSubmitting ? 'Saving...' : 'Add funds'}
+              {fundsSubmitting ? t('saving') : t('addFunds')}
             </Button>
           </DialogFooter>
         </DialogContent>

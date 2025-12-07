@@ -66,7 +66,7 @@ export default function InsightsLoading() {
         </Card>
       </div>
 
-      {/* AI Shop Assistant promo card skeleton */}
+      {/* AI Shop Agent promo card skeleton */}
       <Card className="border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-accent/10">
         <CardContent className="flex flex-col md:flex-row items-center justify-between gap-4 py-6">
           <div className="flex items-center gap-4">

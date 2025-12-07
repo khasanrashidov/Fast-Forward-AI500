@@ -21,6 +21,7 @@ import {
   ArrowDown,
   Search,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type StatusTone = 'primary' | 'warn' | 'error' | 'muted';
 
@@ -54,29 +55,6 @@ const formatAmount = (amount: number, direction?: string, currency?: string) => 
   return { signed, formatted };
 };
 
-const formatDate = (date: string) => {
-  const d = new Date(date);
-  if (Number.isNaN(d.getTime())) return date;
-  return d.toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-};
-
-const formatDateShort = (date: string) => {
-  const d = new Date(date);
-  if (Number.isNaN(d.getTime())) return date;
-  return d.toLocaleString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-};
-
 type MonthGroup = {
   month: string;
   categories: { name: string; value: number }[];
@@ -84,6 +62,8 @@ type MonthGroup = {
   rows: {
     id: string;
     date: string;
+    dateFormatted: string;
+    dateShort: string;
     merchant?: string | null;
     category: string;
     status: string;
@@ -94,7 +74,12 @@ type MonthGroup = {
   }[];
 };
 
-export default function TransactionsClient({ monthGroups }: { monthGroups: MonthGroup[] }) {
+export default function TransactionsClient({
+  monthGroups,
+}: {
+  monthGroups: MonthGroup[];
+}) {
+  const t = useTranslations('transactions');
   const [index, setIndex] = useState(0);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<{
@@ -110,7 +95,7 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
     return (
       <Card>
         <CardContent className="py-6">
-          <p className="text-sm text-zinc-500 text-center">No transactions yet.</p>
+          <p className="text-sm text-zinc-500 text-center">{t('noTransactions')}</p>
         </CardContent>
       </Card>
     );
@@ -119,10 +104,8 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
   const goPrev = () => setIndex((i) => (i - 1 + monthGroups.length) % monthGroups.length);
   const goNext = () => setIndex((i) => (i + 1) % monthGroups.length);
   const goCurrentMonth = () => {
-    const now = new Date();
-    const label = now.toLocaleString('en-US', { month: 'long', year: 'numeric' });
-    const idx = monthGroups.findIndex((m) => m.month === label);
-    if (idx >= 0) setIndex(idx);
+    // Go to the first (most recent) month group
+    setIndex(0);
   };
 
   const filteredRows = current.rows.filter((tx) => {
@@ -207,8 +190,8 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
             className="rounded-md border border-zinc-200 px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium hover:bg-zinc-50 transition flex items-center gap-1.5 sm:gap-2"
           >
             <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            <span className="hidden xs:inline">Current</span>
-            <span className="hidden sm:inline">Month</span>
+            <span className="hidden xs:inline">{t('current')}</span>
+            <span className="hidden sm:inline">{t('month')}</span>
           </button>
         </div>
 
@@ -217,7 +200,7 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400" />
           <input
             className="w-full h-10 rounded-md border border-zinc-200 pl-9 pr-3 text-sm placeholder:text-zinc-400"
-            placeholder="Filter transactions..."
+            placeholder={t('filterPlaceholder')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -249,7 +232,7 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
                       sort.key === 'date' ? 'text-[var(--primary)]' : ''
                     }`}
                   >
-                    Date {renderSortIcon('date')}
+                    {t('date')} {renderSortIcon('date')}
                   </button>
                 </TableHead>
                 <TableHead>
@@ -259,7 +242,7 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
                       sort.key === 'merchant' ? 'text-[var(--primary)]' : ''
                     }`}
                   >
-                    Merchant {renderSortIcon('merchant')}
+                    {t('merchant')} {renderSortIcon('merchant')}
                   </button>
                 </TableHead>
                 <TableHead>
@@ -269,7 +252,7 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
                       sort.key === 'category' ? 'text-[var(--primary)]' : ''
                     }`}
                   >
-                    Category {renderSortIcon('category')}
+                    {t('category')} {renderSortIcon('category')}
                   </button>
                 </TableHead>
                 <TableHead>
@@ -279,7 +262,7 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
                       sort.key === 'status' ? 'text-[var(--primary)]' : ''
                     }`}
                   >
-                    Status {renderSortIcon('status')}
+                    {t('status')} {renderSortIcon('status')}
                   </button>
                 </TableHead>
                 <TableHead className="text-right">
@@ -289,7 +272,7 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
                       sort.key === 'amount' ? 'text-[var(--primary)]' : ''
                     }`}
                   >
-                    Amount {renderSortIcon('amount')}
+                    {t('amount')} {renderSortIcon('amount')}
                   </button>
                 </TableHead>
               </TableRow>
@@ -304,8 +287,10 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
                 );
                 return (
                   <TableRow key={transaction.id}>
-                    <TableCell>{formatDate(transaction.date)}</TableCell>
-                    <TableCell className="font-medium">{transaction.merchant}</TableCell>
+                    <TableCell>{transaction.dateFormatted}</TableCell>
+                    <TableCell className="font-medium">
+                      {transaction.merchant || t('unknown')}
+                    </TableCell>
                     <TableCell>
                       <Badge
                         className="font-semibold text-white"
@@ -332,7 +317,7 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
         {/* Mobile Card List - shown only on mobile */}
         <div className="md:hidden space-y-3">
           {sortedRows.length === 0 ? (
-            <p className="text-sm text-zinc-500 text-center py-4">No transactions found.</p>
+            <p className="text-sm text-zinc-500 text-center py-4">{t('noTransactionsFound')}</p>
           ) : (
             sortedRows.map((transaction) => {
               const { tone, label } = statusStyle(transaction.status ?? '');
@@ -350,9 +335,9 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
                       <p className="font-medium text-sm text-zinc-900 truncate">
-                        {transaction.merchant || 'Unknown'}
+                        {transaction.merchant || t('unknown')}
                       </p>
-                      <p className="text-xs text-zinc-500">{formatDateShort(transaction.date)}</p>
+                      <p className="text-xs text-zinc-500">{transaction.dateShort}</p>
                     </div>
                     <p
                       className={`text-sm font-bold whitespace-nowrap ${
@@ -381,7 +366,9 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
 
         {/* Transaction count */}
         <p className="text-xs text-zinc-500 text-center pt-2">
-          {sortedRows.length} transaction{sortedRows.length !== 1 ? 's' : ''} in {current.month}
+          {sortedRows.length === 1
+            ? t('transactionCount', { count: sortedRows.length, month: current.month })
+            : t('transactionsCount', { count: sortedRows.length, month: current.month })}
         </p>
       </CardContent>
     </Card>

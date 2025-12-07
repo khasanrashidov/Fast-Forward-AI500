@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { getTranslations } from 'next-intl/server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -17,58 +18,53 @@ import {
   Wallet,
 } from 'lucide-react';
 
-const features = [
+const featureKeys = [
   {
-    title: 'AI Spending Insights',
-    description:
-      'Short, actionable explanations of where your money goes. Understand your spending patterns with AI-powered analysis.',
+    titleKey: 'featureSpendingInsights',
+    descKey: 'featureSpendingInsightsDesc',
     icon: BarChart3,
     href: '/transactions',
-    badge: 'Analytics',
+    badgeKey: 'badgeAnalytics',
   },
   {
-    title: 'Smart Monthly Planning',
-    description:
-      'Warnings when spending is too fast & balance predictions. Stay on track with intelligent alerts.',
+    titleKey: 'featureMonthlyPlanning',
+    descKey: 'featureMonthlyPlanningDesc',
     icon: CalendarClock,
     href: '/',
-    badge: 'Dashboard',
+    badgeKey: 'badgeDashboard',
   },
   {
-    title: 'Financial Health Score',
-    description:
-      'One simple score (0–100) explaining your stability. Know exactly where you stand financially.',
+    titleKey: 'featureHealthScore',
+    descKey: 'featureHealthScoreDesc',
     icon: HeartPulse,
     href: '/insights',
-    badge: 'Insights',
+    badgeKey: 'badgeInsights',
   },
   {
-    title: 'Goal Planning',
-    description:
-      'AI calculates timelines and suggests improvements. Set goals and track your progress with Monte Carlo simulations.',
+    titleKey: 'featureGoalPlanning',
+    descKey: 'featureGoalPlanningDesc',
     icon: Target,
     href: '/goals',
-    badge: 'Goals',
+    badgeKey: 'badgeGoals',
   },
   {
-    title: 'Personalized Recommendations',
-    description:
-      'Based on spending patterns, habits, income, and goals. Get tailored advice to improve your finances.',
+    titleKey: 'featureRecommendations',
+    descKey: 'featureRecommendationsDesc',
     icon: Lightbulb,
     href: '/financial-tips',
-    badge: 'Tips',
+    badgeKey: 'badgeTips',
   },
   {
-    title: 'Agrobank Product Matching',
-    description:
-      'AI suggests Microloans, Deposits, Savings, and Installment options. Find the right products for your needs.',
+    titleKey: 'featureProductMatching',
+    descKey: 'featureProductMatchingDesc',
     icon: ShoppingBag,
     href: '/ai-shop',
-    badge: 'AI Shop',
+    badgeKey: 'badgeAIShop',
   },
 ];
 
-export default function ShowcasePage() {
+export default async function ShowcasePage() {
+  const t = await getTranslations('showcase');
   return (
     <div className="p-6 space-y-8">
       {/* Hero Section */}
@@ -76,21 +72,20 @@ export default function ShowcasePage() {
         <div className="relative z-10 max-w-3xl">
           <Badge className="mb-4 bg-primary/15 text-primary border border-primary/25">
             <Sparkles className="h-3 w-3 mr-1" />
-            Powered by AI
+            {t('poweredByAI')}
           </Badge>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
-            Meet <span className="text-primary">Moliyachi</span>
+            {t('heroTitle')} <span className="text-primary">Moliyachi</span>
           </h1>
           <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-            A smart financial assistant fully embedded into Agrobank Mobile that transforms it from
-            a transaction tool into a{' '}
-            <span className="text-foreground font-medium">financial partner</span>.
+            {t('heroDescription')}{' '}
+            <span className="text-foreground font-medium">{t('financialPartner')}</span>.
           </p>
           <div className="flex flex-wrap gap-3">
             <Button asChild size="lg">
               <Link href="/" className="flex items-center gap-2">
                 <Wallet className="h-4 w-4" />
-                View Dashboard
+                {t('viewDashboard')}
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg">
@@ -100,7 +95,7 @@ export default function ShowcasePage() {
                 rel="noreferrer"
                 className="flex items-center gap-2"
               >
-                Visit Landing Page
+                {t('visitLandingPage')}
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
@@ -115,18 +110,17 @@ export default function ShowcasePage() {
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Rocket className="h-5 w-5 text-primary" />
-          <h2 className="text-2xl font-semibold tracking-tight">Features</h2>
+          <h2 className="text-2xl font-semibold tracking-tight">{t('features')}</h2>
         </div>
-        <p className="text-muted-foreground">
-          Explore all the intelligent features that make Moliyachi your personal finance companion.
-        </p>
+        <p className="text-muted-foreground">{t('featuresDescription')}</p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {features.map((feature) => {
+        {featureKeys.map((feature) => {
           const Icon = feature.icon;
+          const title = t(feature.titleKey);
           return (
-            <Link key={feature.title} href={feature.href} className="group">
+            <Link key={feature.titleKey} href={feature.href} className="group">
               <Card className="h-full transition-all hover:shadow-md hover:border-primary/30 bg-gradient-to-br from-card via-card to-primary/5">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between gap-3">
@@ -135,23 +129,23 @@ export default function ShowcasePage() {
                         <Icon className="h-5 w-5 text-primary" />
                       </div>
                       <CardTitle className="text-lg font-semibold group-hover:text-primary transition-colors">
-                        {feature.title}
+                        {title}
                       </CardTitle>
                     </div>
                     <Badge
                       variant="secondary"
                       className="text-[11px] shrink-0 group-hover:bg-primary/10 group-hover:text-primary transition-colors"
                     >
-                      {feature.badge}
+                      {t(feature.badgeKey)}
                     </Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    {feature.description}
+                    {t(feature.descKey)}
                   </p>
                   <div className="flex items-center gap-1 text-sm text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                    Explore
+                    {t('explore')}
                     <ArrowRight className="h-4 w-4" />
                   </div>
                 </CardContent>
@@ -175,16 +169,14 @@ export default function ShowcasePage() {
               />
             </div>
             <div className="space-y-1">
-              <h3 className="text-xl font-semibold text-foreground">Ready to take control?</h3>
-              <p className="text-sm text-muted-foreground">
-                Start your journey to financial wellness with Moliyachi today.
-              </p>
+              <h3 className="text-xl font-semibold text-foreground">{t('readyToTakeControl')}</h3>
+              <p className="text-sm text-muted-foreground">{t('startJourney')}</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-3">
             <Button asChild>
               <Link href="/" className="flex items-center gap-2">
-                Get Started
+                {t('getStarted')}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -195,7 +187,7 @@ export default function ShowcasePage() {
                 rel="noreferrer"
                 className="flex items-center gap-2"
               >
-                Learn More
+                {t('learnMore')}
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
