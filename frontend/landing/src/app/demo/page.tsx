@@ -14,10 +14,14 @@ export default function DemoPage() {
             <h2 className="text-2xl font-bold font-display text-gray-900 mb-6">
               {t.demo?.title || 'Demo Recording'}
             </h2>
-            <div className="aspect-video bg-gray-100 rounded-2xl flex items-center justify-center border-2 border-dashed border-gray-200">
-              <p className="text-gray-500">
-                {t.demo?.videoPlaceholder || 'Video Placeholder (1-5 mins)'}
-              </p>
+            <div className="aspect-video bg-gray-100 rounded-2xl overflow-hidden border border-gray-200">
+              <iframe
+                src="https://www.youtube.com/embed/3t75MOyQF_E"
+                title={t.demo?.videoTitle || 'Demo Video'}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
           </section>
 
