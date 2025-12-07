@@ -9,11 +9,13 @@ import {
   Clock,
   Sparkles,
   Landmark,
+  ShoppingCart,
 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function ProblemSolution() {
   const { t } = useLanguage();
+  const icons = [Brain, TrendingUp, ShieldCheck, Clock, Sparkles, Landmark];
 
   return (
     <section id="solution" className="py-24 bg-gray-50">
@@ -69,8 +71,7 @@ export default function ProblemSolution() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               {t.problemSolution.solutions.map((item, index) => {
-                const icons = [Brain, TrendingUp, ShieldCheck, Clock, Sparkles, Landmark];
-                const Icon = icons[index];
+                const Icon = icons[index] ?? ShoppingCart;
                 return (
                   <div
                     key={index}

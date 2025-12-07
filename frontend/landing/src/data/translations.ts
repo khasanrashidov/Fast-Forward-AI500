@@ -173,6 +173,10 @@ export const translations: Record<Language, Translations> = {
           title: 'Agrobank Product Matching',
           desc: 'AI suggests Microloans, Deposits, Savings, and Installment options',
         },
+        {
+          title: 'AI Shop Agent',
+          desc: 'Find the perfect product with AI-powered recommendations. Get installment options via Opencard by Agrobank, price comparisons, and personalized insights.',
+        },
       ],
     },
     whyUs: {
@@ -510,6 +514,10 @@ export const translations: Record<Language, Translations> = {
           title: 'Agrobank Product Matching',
           desc: 'AI Mikroqarzlar, Depozitlar, Jamg‘arma va Bo‘lib to‘lash mahsulotlarini tavsiya qiladi',
         },
+        {
+          title: "AI Do'kon",
+          desc: "AI tavsiyalari bilan mukammal mahsulotni toping. Bo'lib to'lash variantlarini oling Agrobank Opencard orqali, narx taqqoslashlari va shaxsiy tavsiyalar.",
+        },
       ],
     },
     whyUs: {
@@ -845,6 +853,10 @@ export const translations: Record<Language, Translations> = {
         {
           title: 'Agrobank Product Matching',
           desc: 'AI подбирает Микрозаймы, Депозиты, Накопления и Рассрочки',
+        },
+        {
+          title: 'AI Магазин',
+          desc: 'Найдите идеальный товар с AI-рекомендациями. Получите варианты рассрочки через Opencard от Agrobank, сравнение цен и персональные советы.',
         },
       ],
     },
