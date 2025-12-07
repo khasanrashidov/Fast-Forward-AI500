@@ -2,8 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SpendingCategoryRadial } from "@/components/SpendingCategoryRadial";
 import { getDashboard } from "@/lib/services/dashboard";
 import { getUser } from "@/lib/services/users";
+import { getCards } from "@/lib/services/cards";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { DashboardCards } from "./dashboard/dashboard-cards";
 import {
   AlertTriangle,
   ArrowDownRight,
@@ -25,6 +27,7 @@ function formatPercent(value: number) {
 export default async function DashboardPage() {
   let data;
   let user;
+  let cards = [];
 
   const basePalette = [
     "#2563eb",
@@ -51,7 +54,7 @@ export default async function DashboardPage() {
   };
 
   try {
-    [data, user] = await Promise.all([getDashboard(), getUser()]);
+    [data, user, cards] = await Promise.all([getDashboard(), getUser(), getCards()]);
   } catch (error) {
     return (
       <div className="p-6 space-y-4">
@@ -118,7 +121,11 @@ export default async function DashboardPage() {
         <p className="text-zinc-500">Here is your latest financial overview.</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+
+
+      <div className="grid gap-4 lg:grid-cols-12">
+        <div className="col-span-12 lg:col-span-9 grid gap-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Income</CardTitle>
@@ -179,105 +186,109 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-12">
-        <Card className="col-span-12 lg:col-span-6">
-          <CardHeader>
-            <CardTitle>
-              Spending in {monthLabel}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {deltas.length === 0 ? (
-              <p className="text-sm text-zinc-500">No category data yet.</p>
-            ) : (
-              <>
-                <div className="flex items-center justify-center">
-                  <SpendingCategoryRadial
-                    categories={deltas.map(({ name, value }) => ({ name, value }))}
-                    colors={palette}
-                    sizeClassName="w-[200px] max-w-full"
-                    centerLabel="UZS"
-                    subLabel={monthOnly}
-                    currency="UZS"
-                  />
-                </div>
-                <div className="space-y-2">
-                  {deltas.map(({ name, value, prev, pct, diff }, idx) => (
-                    <div key={name} className="flex items-center justify-between gap-4">
-                      <div className="flex items-center gap-2">
-                        <Badge
-                          className="rounded-full px-2.5 py-1 text-[11px] font-semibold"
-                          style={{
-                            backgroundColor: palette[idx % palette.length],
-                            color: "#ffffff",
-                          }}
-                        >
-                          {name}
-                        </Badge>
-                        <div>
-                          {prev > 0 && (
-                            <p className="text-xs text-zinc-500">
-                              Previous month: {formatCurrency(prev)}
-                              {pct !== null && (
-                                <span className="ml-2">
-                                  ({diff >= 0 ? "+" : ""}
-                                  {formatPercent(pct)})
-                                </span>
-                              )}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                      <p className="text-sm font-semibold shrink-0">{formatCurrency(value)}</p>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
-
-        <div className="col-span-12 lg:col-span-6 grid gap-4">
-          <Card className="flex flex-col bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-[var(--primary)]" />
-                AI Insights
+      <div className="flex flex-col lg:flex-row gap-4">
+          <Card className="w-full lg:basis-[40%]">
+            <CardHeader>
+              <CardTitle>
+                Spending in {monthLabel}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              {insights.length === 0 ? (
-                <p className="text-sm text-zinc-500">No insights yet.</p>
+            <CardContent className="space-y-2">
+              {deltas.length === 0 ? (
+                <p className="text-sm text-zinc-500">No category data yet.</p>
               ) : (
-                insights.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="rounded-md border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/6 to-accent/10 p-3 text-sm text-foreground"
-                  >
-                    {item}
+                <>
+                  <div className="flex items-center justify-center">
+                    <SpendingCategoryRadial
+                      categories={deltas.map(({ name, value }) => ({ name, value }))}
+                      colors={palette}
+                      sizeClassName="w-[200px] max-w-full"
+                      centerLabel="UZS"
+                      subLabel={monthOnly}
+                      currency="UZS"
+                    />
                   </div>
-                ))
+                  <div className="space-y-2">
+                    {deltas.map(({ name, value, prev, pct, diff }, idx) => (
+                      <div key={name} className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-2">
+                          <Badge
+                            className="rounded-full px-2.5 py-1 text-[11px] font-semibold"
+                            style={{
+                              backgroundColor: palette[idx % palette.length],
+                              color: "#ffffff",
+                            }}
+                          >
+                            {name}
+                          </Badge>
+                          <div>
+                            {prev > 0 && (
+                              <p className="text-xs text-zinc-500">
+                                Previous month: {formatCurrency(prev)}
+                                {pct !== null && (
+                                  <span className="ml-2">
+                                    ({diff >= 0 ? "+" : ""}
+                                    {formatPercent(pct)})
+                                  </span>
+                                )}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <p className="text-sm font-semibold shrink-0">{formatCurrency(value)}</p>
+                      </div>
+                    ))}
+                  </div>
+                </>
               )}
             </CardContent>
           </Card>
 
-          <Card className="flex flex-col">
-            <CardHeader className="flex items-center gap-2 pb-2">
-              <AlertTriangle className="h-4 w-4 text-amber-600" />
-              <CardTitle>Alerts</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {alerts.length === 0 ? (
-                <p className="text-sm text-zinc-500">No alerts at this time.</p>
-              ) : (
-                alerts.map((alert, idx) => (
-                  <div key={idx} className="text-sm text-zinc-700 dark:text-zinc-200">
-                    {alert}
-                  </div>
-                ))
-              )}
-            </CardContent>
-          </Card>
+          <Card className="flex flex-col bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20 w-full lg:basis-[35%]">
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-[var(--primary)]" />
+                  AI Insights
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {insights.length === 0 ? (
+                  <p className="text-sm text-zinc-500">No insights yet.</p>
+                ) : (
+                  insights.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="rounded-md border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/6 to-accent/10 p-3 text-sm text-foreground"
+                    >
+                      {item}
+                    </div>
+                  ))
+                )}
+              </CardContent>
+            </Card>
+
+            <Card className="flex flex-col w-full lg:basis-[25%]">
+              <CardHeader className="flex items-center gap-2 pb-2">
+                <AlertTriangle className="h-4 w-4 text-amber-600" />
+                <CardTitle>Alerts</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {alerts.length === 0 ? (
+                  <p className="text-sm text-zinc-500">No alerts at this time.</p>
+                ) : (
+                  alerts.map((alert, idx) => (
+                    <div key={idx} className="text-sm text-zinc-700 dark:text-zinc-200">
+                      {alert}
+                    </div>
+                  ))
+                )}
+              </CardContent>
+            </Card>
+      </div>
+        </div>
+
+        <div className="col-span-12 lg:col-span-3">
+          <DashboardCards initialCards={cards} username={user.username} />
         </div>
       </div>
     </div>

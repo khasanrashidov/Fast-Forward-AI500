@@ -62,7 +62,19 @@ export async function apiFetch<T>(
     throw err;
   }
 
-  if (!response.ok || !body?.is_success) {
+  if (!response.ok) {
+    const err = new ApiError({
+      status: response.status,
+      message: body?.message ?? "API request failed.",
+      url,
+    });
+    if (process.env.NODE_ENV === "development") {
+      console.error("[apiFetch] API error", { url, status: response.status, body });
+    }
+    throw err;
+  }
+
+  if (body && "is_success" in body && body.is_success === false) {
     const err = new ApiError({
       status: response.status,
       message: body?.message ?? "API request failed.",
