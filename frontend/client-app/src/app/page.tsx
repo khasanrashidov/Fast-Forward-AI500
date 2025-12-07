@@ -238,10 +238,10 @@ export default async function DashboardPage() {
         </Card>
 
         <div className="col-span-12 lg:col-span-6 grid gap-4">
-          <Card className="flex flex-col">
+          <Card className="flex flex-col bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-amber-500" />
+                <Sparkles className="h-4 w-4 text-[var(--primary)]" />
                 AI Insights
               </CardTitle>
             </CardHeader>
@@ -250,7 +250,10 @@ export default async function DashboardPage() {
                 <p className="text-sm text-zinc-500">No insights yet.</p>
               ) : (
                 insights.map((item, idx) => (
-                  <div key={idx} className="text-sm text-zinc-700 dark:text-zinc-200">
+                  <div
+                    key={idx}
+                    className="rounded-md border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/6 to-accent/10 p-3 text-sm text-foreground"
+                  >
                     {item}
                   </div>
                 ))
