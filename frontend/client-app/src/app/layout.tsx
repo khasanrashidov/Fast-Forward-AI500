@@ -3,6 +3,7 @@ import { Inter, Outfit } from 'next/font/google';
 import './globals.css';
 import ClientLayout from '@/components/ClientLayout';
 import { Toaster } from '@/components/ui/sonner';
+import { GlobalLoader } from '@/components/GlobalLoader';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${outfit.variable} antialiased bg-white text-gray-900 font-sans`}
       >
+        <GlobalLoader />
         <ClientLayout>{children}</ClientLayout>
         <Toaster />
       </body>
