@@ -6,6 +6,7 @@ const productSchema = z.object({
   id: z.number(),
   image: z.string().url(),
   name: z.string(),
+  sale_price: z.number(),
   opencard_month_text: z.string(),
   opencard_monthly_payment: z.number(),
   opencard_total_price: z.number(),

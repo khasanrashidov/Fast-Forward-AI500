@@ -8,6 +8,7 @@ import {
   CreditCard,
   Rocket,
   Sparkles,
+  ShoppingBag,
   BookOpen,
   ChevronLeft,
   ChevronRight,
@@ -28,6 +29,7 @@ export default function Sidebar({ isCollapsed, setIsCollapsed }: SidebarProps) {
     { icon: CreditCard, label: 'Transactions', href: '/transactions' },
     { icon: Rocket, label: 'Goals', href: '/goals' },
     { icon: Sparkles, label: 'Insights', href: '/insights' },
+    { icon: ShoppingBag, label: 'AI Shop', href: '/ai-shop' },
     { icon: BookOpen, label: 'Financial Tips', href: '/financial-tips' },
     { icon: GalleryVerticalEnd, label: 'Showcase', href: '/showcase' },
   ];
