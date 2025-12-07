@@ -148,6 +148,7 @@ export default function AIShopPage() {
                     width={15}
                     height={15}
                     className="mr-1"
+                    unoptimized
                   />
                   <span>{t('openInstallment')}</span>
                 </Badge>
@@ -235,6 +236,7 @@ export default function AIShopPage() {
                                       width={20}
                                       height={20}
                                       className="shrink-0 cursor-help"
+                                      unoptimized
                                     />
                                   </TooltipTrigger>
                                   <TooltipContent>
