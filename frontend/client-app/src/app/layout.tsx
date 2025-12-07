@@ -1,24 +1,24 @@
-import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
-import "./globals.css";
-import ClientLayout from "@/components/ClientLayout";
-import { Toaster } from "@/components/ui/sonner";
+import type { Metadata } from 'next';
+import { Inter, Outfit } from 'next/font/google';
+import './globals.css';
+import ClientLayout from '@/components/ClientLayout';
+import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
+  variable: '--font-inter',
+  subsets: ['latin'],
 });
 
 const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
+  variable: '--font-outfit',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Moliyachi",
-  description: "Modern Mobile-First Fintech Application",
+  title: 'Moliyachi',
+  description: 'Modern Mobile-First Fintech Application',
   icons: {
-    icon: "/logo.png",
+    icon: '/logo.png',
   },
 };
 

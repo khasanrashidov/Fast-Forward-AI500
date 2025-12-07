@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import { z } from "zod";
-import { toast } from "sonner";
-import Link from "next/link";
-import { Flag, Plus, Wallet } from "lucide-react";
+import { useMemo, useState } from 'react';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import Link from 'next/link';
+import { Flag, Plus, Wallet } from 'lucide-react';
 
-import { Goal, createGoal, updateGoal } from "@/lib/services/goals";
-import { CURRENCIES, GOAL_PRIORITIES, type Currency } from "@/lib/enums";
-import { cn } from "@/lib/utils";
+import { Goal, createGoal, updateGoal } from '@/lib/services/goals';
+import { CURRENCIES, GOAL_PRIORITIES, type Currency } from '@/lib/enums';
+import { cn } from '@/lib/utils';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
@@ -24,14 +24,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 type Props = {
   initialGoals: Goal[];
@@ -43,43 +43,43 @@ type GoalTone = {
   ringClass: string;
 };
 
-const STATUS_TONES: Record<Goal["status"], GoalTone> = {
+const STATUS_TONES: Record<Goal['status'], GoalTone> = {
   Active: {
-    badgeClass: "bg-primary/15 text-primary border border-primary/20",
-    ringClass: "ring-1 ring-primary/30",
+    badgeClass: 'bg-primary/15 text-primary border border-primary/20',
+    ringClass: 'ring-1 ring-primary/30',
   },
   Achieved: {
-    badgeClass: "bg-primary/12 text-primary border border-primary/25",
-    ringClass: "ring-1 ring-primary/25",
+    badgeClass: 'bg-primary/12 text-primary border border-primary/25',
+    ringClass: 'ring-1 ring-primary/25',
   },
   Cancelled: {
-    badgeClass: "bg-destructive/10 text-destructive border border-destructive/20",
-    ringClass: "ring-1 ring-destructive/25",
+    badgeClass: 'bg-destructive/10 text-destructive border border-destructive/20',
+    ringClass: 'ring-1 ring-destructive/25',
   },
 };
 
-const PRIORITY_TONES: Record<Goal["priority"], GoalTone> = {
+const PRIORITY_TONES: Record<Goal['priority'], GoalTone> = {
   Low: {
-    badgeClass: "bg-muted text-muted-foreground border border-border",
-    ringClass: "ring-1 ring-muted/30",
+    badgeClass: 'bg-muted text-muted-foreground border border-border',
+    ringClass: 'ring-1 ring-muted/30',
   },
   Medium: {
-    badgeClass: "bg-secondary text-secondary-foreground border border-secondary/40",
-    ringClass: "ring-1 ring-secondary/30",
+    badgeClass: 'bg-secondary text-secondary-foreground border border-secondary/40',
+    ringClass: 'ring-1 ring-secondary/30',
   },
   High: {
-    badgeClass: "bg-primary text-primary-foreground",
-    ringClass: "ring-1 ring-primary/35",
+    badgeClass: 'bg-primary text-primary-foreground',
+    ringClass: 'ring-1 ring-primary/35',
   },
 };
 
 const createGoalSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string().min(1, 'Name is required'),
   target_amount: z
     .string()
-    .min(1, "Target amount is required")
-    .transform((val) => Number(val.replace(/,/g, "")))
-    .refine((val) => Number.isFinite(val) && val > 0, "Enter a valid amount"),
+    .min(1, 'Target amount is required')
+    .transform((val) => Number(val.replace(/,/g, '')))
+    .refine((val) => Number.isFinite(val) && val > 0, 'Enter a valid amount'),
   currency: z.enum(CURRENCIES),
   priority: z.enum(GOAL_PRIORITIES),
   target_date: z.string().optional(),
@@ -89,21 +89,21 @@ const createGoalSchema = z.object({
 const addFundsSchema = z.object({
   amount: z
     .string()
-    .min(1, "Amount is required")
-    .transform((val) => Number(val.replace(/,/g, "")))
-    .refine((val) => Number.isFinite(val) && val > 0, "Enter a valid amount"),
+    .min(1, 'Amount is required')
+    .transform((val) => Number(val.replace(/,/g, '')))
+    .refine((val) => Number.isFinite(val) && val > 0, 'Enter a valid amount'),
 });
 
 function formatAmount(value: number, currency: string) {
-  return `${value.toLocaleString("en-US")} ${currency}`;
+  return `${value.toLocaleString('en-US')} ${currency}`;
 }
 
 const formatNumberInput = (value: string) => {
-  const digits = value.replace(/\D/g, "");
-  if (!digits) return "";
+  const digits = value.replace(/\D/g, '');
+  if (!digits) return '';
   const number = Number(digits);
-  if (Number.isNaN(number)) return "";
-  return number.toLocaleString("en-US");
+  if (Number.isNaN(number)) return '';
+  return number.toLocaleString('en-US');
 };
 
 function goalPercent(goal: Goal) {
@@ -119,26 +119,26 @@ export function GoalsClient({ initialGoals, userId }: Props) {
   const [fundsSubmitting, setFundsSubmitting] = useState(false);
 
   const [createForm, setCreateForm] = useState({
-    name: "",
-    target_amount: "",
-    currency: "UZS" as Currency,
-    priority: "Medium" as Goal["priority"],
-    target_date: "",
-    description: "",
+    name: '',
+    target_amount: '',
+    currency: 'UZS' as Currency,
+    priority: 'Medium' as Goal['priority'],
+    target_date: '',
+    description: '',
   });
 
-  const [fundsForm, setFundsForm] = useState({ amount: "" });
+  const [fundsForm, setFundsForm] = useState({ amount: '' });
 
   const hasGoals = goals.length > 0;
 
-  const statusTone = (status: Goal["status"]) => STATUS_TONES[status] ?? STATUS_TONES.Active;
-  const priorityTone = (priority: Goal["priority"]) =>
+  const statusTone = (status: Goal['status']) => STATUS_TONES[status] ?? STATUS_TONES.Active;
+  const priorityTone = (priority: Goal['priority']) =>
     PRIORITY_TONES[priority] ?? PRIORITY_TONES.Medium;
 
   const handleCreateGoal = async () => {
     const parsed = createGoalSchema.safeParse(createForm);
     if (!parsed.success) {
-      const message = parsed.error.issues[0]?.message ?? "Invalid form data";
+      const message = parsed.error.issues[0]?.message ?? 'Invalid form data';
       toast.error(message);
       return;
     }
@@ -151,7 +151,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
         target_amount: parsed.data.target_amount,
         current_amount: 0,
         currency: parsed.data.currency,
-        status: "Active" as Goal["status"],
+        status: 'Active' as Goal['status'],
         priority: parsed.data.priority,
         target_date: parsed.data.target_date || undefined,
         description: parsed.data.description || undefined,
@@ -159,19 +159,19 @@ export function GoalsClient({ initialGoals, userId }: Props) {
 
       const created = await createGoal(payload);
       setGoals((prev) => [created, ...prev]);
-      toast.success("Goal created");
+      toast.success('Goal created');
       setCreateForm({
-        name: "",
-        target_amount: "",
-        currency: "UZS",
-        priority: "Medium",
-        target_date: "",
-        description: "",
+        name: '',
+        target_amount: '',
+        currency: 'UZS',
+        priority: 'Medium',
+        target_date: '',
+        description: '',
       });
       setCreateOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to create goal");
+      toast.error('Failed to create goal');
     } finally {
       setCreateSubmitting(false);
     }
@@ -182,7 +182,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
 
     const parsed = addFundsSchema.safeParse(fundsForm);
     if (!parsed.success) {
-      const message = parsed.error.issues[0]?.message ?? "Invalid amount";
+      const message = parsed.error.issues[0]?.message ?? 'Invalid amount';
       toast.error(message);
       return;
     }
@@ -204,12 +204,12 @@ export function GoalsClient({ initialGoals, userId }: Props) {
       });
 
       setGoals((prev) => prev.map((g) => (g.id === updated.id ? updated : g)));
-      toast.success("Funds added");
-      setFundsForm({ amount: "" });
+      toast.success('Funds added');
+      setFundsForm({ amount: '' });
       setFundsOpenFor(null);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to add funds");
+      toast.error('Failed to add funds');
     } finally {
       setFundsSubmitting(false);
     }
@@ -219,7 +219,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
     <div className="p-6 space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-semibold tracking-tight">Goals</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-[var(--primary)]">Goals</h1>
           <p className="text-muted-foreground">
             Track each goal&apos;s progress, priority, and status in real time.
           </p>
@@ -253,20 +253,22 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                     id="goal-amount"
                     inputMode="decimal"
                     placeholder="10,000,000"
-                  value={createForm.target_amount}
-                  onChange={(e) =>
-                    setCreateForm((p) => ({
-                      ...p,
-                      target_amount: formatNumberInput(e.target.value),
-                    }))
-                  }
+                    value={createForm.target_amount}
+                    onChange={(e) =>
+                      setCreateForm((p) => ({
+                        ...p,
+                        target_amount: formatNumberInput(e.target.value),
+                      }))
+                    }
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="goal-currency">Currency</Label>
                   <Select
                     value={createForm.currency}
-                    onValueChange={(value) => setCreateForm((p) => ({ ...p, currency: value as Currency }))}
+                    onValueChange={(value) =>
+                      setCreateForm((p) => ({ ...p, currency: value as Currency }))
+                    }
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Select currency" />
@@ -287,7 +289,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                   <Select
                     value={createForm.priority}
                     onValueChange={(value) =>
-                      setCreateForm((p) => ({ ...p, priority: value as Goal["priority"] }))
+                      setCreateForm((p) => ({ ...p, priority: value as Goal['priority'] }))
                     }
                   >
                     <SelectTrigger className="w-full">
@@ -328,7 +330,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                 Cancel
               </Button>
               <Button onClick={handleCreateGoal} disabled={createSubmitting}>
-                {createSubmitting ? "Creating..." : "Create goal"}
+                {createSubmitting ? 'Creating...' : 'Create goal'}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -356,9 +358,9 @@ export function GoalsClient({ initialGoals, userId }: Props) {
               <Card
                 key={goal.id}
                 className={cn(
-                  "flex flex-col gap-3 border-border/70",
+                  'flex flex-col gap-3 border-border/70',
                   statusToneClasses.ringClass,
-                  "bg-card"
+                  'bg-card'
                 )}
               >
                 <CardHeader className="space-y-2 pb-0">
@@ -419,7 +421,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                     size="sm"
                     className="w-full"
                     onClick={() => {
-                      setFundsForm({ amount: "" });
+                      setFundsForm({ amount: '' });
                       setFundsOpenFor(goal);
                     }}
                   >
@@ -448,8 +450,8 @@ export function GoalsClient({ initialGoals, userId }: Props) {
                 id="funds-amount"
                 inputMode="decimal"
                 placeholder="1,000,000"
-                  value={fundsForm.amount}
-                  onChange={(e) => setFundsForm({ amount: formatNumberInput(e.target.value) })}
+                value={fundsForm.amount}
+                onChange={(e) => setFundsForm({ amount: formatNumberInput(e.target.value) })}
               />
             </div>
             {fundsOpenFor ? (
@@ -463,7 +465,7 @@ export function GoalsClient({ initialGoals, userId }: Props) {
               Cancel
             </Button>
             <Button onClick={handleAddFunds} disabled={fundsSubmitting}>
-              {fundsSubmitting ? "Saving..." : "Add funds"}
+              {fundsSubmitting ? 'Saving...' : 'Add funds'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -471,4 +473,3 @@ export function GoalsClient({ initialGoals, userId }: Props) {
     </div>
   );
 }
-

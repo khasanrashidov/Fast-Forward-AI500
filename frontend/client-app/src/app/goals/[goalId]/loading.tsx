@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function GoalDetailLoading() {
   return (
@@ -91,7 +91,10 @@ export default function GoalDetailLoading() {
           </CardHeader>
           <CardContent className="space-y-3">
             {[...Array(2)].map((_, idx) => (
-              <div key={idx} className="space-y-2 rounded-md border border-border/70 bg-muted/40 p-3">
+              <div
+                key={idx}
+                className="space-y-2 rounded-md border border-border/70 bg-muted/40 p-3"
+              >
                 <Skeleton className="h-4 w-40" />
                 <div className="flex flex-wrap gap-2">
                   <Skeleton className="h-6 w-20 rounded-md" />
@@ -109,4 +112,3 @@ export default function GoalDetailLoading() {
     </div>
   );
 }
-

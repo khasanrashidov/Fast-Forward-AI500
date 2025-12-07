@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { apiFetch } from "../api";
-import { DEFAULT_USERNAME } from "../config";
-import { GOAL_PRIORITIES, GOAL_STATUSES } from "../enums";
+import { z } from 'zod';
+import { apiFetch } from '../api';
+import { DEFAULT_USERNAME } from '../config';
+import { GOAL_PRIORITIES, GOAL_STATUSES } from '../enums';
 
 const goalSchema = z.object({
   id: z.string(),
@@ -120,10 +120,10 @@ const createGoalBodySchema = z.object({
   name: z.string(),
   target_amount: z.number(),
   current_amount: z.number().default(0),
-  currency: z.string().default("UZS"),
+  currency: z.string().default('UZS'),
   target_date: z.string().optional(),
-  status: z.enum(GOAL_STATUSES).default("Active"),
-  priority: z.enum(GOAL_PRIORITIES).default("Medium"),
+  status: z.enum(GOAL_STATUSES).default('Active'),
+  priority: z.enum(GOAL_PRIORITIES).default('Medium'),
   description: z.string().optional().nullable(),
 });
 
@@ -149,7 +149,7 @@ export type SingleGoal = z.infer<typeof goalSchema>;
 
 export async function getGoals(username = DEFAULT_USERNAME): Promise<Goal[]> {
   const result = await apiFetch<unknown>(`/api/goals/?username=${username}`, {
-    method: "GET",
+    method: 'GET',
   });
 
   const parsed = goalsResponseSchema.parse(result);
@@ -160,12 +160,9 @@ export async function getGoalById(
   goalId: string,
   username = DEFAULT_USERNAME
 ): Promise<SingleGoal> {
-  const result = await apiFetch<unknown>(
-    `/api/goals/${goalId}?username=${username}`,
-    {
-      method: "GET",
-    }
-  );
+  const result = await apiFetch<unknown>(`/api/goals/${goalId}?username=${username}`, {
+    method: 'GET',
+  });
 
   const parsed = singleGoalResponseSchema.parse(result);
   return parsed.data;
@@ -174,8 +171,8 @@ export async function getGoalById(
 export async function createGoal(payload: CreateGoalBody): Promise<Goal> {
   const body = createGoalBodySchema.parse(payload);
 
-  const result = await apiFetch<unknown>("/api/goals/", {
-    method: "POST",
+  const result = await apiFetch<unknown>('/api/goals/', {
+    method: 'POST',
     body: JSON.stringify(body),
   });
 
@@ -187,12 +184,9 @@ export async function getGoalTimeline(
   goalId: string,
   username = DEFAULT_USERNAME
 ): Promise<GoalTimeline> {
-  const result = await apiFetch<unknown>(
-    `/api/goals/${goalId}/timeline?username=${username}`,
-    {
-      method: "GET",
-    }
-  );
+  const result = await apiFetch<unknown>(`/api/goals/${goalId}/timeline?username=${username}`, {
+    method: 'GET',
+  });
 
   const parsed = goalTimelineResponseSchema.parse(result);
   return parsed.data;
@@ -205,7 +199,7 @@ export async function getGoalRecommendations(
   const result = await apiFetch<unknown>(
     `/api/goals/${goalId}/recommendations?username=${username}`,
     {
-      method: "GET",
+      method: 'GET',
     }
   );
 
@@ -216,8 +210,8 @@ export async function getGoalRecommendations(
 export async function updateGoal(payload: UpdateGoalBody): Promise<Goal> {
   const body = updateGoalBodySchema.parse(payload);
 
-  const result = await apiFetch<unknown>("/api/goals/", {
-    method: "PUT",
+  const result = await apiFetch<unknown>('/api/goals/', {
+    method: 'PUT',
     body: JSON.stringify(body),
   });
 

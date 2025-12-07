@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import Image from "next/image";
-import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { useMemo, useState } from 'react';
+import Image from 'next/image';
+import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
 export type TipSlide = {
   title: string;
@@ -106,4 +106,3 @@ export function TipsDialog({ tips }: Props) {
     </Dialog>
   );
 }
-

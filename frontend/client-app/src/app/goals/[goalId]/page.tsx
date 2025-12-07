@@ -1,17 +1,17 @@
-import { notFound } from "next/navigation";
-import { Info, Lightbulb, Sparkles, TrendingUp } from "lucide-react";
+import { notFound } from 'next/navigation';
+import { Info, Lightbulb, Sparkles, TrendingUp } from 'lucide-react';
 
-import { getGoalById, getGoalRecommendations, getGoalTimeline } from "@/lib/services/goals";
-import { getGoalInsights } from "@/lib/services/dashboard";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { TimelineChart } from "./timeline-chart";
+import { getGoalById, getGoalRecommendations, getGoalTimeline } from '@/lib/services/goals';
+import { getGoalInsights } from '@/lib/services/dashboard';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { TimelineChart } from './timeline-chart';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 function formatAmount(value: number, currency: string) {
-  return `${value.toLocaleString("en-US")} ${currency}`;
+  return `${value.toLocaleString('en-US')} ${currency}`;
 }
 
 function addMonths(date: Date, months: number) {
@@ -20,14 +20,10 @@ function addMonths(date: Date, months: number) {
   return next;
 }
 
-export default async function GoalDetailPage({
-  params,
-}: {
-  params: Promise<{ goalId: string }>;
-}) {
+export default async function GoalDetailPage({ params }: { params: Promise<{ goalId: string }> }) {
   const { goalId } = await params;
 
-  if (!goalId || goalId === "undefined") {
+  if (!goalId || goalId === 'undefined') {
     return (
       <div className="p-6">
         <Card className="border-destructive/20">
@@ -73,10 +69,10 @@ export default async function GoalDetailPage({
     getGoalTimeline(goalId),
   ]);
 
-  const insights = insightsResult.status === "fulfilled" ? insightsResult.value : null;
+  const insights = insightsResult.status === 'fulfilled' ? insightsResult.value : null;
   const recommendations =
-    recommendationsResult.status === "fulfilled" ? recommendationsResult.value : null;
-  const timeline = timelineResult.status === "fulfilled" ? timelineResult.value : null;
+    recommendationsResult.status === 'fulfilled' ? recommendationsResult.value : null;
+  const timeline = timelineResult.status === 'fulfilled' ? timelineResult.value : null;
 
   const percent = goal.target_amount
     ? Math.min(100, Math.max(0, Math.round((goal.current_amount / goal.target_amount) * 100)))
@@ -95,13 +91,9 @@ export default async function GoalDetailPage({
     timeline?.monte_carlo?.deterministic_months;
 
   const predictedMonths =
-    deterministicMonths ??
-    timeline?.monte_carlo_results?.p50 ??
-    timeline?.monte_carlo?.p50;
+    deterministicMonths ?? timeline?.monte_carlo_results?.p50 ?? timeline?.monte_carlo?.p50;
 
-  const predictedFinishDate = predictedMonths
-    ? addMonths(new Date(), predictedMonths)
-    : null;
+  const predictedFinishDate = predictedMonths ? addMonths(new Date(), predictedMonths) : null;
 
   return (
     <div className="p-6 space-y-6">
@@ -151,19 +143,19 @@ export default async function GoalDetailPage({
                   </span>
                 </div>
               ) : null}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-primary font-semibold inline-flex items-center gap-1">
-                <Sparkles className="h-4 w-4" />
-                Predicted goal finish:
-              </span>
-              <span className="text-foreground">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-primary font-semibold inline-flex items-center gap-1">
+                  <Sparkles className="h-4 w-4" />
+                  Predicted goal finish:
+                </span>
+                <span className="text-foreground">
                   {predictedFinishDate
                     ? `${predictedFinishDate.toLocaleDateString()}${
-                        predictedMonths ? ` (in ${Math.ceil(predictedMonths)} months)` : ""
+                        predictedMonths ? ` (in ${Math.ceil(predictedMonths)} months)` : ''
                       }`
-                    : "N/A"}
-              </span>
-            </div>
+                    : 'N/A'}
+                </span>
+              </div>
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-primary font-semibold">Goal was created at:</span>
                 <span className="text-foreground">
@@ -173,7 +165,7 @@ export default async function GoalDetailPage({
               <div className="flex flex-wrap items-start gap-2">
                 <span className="text-primary font-semibold">Description:</span>
                 <span className="text-foreground">
-                  {goal.description ? goal.description : "No description provided."}
+                  {goal.description ? goal.description : 'No description provided.'}
                 </span>
               </div>
             </div>
@@ -244,7 +236,9 @@ export default async function GoalDetailPage({
                   <div className="flex items-start justify-between gap-2">
                     <div className="font-semibold text-foreground">{rec.product_name}</div>
                     {rec.product_id ? (
-                      <span className="text-[11px] text-muted-foreground">ID: {rec.product_id}</span>
+                      <span className="text-[11px] text-muted-foreground">
+                        ID: {rec.product_id}
+                      </span>
                     ) : null}
                   </div>
                   <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
@@ -254,9 +248,7 @@ export default async function GoalDetailPage({
                       </span>
                     ) : null}
                     {rec.type ? (
-                      <span className="rounded border border-border/60 px-2 py-1">
-                        {rec.type}
-                      </span>
+                      <span className="rounded border border-border/60 px-2 py-1">{rec.type}</span>
                     ) : null}
                   </div>
                   {rec.description ? (
@@ -293,4 +285,3 @@ export default async function GoalDetailPage({
     </div>
   );
 }
-

@@ -1,11 +1,11 @@
-import { Info } from "lucide-react";
+import { Info } from 'lucide-react';
 
-import { GoalsClient } from "./goals-client";
-import { getGoals } from "@/lib/services/goals";
-import { getUser } from "@/lib/services/users";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GoalsClient } from './goals-client';
+import { getGoals } from '@/lib/services/goals';
+import { getUser } from '@/lib/services/users';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 export default async function GoalsPage() {
   try {

@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { apiFetch } from "../api";
+import { z } from 'zod';
+import { apiFetch } from '../api';
 
 const productSchema = z.object({
   all_count: z.number(),
@@ -36,25 +36,22 @@ const shopSearchResponseSchema = z.union([
 ]);
 
 const shopSearchBodySchema = z.object({
-  query: z.string().min(1, "Query is required"),
+  query: z.string().min(1, 'Query is required'),
 });
 
 export type ShopProduct = z.infer<typeof productSchema>;
 export type ShopSearchResult = z.infer<typeof shopSearchDataSchema>;
 export type ShopSearchBody = z.infer<typeof shopSearchBodySchema>;
 
-export async function searchShop(
-  payload: ShopSearchBody
-): Promise<ShopSearchResult> {
+export async function searchShop(payload: ShopSearchBody): Promise<ShopSearchResult> {
   const body = shopSearchBodySchema.parse(payload);
 
-  const result = await apiFetch<unknown>("/api/shop/search", {
-    method: "POST",
+  const result = await apiFetch<unknown>('/api/shop/search', {
+    method: 'POST',
     body: JSON.stringify(body),
   });
 
   const parsed = shopSearchResponseSchema.parse(result);
-  if ("data" in parsed) return parsed.data;
-  throw new Error("Unexpected shop search response shape.");
+  if ('data' in parsed) return parsed.data;
+  throw new Error('Unexpected shop search response shape.');
 }
-

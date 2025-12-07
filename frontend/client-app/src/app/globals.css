@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -80,7 +80,11 @@
 
 body {
   background-attachment: fixed;
-  font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
+  font-family:
+    var(--font-outfit),
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .dark {

@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { apiFetch } from "../api";
-import { CARD_TYPES } from "../enums";
-import { DEFAULT_USERNAME } from "../config";
+import { z } from 'zod';
+import { apiFetch } from '../api';
+import { CARD_TYPES } from '../enums';
+import { DEFAULT_USERNAME } from '../config';
 
 const cardSchema = z.object({
   id: z.string(),
@@ -57,33 +57,33 @@ export type CreateCardBody = z.infer<typeof createCardBodySchema>;
 
 export async function getCards(username = DEFAULT_USERNAME): Promise<Card[]> {
   const result = await apiFetch<unknown>(`/api/cards/?username=${username}`, {
-    method: "GET",
+    method: 'GET',
   });
 
   const parsed = listCardsResponseSchema.parse(result);
-  if ("data" in parsed) return parsed.data;
+  if ('data' in parsed) return parsed.data;
   return parsed.cards;
 }
 
 export async function getCardById(cardId: string): Promise<Card> {
   const result = await apiFetch<unknown>(`/api/cards/${cardId}`, {
-    method: "GET",
+    method: 'GET',
   });
 
   const parsed = singleCardResponseSchema.parse(result);
-  if ("data" in parsed) return parsed.data;
+  if ('data' in parsed) return parsed.data;
   return parsed.card;
 }
 
 export async function createCard(payload: CreateCardBody): Promise<Card> {
   const body = createCardBodySchema.parse(payload);
 
-  const result = await apiFetch<unknown>("/api/cards/", {
-    method: "POST",
+  const result = await apiFetch<unknown>('/api/cards/', {
+    method: 'POST',
     body: JSON.stringify(body),
   });
 
   const parsed = singleCardResponseSchema.parse(result);
-  if ("data" in parsed) return parsed.data;
+  if ('data' in parsed) return parsed.data;
   return parsed.card;
 }

@@ -1,29 +1,29 @@
-"use client";
+'use client';
 
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from 'recharts';
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from '@/components/ui/chart';
 
 type CategoryEntry = { name: string; value: number };
 
 // Diverse, high-contrast palette to keep each category visually distinct.
 const defaultChartColors = [
-  "#2563eb", // blue
-  "#f97316", // orange
-  "#22c55e", // green
-  "#a855f7", // purple
-  "#ec4899", // pink
-  "#14b8a6", // teal
-  "#f59e0b", // amber
-  "#e11d48", // rose
-  "#6366f1", // indigo
-  "#0ea5e9", // sky
-  "#84cc16", // lime
-  "#d946ef", // fuchsia
+  '#2563eb', // blue
+  '#f97316', // orange
+  '#22c55e', // green
+  '#a855f7', // purple
+  '#ec4899', // pink
+  '#14b8a6', // teal
+  '#f59e0b', // amber
+  '#e11d48', // rose
+  '#6366f1', // indigo
+  '#0ea5e9', // sky
+  '#84cc16', // lime
+  '#d946ef', // fuchsia
 ] as const;
 
 export const CATEGORY_COLORS = defaultChartColors;
@@ -31,9 +31,9 @@ export const CATEGORY_COLORS = defaultChartColors;
 export function SpendingCategoryRadial({
   categories,
   colors = CATEGORY_COLORS,
-  sizeClassName = "w-[240px] max-w-full",
-  centerLabel = "Total",
-  currency = "UZS",
+  sizeClassName = 'w-[240px] max-w-full',
+  centerLabel = 'Total',
+  currency = 'UZS',
   subLabel,
 }: {
   categories: CategoryEntry[];
@@ -53,7 +53,7 @@ export function SpendingCategoryRadial({
         acc[key] = item.value;
         return acc;
       },
-      { name: "spending" } as Record<string, number | string>
+      { name: 'spending' } as Record<string, number | string>
     ),
   ];
 
@@ -67,10 +67,7 @@ export function SpendingCategoryRadial({
   }, {} as ChartConfig);
 
   return (
-    <ChartContainer
-      config={chartConfig}
-      className={`mx-auto aspect-square ${sizeClassName}`}
-    >
+    <ChartContainer config={chartConfig} className={`mx-auto aspect-square ${sizeClassName}`}>
       <RadialBarChart
         data={chartData}
         startAngle={90}
@@ -82,7 +79,7 @@ export function SpendingCategoryRadial({
         <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
           <Label
             content={({ viewBox }) => {
-              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+              if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
                 return (
                   <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
                     <tspan
@@ -124,4 +121,3 @@ export function SpendingCategoryRadial({
     </ChartContainer>
   );
 }
-

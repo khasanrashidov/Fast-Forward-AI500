@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { apiFetch } from "../api";
-import { USER_ROLES } from "../enums";
-import { DEFAULT_USERNAME } from "../config";
+import { z } from 'zod';
+import { apiFetch } from '../api';
+import { USER_ROLES } from '../enums';
+import { DEFAULT_USERNAME } from '../config';
 
 const cardSchema = z.object({
   id: z.string(),
@@ -52,7 +52,7 @@ export type UpdateUserBody = z.infer<typeof updateUserBodySchema>;
 
 export async function getUser(username = DEFAULT_USERNAME): Promise<User> {
   const result = await apiFetch<User>(`/api/users/${username}`, {
-    method: "GET",
+    method: 'GET',
   });
 
   const parsed = userResponseSchema.parse(result);
@@ -66,7 +66,7 @@ export async function updateUser(
   const body = updateUserBodySchema.parse(payload);
 
   const result = await apiFetch<User>(`/api/users/${username}`, {
-    method: "PUT",
+    method: 'PUT',
     body: JSON.stringify(body),
   });
 

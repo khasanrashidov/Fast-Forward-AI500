@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Line,
@@ -8,11 +8,16 @@ import {
   YAxis,
   CartesianGrid,
   ResponsiveContainer,
-} from "recharts";
-import { ValueType, NameType } from "recharts/types/component/DefaultTooltipContent";
+} from 'recharts';
+import { ValueType, NameType } from 'recharts/types/component/DefaultTooltipContent';
 
-import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
-import type { GoalTimeline } from "@/lib/services/goals";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from '@/components/ui/chart';
+import type { GoalTimeline } from '@/lib/services/goals';
 
 type Props = {
   timeline?: GoalTimeline | null;
@@ -31,20 +36,17 @@ export function TimelineChart({ timeline, currency }: Props) {
   }
 
   const config: ChartConfig = {
-    deterministic: { label: "Deterministic", color: "var(--chart-1)" },
-    p10_optimistic: { label: "P10 (optimistic)", color: "var(--chart-2)" },
-    p50_median: { label: "P50 (median)", color: "var(--chart-3)" },
-    p90_pessimistic: { label: "P90 (pessimistic)", color: "var(--chart-4)" },
+    deterministic: { label: 'Deterministic', color: 'var(--chart-1)' },
+    p10_optimistic: { label: 'P10 (optimistic)', color: 'var(--chart-2)' },
+    p50_median: { label: 'P50 (median)', color: 'var(--chart-3)' },
+    p90_pessimistic: { label: 'P90 (pessimistic)', color: 'var(--chart-4)' },
   };
 
-  const formatCurrency = (value: number) => `${value.toLocaleString("en-US")} ${currency}`;
+  const formatCurrency = (value: number) => `${value.toLocaleString('en-US')} ${currency}`;
 
   return (
     <ChartContainer config={config} className="h-64 w-full">
-      <LineChart
-        data={data}
-        margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
-      >
+      <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
         <XAxis
           dataKey="month"
@@ -64,7 +66,7 @@ export function TimelineChart({ timeline, currency }: Props) {
           content={
             <ChartTooltipContent
               formatter={(value: ValueType, name?: NameType) => {
-                if (typeof value === "number") {
+                if (typeof value === 'number') {
                   return <span className="text-foreground">{formatCurrency(value)}</span>;
                 }
                 return value;
@@ -109,4 +111,3 @@ export function TimelineChart({ timeline, currency }: Props) {
     </ChartContainer>
   );
 }
-

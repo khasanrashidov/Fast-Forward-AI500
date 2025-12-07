@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { z } from "zod";
-import { toast } from "sonner";
-import { CreditCard, Plus } from "lucide-react";
+import { useState } from 'react';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { CreditCard, Plus } from 'lucide-react';
 
-import { Card as UiCard, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card as UiCard, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
@@ -18,16 +18,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { createCard, type Card } from "@/lib/services/cards";
-import { CARD_TYPES, CURRENCIES, type CardType, type Currency } from "@/lib/enums";
+} from '@/components/ui/select';
+import { createCard, type Card } from '@/lib/services/cards';
+import { CARD_TYPES, CURRENCIES, type CardType, type Currency } from '@/lib/enums';
 
 type Props = {
   initialCards: Card[];
@@ -35,38 +35,35 @@ type Props = {
 };
 
 const createCardSchema = z.object({
-  card_name: z.string().min(1, "Name is required"),
-  card_number: z
-    .string()
-    .min(12, "Card number is required")
-    .max(32, "Too long"),
+  card_name: z.string().min(1, 'Name is required'),
+  card_number: z.string().min(12, 'Card number is required').max(32, 'Too long'),
   balance: z
     .string()
-    .min(1, "Balance is required")
-    .transform((val) => Number(val.replace(/,/g, "")))
-    .refine((val) => Number.isFinite(val), "Enter a valid number"),
+    .min(1, 'Balance is required')
+    .transform((val) => Number(val.replace(/,/g, '')))
+    .refine((val) => Number.isFinite(val), 'Enter a valid number'),
   currency: z.enum(CURRENCIES),
   card_type: z.enum(CARD_TYPES),
-  expiration_date: z.string().min(1, "Expiration date is required"),
+  expiration_date: z.string().min(1, 'Expiration date is required'),
 });
 
 const formatNumberInput = (value: string) => {
-  const digits = value.replace(/\D/g, "");
-  if (!digits) return "";
+  const digits = value.replace(/\D/g, '');
+  if (!digits) return '';
   const number = Number(digits);
-  if (Number.isNaN(number)) return "";
-  return number.toLocaleString("en-US");
+  if (Number.isNaN(number)) return '';
+  return number.toLocaleString('en-US');
 };
 
 function maskCard(cardNumber: string) {
-  if (!cardNumber) return "**** **** ****";
+  if (!cardNumber) return '**** **** ****';
   const first4 = cardNumber.slice(0, 4);
   const last4 = cardNumber.slice(-4);
   return `${first4} **** **** ${last4}`;
 }
 
 function formatAmount(value: number, currency: string) {
-  return `${value.toLocaleString("en-US")} ${currency}`;
+  return `${value.toLocaleString('en-US')} ${currency}`;
 }
 
 export function DashboardCards({ initialCards, username }: Props) {
@@ -74,18 +71,18 @@ export function DashboardCards({ initialCards, username }: Props) {
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
-    card_name: "",
-    card_number: "",
-    balance: "",
-    currency: "UZS" as Currency,
+    card_name: '',
+    card_number: '',
+    balance: '',
+    currency: 'UZS' as Currency,
     card_type: CARD_TYPES[0] as CardType,
-    expiration_date: "",
+    expiration_date: '',
   });
 
   const handleCreate = async () => {
     const parsed = createCardSchema.safeParse(form);
     if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Invalid form");
+      toast.error(parsed.error.issues[0]?.message ?? 'Invalid form');
       return;
     }
 
@@ -101,19 +98,19 @@ export function DashboardCards({ initialCards, username }: Props) {
         expiration_date: parsed.data.expiration_date,
       });
       setCards((prev) => [created, ...prev]);
-      toast.success("Card added");
+      toast.success('Card added');
       setForm({
-        card_name: "",
-        card_number: "",
-        balance: "",
-        currency: "UZS",
+        card_name: '',
+        card_number: '',
+        balance: '',
+        currency: 'UZS',
         card_type: CARD_TYPES[0] as CardType,
-        expiration_date: "",
+        expiration_date: '',
       });
       setOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to add card");
+      toast.error('Failed to add card');
     } finally {
       setSubmitting(false);
     }
@@ -133,10 +130,10 @@ export function DashboardCards({ initialCards, username }: Props) {
         ) : (
           cards.map((card, idx) => {
             const gradients = [
-              "from-primary/12 via-primary/8 to-accent/12",
-              "from-purple-500/15 via-primary/10 to-blue-500/15",
-              "from-amber-400/15 via-primary/10 to-lime-400/15",
-              "from-rose-500/15 via-primary/10 to-orange-400/15",
+              'from-primary/12 via-primary/8 to-accent/12',
+              'from-purple-500/15 via-primary/10 to-blue-500/15',
+              'from-amber-400/15 via-primary/10 to-lime-400/15',
+              'from-rose-500/15 via-primary/10 to-orange-400/15',
             ];
             const gradient = gradients[idx % gradients.length];
             return (
@@ -271,7 +268,7 @@ export function DashboardCards({ initialCards, username }: Props) {
                 Cancel
               </Button>
               <Button onClick={handleCreate} disabled={submitting}>
-                {submitting ? "Saving..." : "Create card"}
+                {submitting ? 'Saving...' : 'Create card'}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -280,4 +277,3 @@ export function DashboardCards({ initialCards, username }: Props) {
     </UiCard>
   );
 }
-

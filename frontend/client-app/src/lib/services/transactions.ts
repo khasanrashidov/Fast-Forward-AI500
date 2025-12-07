@@ -1,13 +1,13 @@
-import { z } from "zod";
-import { apiFetch } from "../api";
+import { z } from 'zod';
+import { apiFetch } from '../api';
 import {
   PARTY_TYPES,
   TRANSACTION_CATEGORIES,
   TRANSACTION_DIRECTIONS,
   TRANSACTION_STATUSES,
   TRANSACTION_TYPES,
-} from "../enums";
-import { DEFAULT_USERNAME } from "../config";
+} from '../enums';
+import { DEFAULT_USERNAME } from '../config';
 
 const partyInfoSchema = z.object({
   type: z.enum(PARTY_TYPES),
@@ -49,15 +49,10 @@ const transactionsResponseSchema = z.object({
 
 export type Transaction = z.infer<typeof transactionSchema>;
 
-export async function getTransactions(
-  username = DEFAULT_USERNAME
-): Promise<Transaction[]> {
-  const result = await apiFetch<unknown>(
-    `/api/transactions/?username=${username}`,
-    {
-      method: "GET",
-    }
-  );
+export async function getTransactions(username = DEFAULT_USERNAME): Promise<Transaction[]> {
+  const result = await apiFetch<unknown>(`/api/transactions/?username=${username}`, {
+    method: 'GET',
+  });
 
   const parsed = transactionsResponseSchema.parse(result);
   return parsed.data;

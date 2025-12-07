@@ -1,114 +1,120 @@
-"use client"
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { getDashboard } from '@/lib/services/dashboard';
+import { getUser } from '@/lib/services/users';
+import { AlertTriangle, ShieldCheck, Sparkles } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Lightbulb, TrendingUp, AlertTriangle, ShieldCheck, PieChart } from "lucide-react"
+export const dynamic = 'force-dynamic';
 
-export default function InsightsPage() {
-    const financialScore = 780
+export default async function InsightsPage() {
+  const [dashboard, user] = await Promise.all([getDashboard(), getUser()]);
+  const { insights, alerts, health_score } = dashboard;
 
-    const insights = [
-        {
-            id: 1,
-            title: "High Savings Rate",
-            description: "You saved 25% of your income this month! Consider opening a high-yield savings account to maximize returns.",
-            type: "positive",
-            icon: TrendingUp,
-            action: "View Deposit Options"
-        },
-        {
-            id: 2,
-            title: "Unusual Subscription Activity",
-            description: "We noticed a price increase in your 'Netflix' subscription this month.",
-            type: "warning",
-            icon: AlertTriangle,
-            action: "Manage Subscriptions"
-        },
-        {
-            id: 3,
-            title: "Loan Eligibility",
-            description: "With your current score (780), you are eligible for personal loans with interest rates as low as 5%.",
-            type: "info",
-            icon: ShieldCheck,
-            action: "Check Rates"
-        },
-        {
-            id: 4,
-            title: "Spending Analysis",
-            description: "Your food expenses are 15% lower than last month. Great job sticking to your budget!",
-            type: "positive",
-            icon: PieChart,
-            action: "View Details"
-        }
-    ]
+  const healthTone = (health_score.color || '').toLowerCase();
+  const healthBadge =
+    healthTone === 'green'
+      ? { className: 'bg-green-100 text-green-700 border border-green-200', label: 'On Track' }
+      : healthTone === 'yellow'
+        ? {
+            className: 'bg-amber-100 text-amber-700 border border-amber-200',
+            label: 'Needs Attention',
+          }
+        : healthTone === 'red'
+          ? { className: 'bg-rose-100 text-rose-700 border border-rose-200', label: 'Critical' }
+          : null;
 
-    const getScoreColor = (score: number) => {
-        if (score >= 800) return "text-blue-500"
-        if (score >= 700) return "text-indigo-500"
-        if (score >= 600) return "text-yellow-500"
-        return "text-red-500"
-    }
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-3xl font-semibold tracking-tight text-[var(--primary)]">AI Insights</h1>
+        <p className="text-muted-foreground">Smart analysis of your financial health.</p>
+      </div>
 
-    return (
-        <div className="p-6 space-y-6">
-            <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-bold tracking-tight">AI Insights</h1>
-                <p className="text-zinc-500">Smart analysis of your financial health.</p>
+      <div className="grid gap-4 md:grid-cols-12">
+        <Card className="md:col-span-4 bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ShieldCheck className="h-5 w-5 text-[var(--primary)]" />
+              Financial Health
+              {healthBadge && (
+                <Badge className={`text-xs font-semibold ${healthBadge.className}`}>
+                  {healthBadge.label}
+                </Badge>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="text-4xl font-bold">{health_score.score} / 100</div>
+            <div className="text-sm text-muted-foreground">
+              <span className="text-[var(--primary)] font-semibold">User:</span>{' '}
+              <span className="text-foreground">
+                {user.first_name} {user.last_name}
+              </span>
             </div>
+            <div className="text-sm text-muted-foreground">
+              <span className="text-[var(--primary)] font-semibold">Email:</span>{' '}
+              <span className="text-foreground">{user.email}</span>
+            </div>
+            <div className="text-sm text-muted-foreground">
+              <span className="text-[var(--primary)] font-semibold">Status:</span>{' '}
+              <span className="text-foreground">{health_score.status}</span>
+            </div>
+            <div className="text-sm text-muted-foreground">
+              <span className="text-[var(--primary)] font-semibold">Age:</span>{' '}
+              <span className="text-foreground">{user.age}</span>
+            </div>
+            <div className="text-sm text-muted-foreground">
+              <span className="text-[var(--primary)] font-semibold">Family Size:</span>{' '}
+              <span className="text-foreground">{user.family_size}</span>
+            </div>
+            <div className="text-sm text-muted-foreground">
+              <span className="text-[var(--primary)] font-semibold">Location:</span>{' '}
+              <span className="text-foreground">{user.location}</span>
+            </div>
+          </CardContent>
+        </Card>
 
-            {/* Financial Score Section */}
-            <div className="grid gap-6 md:grid-cols-3">
-                <Card className="col-span-1 border-zinc-200 dark:border-zinc-800 bg-gradient-to-br from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-950">
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-2">
-                            <ShieldCheck className="w-5 h-5 text-blue-600" />
-                            Financial Health Score
-                        </CardTitle>
-                        <CardDescription>Based on your income, savings, and spending habits.</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex flex-col items-center justify-center py-6">
-                        <div className={`relative flex items-center justify-center w-32 h-32 rounded-full border-8 border-zinc-100 dark:border-zinc-800`}>
-                            <div className="absolute inset-0 flex items-center justify-center flex-col">
-                                <span className={`text-4xl font-black ${getScoreColor(financialScore)}`}>{financialScore}</span>
-                                <span className="text-xs text-zinc-400 font-medium">EXCELLENT</span>
-                            </div>
-                        </div>
-                    </CardContent>
-                    <CardFooter className="justify-center">
-                        <p className="text-xs text-center text-zinc-500 max-w-[200px]">You are in the top 15% of users. Keep up the good work!</p>
-                    </CardFooter>
-                </Card>
-
-                <div className="col-span-2 grid gap-4 grid-cols-1 md:grid-cols-2">
-                    {insights.map((insight) => (
-                        <Card key={insight.id} className="flex flex-col">
-                            <CardHeader className="flex flex-row items-start gap-4 space-y-0 pb-2">
-                                <div className={`p-2 rounded-lg ${insight.type === 'positive' ? 'bg-blue-100 text-blue-700' :
-                                    insight.type === 'warning' ? 'bg-amber-100 text-amber-700' :
-                                        'bg-indigo-100 text-indigo-700'
-                                    }`}>
-                                    <insight.icon className="w-5 h-5" />
-                                </div>
-                                <div className="flex-1">
-                                    <CardTitle className="text-base font-semibold">{insight.title}</CardTitle>
-                                </div>
-                            </CardHeader>
-                            <CardContent className="flex-1">
-                                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                                    {insight.description}
-                                </p>
-                            </CardContent>
-                            <CardFooter>
-                                <Button variant="ghost" className="w-full justify-between group hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
-                                    {insight.action}
-                                    <TrendingUp className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    ))}
+        <Card className="md:col-span-8 flex flex-col bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-[var(--primary)]" />
+              AI Insights
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {insights.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No insights yet.</p>
+            ) : (
+              insights.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-md border border-primary/25 bg-white/80 p-3 text-sm text-foreground"
+                >
+                  {item}
                 </div>
-            </div>
-        </div>
-    )
+              ))
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="flex flex-col">
+        <CardHeader className="flex items-center gap-2 pb-2">
+          <AlertTriangle className="h-4 w-4 text-amber-600" />
+          <CardTitle>Alerts</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-2">
+          {alerts.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No alerts at this time.</p>
+          ) : (
+            alerts.map((alert, idx) => (
+              <div key={idx} className="text-sm text-foreground">
+                {alert}
+              </div>
+            ))
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
 }

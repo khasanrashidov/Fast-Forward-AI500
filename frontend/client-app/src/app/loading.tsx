@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 function SkeletonLine({ className }: { className?: string }) {
-  return <div className={`h-3 rounded-md bg-zinc-200 animate-pulse ${className ?? ""}`} />;
+  return <div className={`h-3 rounded-md bg-zinc-200 animate-pulse ${className ?? ''}`} />;
 }
 
 function StatSkeleton() {
@@ -107,4 +107,3 @@ export default function DashboardLoading() {
     </div>
   );
 }
-

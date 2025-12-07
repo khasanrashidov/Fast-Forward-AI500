@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -10,13 +10,13 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Loader2, Rocket } from "lucide-react";
-import { getUser, updateUser } from "@/lib/services/users";
-import { toast } from "sonner";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Loader2, Rocket } from 'lucide-react';
+import { getUser, updateUser } from '@/lib/services/users';
+import { toast } from 'sonner';
 
 type FormState = {
   salary: string;
@@ -25,19 +25,19 @@ type FormState = {
 };
 
 const formatNumberInput = (value: string) => {
-  const digits = value.replace(/\D/g, "");
-  if (!digits) return "";
+  const digits = value.replace(/\D/g, '');
+  if (!digits) return '';
   const number = Number(digits);
-  if (Number.isNaN(number)) return "";
-  return number.toLocaleString("en-US");
+  if (Number.isNaN(number)) return '';
+  return number.toLocaleString('en-US');
 };
 
 export default function OnboardingPage() {
   const router = useRouter();
   const [formData, setFormData] = useState<FormState>({
-    salary: "",
-    age: "",
-    family_size: "",
+    salary: '',
+    age: '',
+    family_size: '',
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
@@ -47,9 +47,9 @@ export default function OnboardingPage() {
     getUser()
       .then((user) => {
         setFormData({
-          salary: user.salary?.toString() ?? "",
-          age: user.age?.toString() ?? "",
-          family_size: user.family_size?.toString() ?? "",
+          salary: user.salary?.toString() ?? '',
+          age: user.age?.toString() ?? '',
+          family_size: user.family_size?.toString() ?? '',
         });
       })
       .catch(() => {
@@ -64,16 +64,16 @@ export default function OnboardingPage() {
     setError(null);
     try {
       await updateUser(undefined, {
-        salary: Number((formData.salary || "0").replace(/,/g, "")),
+        salary: Number((formData.salary || '0').replace(/,/g, '')),
         age: Number(formData.age || 0),
         family_size: Number(formData.family_size || 0),
       });
-      setSuccess("Profile updated successfully.");
-      toast.success("Profile updated successfully.");
-      setTimeout(() => router.push("/"), 600);
+      setSuccess('Profile updated successfully.');
+      toast.success('Profile updated successfully.');
+      setTimeout(() => router.push('/'), 600);
     } catch (err) {
-      setError("Failed to update profile. Please try again.");
-      toast.error("Failed to update profile. Please try again.");
+      setError('Failed to update profile. Please try again.');
+      toast.error('Failed to update profile. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ export default function OnboardingPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === "salary") {
+    if (name === 'salary') {
       setFormData((prev) => ({ ...prev, [name]: formatNumberInput(value) }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -94,7 +94,13 @@ export default function OnboardingPage() {
         <CardHeader className="gap-3">
           <div className="flex items-center gap-3">
             <div className="relative h-12 w-12 overflow-hidden rounded-lg border border-zinc-200 bg-white">
-              <Image src="/logo.png" alt="Moliyachi" fill className="object-contain p-2" sizes="48px" />
+              <Image
+                src="/logo.png"
+                alt="Moliyachi"
+                fill
+                className="object-contain p-2"
+                sizes="48px"
+              />
             </div>
             <div className="flex flex-col">
               <CardTitle className="text-2xl font-bold text-zinc-900">
@@ -155,11 +161,7 @@ export default function OnboardingPage() {
             )}
           </CardContent>
           <CardFooter className="md:justify-end">
-            <Button
-              type="submit"
-              className="w-full md:w-auto"
-              disabled={loading}
-            >
+            <Button type="submit" className="w-full md:w-auto" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Save & Continue
             </Button>

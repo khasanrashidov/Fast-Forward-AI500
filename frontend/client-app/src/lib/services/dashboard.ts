@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { apiFetch } from "../api";
-import { DEFAULT_USERNAME } from "../config";
+import { z } from 'zod';
+import { apiFetch } from '../api';
+import { DEFAULT_USERNAME } from '../config';
 
 const summarySchema = z.object({
   total_income: z.number(),
@@ -46,29 +46,19 @@ const goalInsightsResponseSchema = z.object({
 export type DashboardData = z.infer<typeof dashboardDataSchema>;
 export type DashboardGoalInsights = z.infer<typeof goalInsightsSchema>;
 
-export async function getDashboard(
-  username = DEFAULT_USERNAME
-): Promise<DashboardData> {
-  const result = await apiFetch<unknown>(
-    `/api/dashboard/?username=${username}`,
-    {
-      method: "GET",
-    }
-  );
+export async function getDashboard(username = DEFAULT_USERNAME): Promise<DashboardData> {
+  const result = await apiFetch<unknown>(`/api/dashboard/?username=${username}`, {
+    method: 'GET',
+  });
 
   const parsed = dashboardResponseSchema.parse(result);
   return parsed.data;
 }
 
-export async function getGoalInsights(
-  goalId: string
-): Promise<DashboardGoalInsights> {
-  const result = await apiFetch<unknown>(
-    `/api/dashboard/goal-insights/${goalId}`,
-    {
-      method: "GET",
-    }
-  );
+export async function getGoalInsights(goalId: string): Promise<DashboardGoalInsights> {
+  const result = await apiFetch<unknown>(`/api/dashboard/goal-insights/${goalId}`, {
+    method: 'GET',
+  });
 
   const parsed = goalInsightsResponseSchema.parse(result);
   return parsed.data;

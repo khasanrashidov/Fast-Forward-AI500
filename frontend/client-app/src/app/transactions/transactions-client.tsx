@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useMemo, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import React, { useMemo, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   Table,
   TableBody,
@@ -10,38 +10,38 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { SpendingCategoryRadial } from "@/components/SpendingCategoryRadial";
-import { Calendar, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
+} from '@/components/ui/table';
+import { SpendingCategoryRadial } from '@/components/SpendingCategoryRadial';
+import { Calendar, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 
-type StatusTone = "primary" | "warn" | "error" | "muted";
+type StatusTone = 'primary' | 'warn' | 'error' | 'muted';
 
 const toneBadge = (tone: StatusTone, label: string) => {
   const map: Record<StatusTone, string> = {
-    primary: "bg-[color-mix(in_srgb,var(--primary)_12%,transparent)] text-[var(--primary)]",
-    warn: "bg-amber-100 text-amber-700",
-    error: "bg-rose-100 text-rose-700",
-    muted: "bg-zinc-100 text-zinc-700",
+    primary: 'bg-[color-mix(in_srgb,var(--primary)_12%,transparent)] text-[var(--primary)]',
+    warn: 'bg-amber-100 text-amber-700',
+    error: 'bg-rose-100 text-rose-700',
+    muted: 'bg-zinc-100 text-zinc-700',
   };
   return <Badge className={`font-semibold ${map[tone]}`}>{label}</Badge>;
 };
 
 const statusStyle = (status: string): { tone: StatusTone; label: string } => {
-  const s = status?.toUpperCase?.() ?? "";
-  if (s === "APPROVED" || s === "SETTLED" || s === "SUCCESS" || s === "COMPLETED") {
-    return { tone: "primary", label: status };
+  const s = status?.toUpperCase?.() ?? '';
+  if (s === 'APPROVED' || s === 'SETTLED' || s === 'SUCCESS' || s === 'COMPLETED') {
+    return { tone: 'primary', label: status };
   }
-  if (s === "PENDING") return { tone: "warn", label: status };
-  if (s === "DECLINED" || s === "CANCELED" || s === "VOIDED" || s === "REFUNDED") {
-    return { tone: "error", label: status };
+  if (s === 'PENDING') return { tone: 'warn', label: status };
+  if (s === 'DECLINED' || s === 'CANCELED' || s === 'VOIDED' || s === 'REFUNDED') {
+    return { tone: 'error', label: status };
   }
-  return { tone: "muted", label: status };
+  return { tone: 'muted', label: status };
 };
 
 const formatAmount = (amount: number, direction?: string, currency?: string) => {
-  const signed = direction === "INCOMING" ? Math.abs(amount) : -Math.abs(amount);
-  const formatted = `${signed > 0 ? "+" : ""}${Math.abs(signed).toLocaleString("en-US")} ${
-    currency ?? "UZS"
+  const signed = direction === 'INCOMING' ? Math.abs(amount) : -Math.abs(amount);
+  const formatted = `${signed > 0 ? '+' : ''}${Math.abs(signed).toLocaleString('en-US')} ${
+    currency ?? 'UZS'
   }`;
   return { signed, formatted };
 };
@@ -49,12 +49,12 @@ const formatAmount = (amount: number, direction?: string, currency?: string) => 
 const formatDate = (date: string) => {
   const d = new Date(date);
   if (Number.isNaN(d.getTime())) return date;
-  return d.toLocaleString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+  return d.toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
   });
 };
 
@@ -77,10 +77,13 @@ type MonthGroup = {
 
 export default function TransactionsClient({ monthGroups }: { monthGroups: MonthGroup[] }) {
   const [index, setIndex] = useState(0);
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<{ key: "date" | "merchant" | "category" | "status" | "amount"; dir: "asc" | "desc" }>({
-    key: "date",
-    dir: "desc",
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<{
+    key: 'date' | 'merchant' | 'category' | 'status' | 'amount';
+    dir: 'asc' | 'desc';
+  }>({
+    key: 'date',
+    dir: 'desc',
   });
   const current = useMemo(() => monthGroups[index], [monthGroups, index]);
 
@@ -98,38 +101,44 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
   const goNext = () => setIndex((i) => (i + 1) % monthGroups.length);
   const goCurrentMonth = () => {
     const now = new Date();
-    const label = now.toLocaleString("en-US", { month: "long", year: "numeric" });
+    const label = now.toLocaleString('en-US', { month: 'long', year: 'numeric' });
     const idx = monthGroups.findIndex((m) => m.month === label);
     if (idx >= 0) setIndex(idx);
   };
 
   const filteredRows = current.rows.filter((tx) => {
-    const q = (search ?? "").toLowerCase().trim();
+    const q = (search ?? '').toLowerCase().trim();
     if (!q) return true;
     return (
-      String(tx.merchant ?? "").toLowerCase().includes(q) ||
-      String(tx.category ?? "").toLowerCase().includes(q) ||
-      String(tx.status ?? "").toLowerCase().includes(q) ||
+      String(tx.merchant ?? '')
+        .toLowerCase()
+        .includes(q) ||
+      String(tx.category ?? '')
+        .toLowerCase()
+        .includes(q) ||
+      String(tx.status ?? '')
+        .toLowerCase()
+        .includes(q) ||
       tx.amount.toString().includes(q)
     );
   });
 
   const sortedRows = [...filteredRows].sort((a, b) => {
-    const dir = sort.dir === "asc" ? 1 : -1;
+    const dir = sort.dir === 'asc' ? 1 : -1;
     switch (sort.key) {
-      case "date": {
+      case 'date': {
         return (new Date(a.date).getTime() - new Date(b.date).getTime()) * dir;
       }
-      case "merchant": {
-        return (a.merchant || "").localeCompare(b.merchant || "") * dir;
+      case 'merchant': {
+        return (a.merchant || '').localeCompare(b.merchant || '') * dir;
       }
-      case "category": {
-        return (a.category || "").localeCompare(b.category || "") * dir;
+      case 'category': {
+        return (a.category || '').localeCompare(b.category || '') * dir;
       }
-      case "status": {
-        return (a.status || "").localeCompare(b.status || "") * dir;
+      case 'status': {
+        return (a.status || '').localeCompare(b.status || '') * dir;
       }
-      case "amount": {
+      case 'amount': {
         return (a.amount - b.amount) * dir;
       }
       default:
@@ -139,13 +148,13 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
 
   const toggleSort = (key: typeof sort.key) => {
     setSort((prev) =>
-      prev.key === key ? { key, dir: prev.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" }
+      prev.key === key ? { key, dir: prev.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: 'asc' }
     );
   };
 
   const renderSortIcon = (key: typeof sort.key) => {
     if (sort.key !== key) return <ArrowUpDown className="h-3.5 w-3.5 text-zinc-400" />;
-    return sort.dir === "asc" ? (
+    return sort.dir === 'asc' ? (
       <ArrowUp className="h-3.5 w-3.5 text-[var(--primary)]" />
     ) : (
       <ArrowDown className="h-3.5 w-3.5 text-[var(--primary)]" />
@@ -204,59 +213,59 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
             <TableRow>
               <TableHead>
                 <button
-                  onClick={() => toggleSort("date")}
+                  onClick={() => toggleSort('date')}
                   className={`flex items-center gap-1 font-medium ${
-                    sort.key === "date" ? "text-[var(--primary)]" : ""
+                    sort.key === 'date' ? 'text-[var(--primary)]' : ''
                   }`}
                 >
-                  Date {renderSortIcon("date")}
+                  Date {renderSortIcon('date')}
                 </button>
               </TableHead>
               <TableHead>
                 <button
-                  onClick={() => toggleSort("merchant")}
+                  onClick={() => toggleSort('merchant')}
                   className={`flex items-center gap-1 font-medium ${
-                    sort.key === "merchant" ? "text-[var(--primary)]" : ""
+                    sort.key === 'merchant' ? 'text-[var(--primary)]' : ''
                   }`}
                 >
-                  Merchant {renderSortIcon("merchant")}
+                  Merchant {renderSortIcon('merchant')}
                 </button>
               </TableHead>
               <TableHead>
                 <button
-                  onClick={() => toggleSort("category")}
+                  onClick={() => toggleSort('category')}
                   className={`flex items-center gap-1 font-medium ${
-                    sort.key === "category" ? "text-[var(--primary)]" : ""
+                    sort.key === 'category' ? 'text-[var(--primary)]' : ''
                   }`}
                 >
-                  Category {renderSortIcon("category")}
+                  Category {renderSortIcon('category')}
                 </button>
               </TableHead>
               <TableHead>
                 <button
-                  onClick={() => toggleSort("status")}
+                  onClick={() => toggleSort('status')}
                   className={`flex items-center gap-1 font-medium ${
-                    sort.key === "status" ? "text-[var(--primary)]" : ""
+                    sort.key === 'status' ? 'text-[var(--primary)]' : ''
                   }`}
                 >
-                  Status {renderSortIcon("status")}
+                  Status {renderSortIcon('status')}
                 </button>
               </TableHead>
               <TableHead className="text-right">
                 <button
-                  onClick={() => toggleSort("amount")}
+                  onClick={() => toggleSort('amount')}
                   className={`flex w-full items-center justify-end gap-1 font-medium ${
-                    sort.key === "amount" ? "text-[var(--primary)]" : ""
+                    sort.key === 'amount' ? 'text-[var(--primary)]' : ''
                   }`}
                 >
-                  Amount {renderSortIcon("amount")}
+                  Amount {renderSortIcon('amount')}
                 </button>
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {sortedRows.map((transaction) => {
-              const { tone, label } = statusStyle(transaction.status ?? "");
+              const { tone, label } = statusStyle(transaction.status ?? '');
               const { formatted, signed } = formatAmount(
                 transaction.amount,
                 transaction.direction ?? undefined,
@@ -277,7 +286,7 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
                   <TableCell>{toneBadge(tone, label)}</TableCell>
                   <TableCell
                     className={`text-right font-bold ${
-                      signed >= 0 ? "text-[var(--primary)]" : "text-zinc-900"
+                      signed >= 0 ? 'text-[var(--primary)]' : 'text-zinc-900'
                     }`}
                   >
                     {formatted}
@@ -291,4 +300,3 @@ export default function TransactionsClient({ monthGroups }: { monthGroups: Month
     </Card>
   );
 }
-
