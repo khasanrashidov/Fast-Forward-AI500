@@ -17,7 +17,7 @@ export default function DemoPage() {
             <div className="aspect-video bg-gray-100 rounded-2xl overflow-hidden border border-gray-200">
               <iframe
                 src="https://www.youtube.com/embed/3t75MOyQF_E"
-                title={t.demo?.videoTitle || 'Demo Video'}
+                title={t.demo?.videoPlaceholder || 'Demo Video'}
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
