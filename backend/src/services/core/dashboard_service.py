@@ -121,7 +121,13 @@ class DashboardService:
 
     @staticmethod
     def get_dashboard_data(username: str) -> BaseResponse:
-        """Get aggregated data for the dashboard."""
+        """Get aggregated data for the dashboard (fast, no LLM calls).
+
+        Args:
+            username: The username to get dashboard data for
+
+        Note: AI-generated insights are available via get_dashboard_insights() method.
+        """
         try:
             # 1. Get user profile by username.
             user = User.query.filter_by(username=username).first()
@@ -217,7 +223,7 @@ class DashboardService:
                 current_month_start,
             )
 
-            # 10. Generate insights with trend data and anomaly detection.
+            # 10. Generate alerts and health score (rule-based, fast).
             spending_summary = {
                 "total_spending": current_month_spending,
                 "category_breakdown": current_category_breakdown,
@@ -228,7 +234,7 @@ class DashboardService:
             }
             user_profile_dict = user.to_dict()
 
-            insights = AIService.generate_insights(spending_summary, user_profile_dict)
+            # Note: insights are now fetched via separate /insights endpoint (LLM-based)
             alerts = AIService.check_budget_alerts(spending_summary, user_profile_dict)
             health_score = AIService.calculate_health_score(
                 spending_summary, user_profile_dict
@@ -245,7 +251,6 @@ class DashboardService:
                 },
                 "category_distribution": current_category_breakdown,
                 "previous_month_categories": previous_category_breakdown,
-                "insights": insights,
                 "alerts": alerts,
                 "health_score": health_score,
             }
@@ -265,8 +270,139 @@ class DashboardService:
             )
 
     @staticmethod
-    def get_goal_insights(goal_id: str) -> BaseResponse:
-        """Get AI-generated insights for a specific goal."""
+    def get_dashboard_insights(username: str, language: str = "en") -> BaseResponse:
+        """Get AI-generated insights for the dashboard (LLM-based, separate from main dashboard).
+
+        Args:
+            username: The username to get insights for
+            language: Language code ('en', 'uz', 'ru'). Defaults to 'en'.
+        """
+        try:
+            # 1. Get user profile by username.
+            user = User.query.filter_by(username=username).first()
+            if not user:
+                return BaseResponse(
+                    is_success=False,
+                    message="User not found",
+                    errors=["User not found"],
+                )
+
+            user_id = str(user.id)
+
+            # 2. Calculate date ranges for current and previous month.
+            now = datetime.utcnow()
+            current_month_start = now.replace(
+                day=1, hour=0, minute=0, second=0, microsecond=0
+            )
+
+            # Calculate previous month.
+            if now.month == 1:
+                previous_month_start = current_month_start.replace(
+                    year=now.year - 1, month=12
+                )
+            else:
+                previous_month_start = current_month_start.replace(month=now.month - 1)
+
+            # Previous month end is the day before current month start.
+            previous_month_end = current_month_start - timedelta(seconds=1)
+
+            # 3. Calculate current month spending (OUTGOING only).
+            current_month_spending = (
+                db.session.query(func.sum(Transaction.amount))
+                .filter(Transaction.user_id == user_id)
+                .filter(Transaction.date >= current_month_start)
+                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .scalar()
+                or 0
+            )
+
+            # 4. Calculate current month category breakdown (OUTGOING only).
+            current_category_stats = (
+                db.session.query(Transaction.category, func.sum(Transaction.amount))
+                .filter(Transaction.user_id == user_id)
+                .filter(Transaction.date >= current_month_start)
+                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .group_by(Transaction.category)
+                .all()
+            )
+            current_category_breakdown = {cat: amount for cat, amount in current_category_stats if cat != "Income"}
+
+            # 5. Calculate previous month spending (OUTGOING only).
+            previous_month_spending = (
+                db.session.query(func.sum(Transaction.amount))
+                .filter(Transaction.user_id == user_id)
+                .filter(Transaction.date >= previous_month_start)
+                .filter(Transaction.date <= previous_month_end)
+                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .scalar()
+                or 0
+            )
+
+            # 6. Calculate previous month category breakdown (OUTGOING only).
+            previous_category_stats = (
+                db.session.query(Transaction.category, func.sum(Transaction.amount))
+                .filter(Transaction.user_id == user_id)
+                .filter(Transaction.date >= previous_month_start)
+                .filter(Transaction.date <= previous_month_end)
+                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .group_by(Transaction.category)
+                .all()
+            )
+            previous_category_breakdown = {cat: amount for cat, amount in previous_category_stats if cat != "Income"}
+
+            # 7. Calculate month-over-month change percentage.
+            if previous_month_spending > 0:
+                spending_change_percent = (
+                    (current_month_spending - previous_month_spending)
+                    / previous_month_spending
+                ) * 100
+            else:
+                spending_change_percent = 0 if current_month_spending == 0 else 100
+
+            # 8. Detect anomalies using statistical rules.
+            anomaly_data = DashboardService._detect_spending_anomalies(
+                current_category_breakdown,
+                previous_category_breakdown,
+                user_id,
+                current_month_start,
+            )
+
+            # 9. Prepare spending summary for AI.
+            spending_summary = {
+                "total_spending": current_month_spending,
+                "category_breakdown": current_category_breakdown,
+                "previous_month_spending": previous_month_spending,
+                "previous_month_categories": previous_category_breakdown,
+                "spending_change_percent": spending_change_percent,
+                "anomaly_data": anomaly_data,
+            }
+            user_profile_dict = user.to_dict()
+
+            # 10. Generate insights via LLM.
+            insights = AIService.generate_insights(spending_summary, user_profile_dict, language)
+
+            return BaseResponse(
+                is_success=True,
+                message="Dashboard insights generated successfully.",
+                data={"insights": insights},
+            )
+
+        except Exception as e:
+            logger.error(f"Error getting dashboard insights: {str(e)}")
+            return BaseResponse(
+                is_success=False,
+                message="Failed to generate dashboard insights.",
+                errors=[str(e)],
+            )
+
+    @staticmethod
+    def get_goal_insights(goal_id: str, language: str = "en") -> BaseResponse:
+        """Get AI-generated insights for a specific goal.
+
+        Args:
+            goal_id: The goal ID to get insights for
+            language: Language code ('en', 'uz', 'ru'). Defaults to 'en'.
+        """
         try:
             # For demo, use default user.
             user = User.query.filter_by(username="khasanrashidov").first()
@@ -390,7 +526,7 @@ class DashboardService:
             }
 
             # Generate insights.
-            insights = AIService.generate_goal_insights(goal_data, spending_data)
+            insights = AIService.generate_goal_insights(goal_data, spending_data, language)
 
             return BaseResponse(
                 is_success=True,

@@ -480,14 +480,16 @@ HTML_TEMPLATE = """
                     <span class="method get">GET</span>
                     <span class="url">/api/dashboard/?username=&lt;username&gt;</span>
                 </div>
-                <div class="desc"><strong>Get Dashboard Data</strong></div>
-                <p>Returns summary, category distribution, AI insights, and health score.</p>
+                <div class="desc"><strong>Get Dashboard Data</strong> (Fast, no LLM)</div>
+                <p>Returns summary, category distribution, alerts, and health score. For AI-generated insights, use the separate <code>/insights</code> endpoint.</p>
+                <p class="section-title">Query Parameters:</p>
+                <pre>username (string) - required</pre>
                 <p class="section-title">Response (200 OK):</p>
                 <pre>{
   "is_success": true,
   "message": "Dashboard data retrieved successfully.",
   "data": {
-    "summary": { 
+    "summary": {
         "total_income": 3000000,
         "total_spending": 500000,
         "savings_potential": 2500000,
@@ -496,7 +498,6 @@ HTML_TEMPLATE = """
     },
     "category_distribution": { "Food": 200000, "Transport": 50000 },
     "previous_month_categories": { "Food": 150000 },
-    "insights": ["Spending on Food increased by 33%"],
     "alerts": ["High shopping expenses detected"],
     "health_score": { "score": 85, "status": "Doing Great", "color": "Green" }
   }
@@ -506,9 +507,40 @@ HTML_TEMPLATE = """
             <div class="endpoint">
                 <div class="header">
                     <span class="method get">GET</span>
+                    <span class="url">/api/dashboard/insights?username=&lt;username&gt;</span>
+                </div>
+                <div class="desc"><strong>Get Dashboard Insights</strong> (LLM-based, may take a few seconds)</div>
+                <p>Returns AI-generated financial insights based on spending patterns. Supports multiple languages.</p>
+                <p class="section-title">Query Parameters:</p>
+                <pre>username (string) - required
+language (string) - optional: "en", "uz", "ru" (default: "en")</pre>
+                <p class="section-title">Headers:</p>
+                <pre>Accept-Language (optional): Language preference (e.g., "uz", "ru", "en")</pre>
+                <p class="section-title">Response (200 OK):</p>
+                <pre>{
+  "is_success": true,
+  "message": "Dashboard insights generated successfully.",
+  "data": {
+    "insights": [
+      "Spending on Food increased by 33% compared to last month.",
+      "Your savings rate is healthy at 83%.",
+      "Consider reviewing entertainment expenses."
+    ]
+  }
+}</pre>
+            </div>
+
+            <div class="endpoint">
+                <div class="header">
+                    <span class="method get">GET</span>
                     <span class="url">/api/dashboard/goal-insights/&lt;goal_id&gt;</span>
                 </div>
-                <div class="desc"><strong>Get Goal Insights</strong></div>
+                <div class="desc"><strong>Get Goal Insights</strong> (LLM-based, may take a few seconds)</div>
+                <p>Returns AI-generated insights for a specific goal. Supports multiple languages.</p>
+                <p class="section-title">Query Parameters:</p>
+                <pre>language (string) - optional: "en", "uz", "ru" (default: "en")</pre>
+                <p class="section-title">Headers:</p>
+                <pre>Accept-Language (optional): Language preference (e.g., "uz", "ru", "en")</pre>
                 <p class="section-title">Response (200 OK):</p>
                 <pre>{
   "is_success": true,
@@ -668,32 +700,23 @@ HTML_TEMPLATE = """
                     <span class="method get">GET</span>
                     <span class="url">/api/goals/&lt;goal_id&gt;/timeline?username=&lt;username&gt;</span>
                 </div>
-                <div class="desc"><strong>Predict Goal Timeline</strong></div>
-                <p>Uses Monte Carlo simulation to predict when a goal will be reached based on financial data.</p>
+                <div class="desc"><strong>Predict Goal Timeline</strong> (Fast, no LLM)</div>
+                <p>Uses Monte Carlo simulation to predict when a goal will be reached. For AI interpretation, use the separate <code>/timeline/interpretation</code> endpoint.</p>
+                <p class="section-title">Query Parameters:</p>
+                <pre>username (string) - required</pre>
                 <p class="section-title">Response (200 OK):</p>
                 <pre>{
   "is_success": true,
   "message": "Goal timeline prediction completed.",
   "data": {
-    "goal": {
-      "name": "New Laptop",
-      "target_amount": 10000000,
-      "current_amount": 1000000,
-      "remaining_amount": 9000000,
-      "currency": "UZS"
-    },
-    "financial_summary": {
-      "income": 3000000,
-      "monthly_spending": 500000,
-      "real_contribution": 2000000
-    },
-    "monte_carlo_results": {
-      "deterministic_months": 4.5,
+    "deterministic_months": 4.5,
+    "monte_carlo": {
       "p10": 3.8,
       "p50": 4.5,
-      "p90": 5.2,
-      "success_probability": 95.0
+      "p90": 5.2
     },
+    "success_probability": 95.0,
+    "real_monthly_contribution": 2000000,
     "timeline_data": [
       {
         "month": 0,
@@ -701,9 +724,37 @@ HTML_TEMPLATE = """
         "p10_optimistic": 1000000,
         "p50_median": 1000000,
         "p90_pessimistic": 1000000
+      },
+      {
+        "month": 1,
+        "deterministic": 3000000,
+        "p10_optimistic": 3300000,
+        "p50_median": 3000000,
+        "p90_pessimistic": 2700000
       }
-    ],
-    "ai_interpretation": "Based on your current savings rate..."
+    ]
+  }
+}</pre>
+            </div>
+
+            <div class="endpoint">
+                <div class="header">
+                    <span class="method get">GET</span>
+                    <span class="url">/api/goals/&lt;goal_id&gt;/timeline/interpretation?username=&lt;username&gt;</span>
+                </div>
+                <div class="desc"><strong>Get Timeline Interpretation</strong> (LLM-based, may take a few seconds)</div>
+                <p>Returns AI-generated interpretation of the Monte Carlo simulation results. Supports multiple languages.</p>
+                <p class="section-title">Query Parameters:</p>
+                <pre>username (string) - required
+language (string) - optional: "en", "uz", "ru" (default: "en")</pre>
+                <p class="section-title">Headers:</p>
+                <pre>Accept-Language (optional): Language preference (e.g., "uz", "ru", "en")</pre>
+                <p class="section-title">Response (200 OK):</p>
+                <pre>{
+  "is_success": true,
+  "message": "Goal timeline interpretation generated.",
+  "data": {
+    "interpretation": "Based on your current savings rate of 2,000,000 UZS/month, you're on track to reach your goal in approximately 4-5 months. The Monte Carlo simulation shows a 95% probability of success by your target date."
   }
 }</pre>
             </div>
@@ -713,8 +764,13 @@ HTML_TEMPLATE = """
                     <span class="method get">GET</span>
                     <span class="url">/api/goals/&lt;goal_id&gt;/recommendations?username=&lt;username&gt;</span>
                 </div>
-                <div class="desc"><strong>Get Agrobank Product Recommendations</strong></div>
-                <p>Returns 0-3 relevant Agrobank products to help achieve the goal faster.</p>
+                <div class="desc"><strong>Get Agrobank Product Recommendations</strong> (LLM-based, may take a few seconds)</div>
+                <p>Returns 0-3 relevant Agrobank products to help achieve the goal faster. Supports multiple languages.</p>
+                <p class="section-title">Query Parameters:</p>
+                <pre>username (string) - required
+language (string) - optional: "en", "uz", "ru" (default: "en")</pre>
+                <p class="section-title">Headers:</p>
+                <pre>Accept-Language (optional): Language preference (e.g., "uz", "ru", "en")</pre>
                 <p class="section-title">Response (200 OK):</p>
                 <pre>{
   "is_success": true,
@@ -722,14 +778,22 @@ HTML_TEMPLATE = """
   "data": {
     "recommendations": [
       {
+        "product_id": "deposit_stable",
         "product_name": "Agrobank Deposit 'Stable Income'",
+        "category": "Deposits",
+        "type": "savings",
+        "description": "High-yield savings deposit",
         "reason": "Earn 18% annual interest to grow your savings faster",
-        "benefit": "Additional 150,000 UZS monthly from interest"
+        "link": "https://agrobank.uz/deposits"
       },
       {
+        "product_id": "card_cashback",
         "product_name": "Agrobank Card 'Cashback'",
+        "category": "Cards",
+        "type": "debit",
+        "description": "Cashback on all purchases",
         "reason": "Get 5% cashback on all purchases to reduce spending",
-        "benefit": "Save 25,000 UZS monthly on average"
+        "link": "https://agrobank.uz/cards"
       }
     ]
   }
@@ -759,8 +823,9 @@ HTML_TEMPLATE = """
       {
         "all_count": 79,
         "id": 358207,
-        "image": "https://mini-io-api.texnomart.uz/catalog/product/3582/358207/208310/0ab7e8c3-fab8-41a5-a970-d3e4b4d1e893.webp",
-        "name": "Samsung Galaxy S25 Ultra 12/256GB Titanium Gray Smartfoni",
+          "image": "https://mini-io-api.texnomart.uz/catalog/product/3582/358207/208310/0ab7e8c3-fab8-41a5-a970-d3e4b4d1e893.webp",
+          "sale_price": 26099000,
+          "name": "Samsung Galaxy S25 Ultra 12/256GB Titanium Gray Smartfoni",
         "opencard_month_text": "12 months",
         "opencard_monthly_payment": 2174917,
         "opencard_total_price": 26099000,
@@ -770,6 +835,7 @@ HTML_TEMPLATE = """
         "all_count": 53,
         "id": 358175,
         "image": "https://mini-io-api.texnomart.uz/catalog/product/3581/358175/208210/baebb227-d7b2-4a8c-998f-f911d88abd4a.webp",
+        "sale_price": 28065000,
         "name": "Samsung Galaxy S25 Ultra 12/512GB Titanium Gray",
         "opencard_month_text": "12 months",
         "opencard_monthly_payment": 2338750,
@@ -780,6 +846,7 @@ HTML_TEMPLATE = """
         "all_count": 5,
         "id": 358174,
         "image": "https://mini-io-api.texnomart.uz/catalog/product/3581/358174/208204/b2799e96-bce9-4c0e-9d45-264edaebc1f0.webp",
+        "sale_price": 28065000,
         "name": "Samsung Galaxy S25 Ultra 12/512GB Titanium Black",
         "opencard_month_text": "12 months",
         "opencard_monthly_payment": 2338750,
@@ -790,6 +857,7 @@ HTML_TEMPLATE = """
         "all_count": 24,
         "id": 358178,
         "image": "https://mini-io-api.texnomart.uz/catalog/product/3581/358178/208183/061d94a4-0c47-4b6a-ad80-ce6710efc284.webp",
+        "sale_price": 26099000,
         "name": "Samsung Galaxy S25 Ultra 12/256GB Titanium Blue",
         "opencard_month_text": "12 months",
         "opencard_monthly_payment": 2174917,
@@ -800,6 +868,7 @@ HTML_TEMPLATE = """
         "all_count": 111,
         "id": 358840,
         "image": "https://mini-io-api.texnomart.uz/catalog/product/3588/358840/211779/a5430217-0f8e-4cd8-89bd-59352352f508.webp",
+        "sale_price": 28065000,
         "name": "Samsung Galaxy S25 Ultra 12/512GB Titanium Jetblack",
         "opencard_month_text": "12 months",
         "opencard_monthly_payment": 2338750,
@@ -810,6 +879,7 @@ HTML_TEMPLATE = """
         "all_count": 143,
         "id": 358841,
         "image": "https://mini-io-api.texnomart.uz/catalog/product/3588/358841/211786/09a3ba36-4eb5-437e-8e8d-5808a8ad40ee.webp",
+        "sale_price": 26099000,
         "name": "Samsung Galaxy S25 Ultra 12/256GB Titanium Jetblack",
         "opencard_month_text": "12 months",
         "opencard_monthly_payment": 2174917,

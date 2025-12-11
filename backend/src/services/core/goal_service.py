@@ -173,13 +173,19 @@ class GoalService:
     @staticmethod
     def predict_goal_timeline(goal_id: str, username: str) -> BaseResponse:
         """
-        Predict goal timeline using Monte Carlo simulation.
+        Predict goal timeline using Monte Carlo simulation (fast, no LLM calls).
+
+        Args:
+            goal_id: The goal ID to predict timeline for
+            username: The username of the goal owner
 
         Returns:
             - Deterministic calculation
             - Monte Carlo percentiles (P10, P50, P90)
             - Success probability
             - Timeline data for visualization
+
+        Note: AI-generated interpretation is available via get_timeline_interpretation() method.
         """
         try:
             # Get user.
@@ -322,32 +328,189 @@ class GoalService:
 
             # Generate timeline data for visualization with Monte Carlo scenarios.
             timeline_months = min(int(p90) + 6, 60)  # Show up to 60 months.
-            
+
             # Create three scenario projections: P10 (optimistic), P50 (median), P90 (pessimistic)
             timeline_data = []
-            
+
             for month in range(timeline_months + 1):
                 # Deterministic baseline
                 deterministic_amount = goal.current_amount + (real_contribution * month)
-                
+
                 # P10 scenario: optimistic (higher contribution due to lower spending/higher income)
                 p10_contribution = real_contribution * 1.15  # 15% better
                 p10_amount = goal.current_amount + (p10_contribution * month)
-                
+
                 # P50 scenario: median (realistic with slight variations)
                 p50_contribution = real_contribution * 1.0  # Base case
                 p50_amount = goal.current_amount + (p50_contribution * month)
-                
+
                 # P90 scenario: pessimistic (lower contribution due to unexpected expenses)
                 p90_contribution = real_contribution * 0.85  # 15% worse
                 p90_amount = goal.current_amount + (p90_contribution * month)
-                
+
                 timeline_data.append({
                     "month": month,
                     "deterministic": round(deterministic_amount, 2),
                     "p10_optimistic": round(p10_amount, 2),
                     "p50_median": round(p50_amount, 2),
                     "p90_pessimistic": round(p90_amount, 2),
+                })
+
+            # Build response with Monte Carlo results (no LLM interpretation).
+            prediction = {
+                "deterministic_months": round(deterministic_months, 1),
+                "monte_carlo": {
+                    "p10": round(p10, 1),
+                    "p50": round(p50, 1),
+                    "p90": round(p90, 1),
+                },
+                "success_probability": round(success_probability, 1),
+                "real_monthly_contribution": real_contribution,
+                "timeline_data": timeline_data,
+            }
+
+            return BaseResponse(
+                is_success=True,
+                message="Goal timeline prediction completed.",
+                data=prediction,
+            )
+
+        except Exception as e:
+            logger.error(f"Error predicting goal timeline: {str(e)}")
+            return BaseResponse(
+                is_success=False,
+                message="Failed to predict goal timeline.",
+                errors=[str(e)],
+            )
+
+    @staticmethod
+    def get_timeline_interpretation(goal_id: str, username: str, language: str = "en") -> BaseResponse:
+        """
+        Get AI-generated interpretation for goal timeline (LLM-based, separate from main timeline).
+
+        Args:
+            goal_id: The goal ID to get interpretation for
+            username: The username of the goal owner
+            language: Language code ('en', 'uz', 'ru'). Defaults to 'en'.
+
+        Returns:
+            - AI interpretation of the Monte Carlo simulation results
+        """
+        try:
+            # Get user.
+            user = User.query.filter_by(username=username).first()
+            if not user:
+                return BaseResponse(
+                    is_success=False,
+                    message="User not found.",
+                    errors=["User not found."],
+                )
+
+            # Get goal.
+            goal = Goal.query.filter_by(id=goal_id).first()
+            if not goal:
+                return BaseResponse(
+                    is_success=False,
+                    message="Goal not found.",
+                    errors=["Goal not found."],
+                )
+
+            # Verify ownership.
+            if goal.user_id != user.id:
+                return BaseResponse(
+                    is_success=False,
+                    message="Unauthorized access.",
+                    errors=["Goal does not belong to user."],
+                )
+
+            # Get financial data.
+            user_id = str(user.id)
+
+            # Calculate monthly spending (current month).
+            from datetime import datetime
+
+            now = datetime.now()
+            current_month_start = now.replace(
+                day=1, hour=0, minute=0, second=0, microsecond=0
+            )
+
+            monthly_spending = (
+                db.session.query(func.sum(Transaction.amount))
+                .filter(
+                    Transaction.user_id == user_id,
+                    Transaction.created_at >= current_month_start,
+                )
+                .scalar()
+                or 0
+            )
+
+            income = user.salary or 0
+
+            # Estimate installments and taxes.
+            installments = income * 0.05
+            taxes = income * 0.12
+            volatility_buffer = income * 0.10
+
+            real_contribution = max(
+                0, income - monthly_spending - installments - taxes - volatility_buffer
+            )
+
+            remaining_amount = max(0, goal.target_amount - goal.current_amount)
+
+            # Deterministic calculation.
+            if real_contribution > 0:
+                deterministic_months = remaining_amount / real_contribution
+            else:
+                deterministic_months = float("inf")
+
+            # Monte Carlo simulation (simplified for interpretation).
+            num_simulations = 5000
+            months_to_goal = []
+
+            for _ in range(num_simulations):
+                simulated_months = 0
+                accumulated = goal.current_amount
+                max_months = 360
+
+                while accumulated < goal.target_amount and simulated_months < max_months:
+                    sim_income = income * np.random.normal(1.0, 0.05)
+                    sim_spending = monthly_spending * np.random.normal(1.0, 0.15)
+                    unexpected = 0
+                    if np.random.random() < 0.10:
+                        unexpected = sim_income * np.random.uniform(0.05, 0.20)
+
+                    monthly_contrib = max(
+                        0, sim_income - sim_spending - installments - taxes - unexpected
+                    )
+                    accumulated += monthly_contrib
+                    simulated_months += 1
+
+                months_to_goal.append(
+                    simulated_months if simulated_months < max_months else max_months
+                )
+
+            p10 = np.percentile(months_to_goal, 10)
+            p50 = np.percentile(months_to_goal, 50)
+            p90 = np.percentile(months_to_goal, 90)
+
+            success_probability = 100.0
+            months_to_target = None
+
+            if goal.target_date:
+                days_to_target = (goal.target_date - datetime.now()).days
+                months_to_target = max(1, days_to_target / 30)
+                success_count = sum(1 for m in months_to_goal if m <= months_to_target)
+                success_probability = (success_count / num_simulations) * 100
+
+            # Generate timeline data for LLM context.
+            timeline_months = min(int(p90) + 6, 60)
+            timeline_data = []
+
+            for month in range(timeline_months + 1):
+                deterministic_amount = goal.current_amount + (real_contribution * month)
+                timeline_data.append({
+                    "month": month,
+                    "amount": round(deterministic_amount, 2),
                 })
 
             # Prepare data for AI interpretation.
@@ -383,20 +546,20 @@ class GoalService:
 
             # Get AI interpretation.
             prediction = AIService.predict_goal_timeline(
-                goal_data, financial_data, monte_carlo_results, timeline_data
+                goal_data, financial_data, monte_carlo_results, timeline_data, language
             )
 
             return BaseResponse(
                 is_success=True,
-                message="Goal timeline prediction completed.",
-                data=prediction,
+                message="Goal timeline interpretation generated.",
+                data={"interpretation": prediction.get("interpretation", "")},
             )
 
         except Exception as e:
-            logger.error(f"Error predicting goal timeline: {str(e)}")
+            logger.error(f"Error getting timeline interpretation: {str(e)}")
             return BaseResponse(
                 is_success=False,
-                message="Failed to predict goal timeline.",
+                message="Failed to generate timeline interpretation.",
                 errors=[str(e)],
             )
 
@@ -443,8 +606,14 @@ class GoalService:
             )
 
     @staticmethod
-    def get_product_recommendations(goal_id: str, username: str) -> BaseResponse:
-        """Get Agrobank product recommendations for a specific goal."""
+    def get_product_recommendations(goal_id: str, username: str, language: str = "en") -> BaseResponse:
+        """Get Agrobank product recommendations for a specific goal.
+
+        Args:
+            goal_id: The goal ID to get recommendations for
+            username: The username of the goal owner
+            language: Language code ('en', 'uz', 'ru'). Defaults to 'en'.
+        """
         try:
             # Get user
             user = User.query.filter_by(username=username).first()
@@ -555,7 +724,7 @@ class GoalService:
 
             # Get recommendations from AI
             recommendations = AIService.recommend_agrobank_products(
-                goal_data, spending_data, products
+                goal_data, spending_data, products, language
             )
 
             return BaseResponse(

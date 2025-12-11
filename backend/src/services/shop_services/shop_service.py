@@ -105,6 +105,7 @@ class ShopService:
                     "all_count": p.all_count,
                     "id": p.id,
                     "image": p.image,
+                    "sale_price": p.sale_price,
                     "name": p.name,
                     "opencard_month_text": p.opencard_month_text,
                     "opencard_monthly_payment": p.opencard_monthly_payment,

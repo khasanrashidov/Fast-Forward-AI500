@@ -25,3 +25,5 @@
 Analyze the goal and financial data. Recommend 0-3 products that genuinely help achieve this goal.
 
 Return empty list if no products are truly beneficial. Quality over quantity.
+
+**IMPORTANT:** All text responses (especially the 'reason' field) MUST be written in {language}.

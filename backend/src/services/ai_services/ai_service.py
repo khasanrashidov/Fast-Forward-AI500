@@ -92,11 +92,17 @@ class AIService:
 
     @staticmethod
     def generate_insights(
-        spending_summary: Dict, user_profile: Dict
+        spending_summary: Dict, user_profile: Dict, language: str = "en"
     ) -> Optional[List[str]]:
-        """Generate financial insights based on spending summary and user profile using LLM"""
+        """Generate financial insights based on spending summary and user profile using LLM
+
+        Args:
+            spending_summary: Dict with spending data
+            user_profile: Dict with user profile data
+            language: Language code ('en', 'uz', 'ru'). Defaults to 'en'.
+        """
         try:
-            logger.info("Generating insights via LLM")
+            logger.info(f"Generating insights via LLM in {language}")
 
             # Initialize LLM instance.
             llm_client = _get_llm_client()
@@ -188,6 +194,7 @@ class AIService:
             chain = prompt | structured_llm
             response = chain.invoke(
                 {
+                    "language": language,
                     "salary": income,
                     "age": user_profile.get("age", "unknown"),
                     "family_size": user_profile.get("family_size", 1),
@@ -229,12 +236,19 @@ class AIService:
 
     @staticmethod
     def generate_recommendations(
-        user_profile: Dict, spending_summary: Dict, goals: List[Dict]
+        user_profile: Dict, spending_summary: Dict, goals: List[Dict], language: str = "en"
     ) -> List[str]:
-        """Generate smart recommendations based on user data and goals using LLM"""
+        """Generate smart recommendations based on user data and goals using LLM
+
+        Args:
+            user_profile: Dict with user profile data
+            spending_summary: Dict with spending data
+            goals: List of goal dicts
+            language: Language code ('en', 'uz', 'ru'). Defaults to 'en'.
+        """
         try:
             # Try LLM-based recommendations generation
-            logger.info("Attempting to generate recommendations via LLM")
+            logger.info(f"Attempting to generate recommendations via LLM in {language}")
 
             # Initialize LLM instance.
             llm_client = _get_llm_client()
@@ -289,6 +303,7 @@ class AIService:
             chain = prompt | structured_llm
             response = chain.invoke(
                 {
+                    "language": language,
                     "salary": user_profile.get("salary", 0),
                     "total_spending": spending_summary.get("total_spending", 0),
                     "savings": spending_summary.get("savings", 0),
@@ -410,10 +425,16 @@ class AIService:
         return {"score": final_score, "status": status, "color": color}
 
     @staticmethod
-    def generate_goal_insights(goal_data: Dict, spending_data: Dict) -> Dict:
-        """Generate goal-specific insights using LLM."""
+    def generate_goal_insights(goal_data: Dict, spending_data: Dict, language: str = "en") -> Dict:
+        """Generate goal-specific insights using LLM.
+
+        Args:
+            goal_data: Dict with goal information
+            spending_data: Dict with spending data
+            language: Language code ('en', 'uz', 'ru'). Defaults to 'en'.
+        """
         try:
-            logger.info("Generating goal insights via LLM.")
+            logger.info(f"Generating goal insights via LLM in {language}.")
 
             llm_client = _get_llm_client()
             structured_llm = llm_client.llm.with_structured_output(GoalBasedInsights)
@@ -436,6 +457,7 @@ class AIService:
             chain = prompt | structured_llm
             response = chain.invoke(
                 {
+                    "language": language,
                     "goal_name": goal_data["name"],
                     "target_amount": goal_data["target_amount"],
                     "current_amount": goal_data["current_amount"],
@@ -455,7 +477,7 @@ class AIService:
                 }
             )
 
-            logger.info("Successfully generated goal insights via LLM.")
+            logger.info(f"Successfully generated goal insights via LLM in {language}.")
 
             # Build response with single insights
             insights = [
@@ -477,10 +499,19 @@ class AIService:
         financial_data: Dict,
         monte_carlo_results: Dict,
         timeline_data: List[Dict],
+        language: str = "en",
     ) -> Dict:
-        """Generate goal timeline prediction with Monte Carlo simulation interpretation using LLM."""
+        """Generate goal timeline prediction with Monte Carlo simulation interpretation using LLM.
+
+        Args:
+            goal_data: Dict with goal information
+            financial_data: Dict with financial data
+            monte_carlo_results: Dict with Monte Carlo simulation results
+            timeline_data: List of timeline data points
+            language: Language code ('en', 'uz', 'ru'). Defaults to 'en'.
+        """
         try:
-            logger.info("Generating goal timeline prediction via LLM.")
+            logger.info(f"Generating goal timeline prediction via LLM in {language}.")
 
             llm_client = _get_llm_client()
             structured_llm = llm_client.llm.with_structured_output(
@@ -505,6 +536,7 @@ class AIService:
             chain = prompt | structured_llm
             response = chain.invoke(
                 {
+                    "language": language,
                     "goal_name": goal_data["name"],
                     "target_amount": goal_data["target_amount"],
                     "current_amount": goal_data["current_amount"],
@@ -528,7 +560,7 @@ class AIService:
                 }
             )
 
-            logger.info("Successfully generated goal timeline prediction via LLM.")
+            logger.info(f"Successfully generated goal timeline prediction via LLM in {language}.")
 
             return {
                 "deterministic_months": response.deterministic_months,
@@ -569,11 +601,18 @@ class AIService:
 
     @staticmethod
     def recommend_agrobank_products(
-        goal_data: Dict, spending_data: Dict, products: List[Dict]
+        goal_data: Dict, spending_data: Dict, products: List[Dict], language: str = "en"
     ) -> List[Dict]:
-        """Recommend Agrobank products for a specific goal using LLM."""
+        """Recommend Agrobank products for a specific goal using LLM.
+
+        Args:
+            goal_data: Dict with goal information
+            spending_data: Dict with spending data
+            products: List of available products
+            language: Language code ('en', 'uz', 'ru'). Defaults to 'en'.
+        """
         try:
-            logger.info("Generating Agrobank product recommendations via LLM.")
+            logger.info(f"Generating Agrobank product recommendations via LLM in {language}.")
 
             llm_client = _get_llm_client()
             structured_llm = llm_client.llm.with_structured_output(
@@ -606,6 +645,7 @@ class AIService:
             chain = prompt | structured_llm
             response = chain.invoke(
                 {
+                    "language": language,
                     "goal_name": goal_data["name"],
                     "target_amount": goal_data["target_amount"],
                     "current_amount": goal_data["current_amount"],
@@ -627,7 +667,7 @@ class AIService:
             )
 
             logger.info(
-                f"Successfully generated {len(response.recommendations)} product recommendations via LLM."
+                f"Successfully generated {len(response.recommendations)} product recommendations via LLM in {language}."
             )
 
             # Convert to dict format with full product details

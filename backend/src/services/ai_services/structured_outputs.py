@@ -94,10 +94,10 @@ class GoalTimelinePrediction(BaseModel):
 
 class ProductRecommendation(BaseModel):
     """Single Agrobank product recommendation."""
-    
+
     product_id: str = Field(description="Product ID from the services list")
     product_name: str = Field(description="Product name")
-    reason: str = Field(description="Very short explanation why recommended. Maximum 20 words.")
+    reason: str = Field(description="Very short explanation why recommended. Maximum 20 words. MUST be in the language specified in the system prompt.")
 
 
 class AgrobankProductRecommendations(BaseModel):
