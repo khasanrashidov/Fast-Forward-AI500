@@ -1,4 +1,5 @@
 import { API_BASE_URL } from './config';
+import { createTrackedController, untrackController } from './request-manager';
 
 type ApiErrorContext = {
   status: number;
@@ -27,13 +28,13 @@ type ApiResponse<T> = {
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Fetch with timeout to prevent hanging requests
+// Fetch with timeout and tracking for cancellation on navigation
 async function fetchWithTimeout(
   url: string,
   init: RequestInit | undefined,
   timeoutMs: number
 ): Promise<Response> {
-  const controller = new AbortController();
+  const controller = createTrackedController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
@@ -44,6 +45,7 @@ async function fetchWithTimeout(
     return response;
   } finally {
     clearTimeout(timeoutId);
+    untrackController(controller);
   }
 }
 

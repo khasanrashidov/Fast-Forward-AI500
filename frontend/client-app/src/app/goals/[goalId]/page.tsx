@@ -236,17 +236,17 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
               ) : null}
             </div>
 
+            {/* AI Interpretation - LLM-based, loads separately (above chart) */}
+            <Suspense fallback={<TimelineInterpretationSkeleton />}>
+              <TimelineInterpretation goalId={goalId} />
+            </Suspense>
+
             {/* Chart */}
             <div className="w-full overflow-x-auto -mx-1 px-1">
               <div className="min-w-[240px]">
                 <TimelineChart timeline={timeline ?? undefined} currency={goal.currency} />
               </div>
             </div>
-
-            {/* AI Interpretation - LLM-based, loads separately */}
-            <Suspense fallback={<TimelineInterpretationSkeleton />}>
-              <TimelineInterpretation goalId={goalId} />
-            </Suspense>
           </CardContent>
         </Card>
 

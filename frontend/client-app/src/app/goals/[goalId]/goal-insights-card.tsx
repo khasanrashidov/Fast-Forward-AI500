@@ -32,7 +32,7 @@ export async function GoalInsightsCard({ goalId }: Props) {
           insights.map((item, idx) => (
             <div
               key={idx}
-              className="rounded-md border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/6 to-accent/10 p-2.5 sm:p-3 text-xs sm:text-sm text-foreground"
+              className="rounded-md border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/6 to-accent/10 p-2.5 sm:p-3 text-xs sm:text-base text-foreground" // font 16px should be added here
             >
               {item}
             </div>
@@ -68,4 +68,3 @@ export function GoalInsightsCardSkeleton() {
     </Card>
   );
 }
-

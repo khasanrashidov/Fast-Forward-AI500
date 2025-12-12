@@ -1,4 +1,4 @@
-import { Lightbulb } from 'lucide-react';
+import { ArrowUpRight, Lightbulb } from 'lucide-react';
 import { getTranslations, getLocale } from 'next-intl/server';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -67,21 +67,23 @@ export async function RecommendationsCard({ goalId }: Props) {
                     </span>
                   ) : null}
                   {rec.type ? (
-                    <span className="rounded border border-border/60 px-1.5 py-0.5">{rec.type}</span>
+                    <span className="rounded border border-border/60 px-1.5 py-0.5">
+                      {rec.type}
+                    </span>
                   ) : null}
                 </div>
               )}
 
               {/* Description - hidden on mobile, shown on desktop */}
               {rec.description ? (
-                <div className="hidden sm:block text-foreground text-sm leading-relaxed">
+                <div className="hidden sm:block text-foreground text-base leading-relaxed">
                   {rec.description}
                 </div>
               ) : null}
 
               {/* Reason - truncated on mobile */}
               {rec.reason ? (
-                <div className="text-muted-foreground text-xs sm:text-xs line-clamp-2 sm:line-clamp-none">
+                <div className="text-muted-foreground line-clamp-2 sm:line-clamp-none">
                   <span className="font-semibold text-primary">{t('why')}</span> {rec.reason}
                 </div>
               ) : null}
@@ -99,9 +101,10 @@ export async function RecommendationsCard({ goalId }: Props) {
                   href={rec.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-block text-primary text-xs sm:text-xs underline underline-offset-2"
+                  className="inline-flex items-center gap-1 text-primary text-xs sm:text-base underline underline-offset-2"
                 >
                   {t('learnMore')}
+                  <ArrowUpRight className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0" />
                 </a>
               ) : null}
             </div>
@@ -142,4 +145,3 @@ export function RecommendationsCardSkeleton() {
     </Card>
   );
 }
-

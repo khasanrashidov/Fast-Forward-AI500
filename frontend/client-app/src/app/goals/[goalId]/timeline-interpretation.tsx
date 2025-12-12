@@ -1,6 +1,7 @@
 import { getLocale } from 'next-intl/server';
 
 import { getGoalTimelineInterpretation } from '@/lib/services/goals';
+import { Sparkles } from 'lucide-react';
 
 type Props = {
   goalId: string;
@@ -23,8 +24,9 @@ export async function TimelineInterpretation({ goalId }: Props) {
   }
 
   return (
-    <div className="rounded border bg-muted/40 p-2 sm:p-3 text-[10px] sm:text-xs text-foreground leading-relaxed">
-      {interpretation}
+    <div className="rounded border bg-muted/40 p-2.5 sm:p-3 text-xs sm:text-base text-foreground leading-relaxed flex items-start gap-2.5">
+      <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary shrink-0 mt-1" />
+      <span className="text-xs sm:text-base text-foreground leading-relaxed">{interpretation}</span>
     </div>
   );
 }
@@ -40,4 +42,3 @@ export function TimelineInterpretationSkeleton() {
     </div>
   );
 }
-
