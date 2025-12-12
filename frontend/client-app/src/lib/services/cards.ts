@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { z } from 'zod';
 import { apiFetch } from '../api';
 import { CARD_TYPES } from '../enums';
@@ -55,7 +56,10 @@ const createCardBodySchema = z.object({
 export type Card = z.infer<typeof cardSchema>;
 export type CreateCardBody = z.infer<typeof createCardBodySchema>;
 
-export async function getCards(username = DEFAULT_USERNAME): Promise<Card[]> {
+/**
+ * Get user's cards. Cached per request - multiple calls in the same render will be deduplicated.
+ */
+export const getCards = cache(async (username = DEFAULT_USERNAME): Promise<Card[]> => {
   const result = await apiFetch<unknown>(`/api/cards/?username=${username}`, {
     method: 'GET',
   });
@@ -63,7 +67,7 @@ export async function getCards(username = DEFAULT_USERNAME): Promise<Card[]> {
   const parsed = listCardsResponseSchema.parse(result);
   if ('data' in parsed) return parsed.data;
   return parsed.cards;
-}
+});
 
 export async function getCardById(cardId: string): Promise<Card> {
   const result = await apiFetch<unknown>(`/api/cards/${cardId}`, {

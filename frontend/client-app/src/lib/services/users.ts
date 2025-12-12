@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { z } from 'zod';
 import { apiFetch } from '../api';
 import { USER_ROLES } from '../enums';
@@ -50,14 +51,17 @@ const updateUserBodySchema = z.object({
 export type User = z.infer<typeof userSchema>;
 export type UpdateUserBody = z.infer<typeof updateUserBodySchema>;
 
-export async function getUser(username = DEFAULT_USERNAME): Promise<User> {
+/**
+ * Get user data. Cached per request - multiple calls in the same render will be deduplicated.
+ */
+export const getUser = cache(async (username = DEFAULT_USERNAME): Promise<User> => {
   const result = await apiFetch<User>(`/api/users/${username}`, {
     method: 'GET',
   });
 
   const parsed = userResponseSchema.parse(result);
   return parsed.data;
-}
+});
 
 export async function updateUser(
   username = DEFAULT_USERNAME,

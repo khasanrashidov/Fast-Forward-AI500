@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { z } from 'zod';
 import { apiFetch } from '../api';
 import { DEFAULT_USERNAME } from '../config';
@@ -62,34 +63,35 @@ export type DashboardGoalInsights = z.infer<typeof goalInsightsSchema>;
 /**
  * Get dashboard data (fast, no LLM)
  * Returns summary, category distribution, alerts, and health score.
+ * Cached per request - multiple calls in the same render will be deduplicated.
  */
-export async function getDashboard(username = DEFAULT_USERNAME): Promise<DashboardData> {
+export const getDashboard = cache(async (username = DEFAULT_USERNAME): Promise<DashboardData> => {
   const result = await apiFetch<unknown>(`/api/dashboard/?username=${username}`, {
     method: 'GET',
   });
 
   const parsed = dashboardResponseSchema.parse(result);
   return parsed.data;
-}
+});
 
 /**
  * Get dashboard insights (LLM-based, may take a few seconds)
  * Returns AI-generated financial insights based on spending patterns.
+ * Cached per request - multiple calls in the same render will be deduplicated.
  */
-export async function getDashboardInsights(
-  username = DEFAULT_USERNAME,
-  language = 'en'
-): Promise<DashboardInsights> {
-  const result = await apiFetch<unknown>(
-    `/api/dashboard/insights?username=${username}&language=${language}`,
-    {
-      method: 'GET',
-    }
-  );
+export const getDashboardInsights = cache(
+  async (username = DEFAULT_USERNAME, language = 'en'): Promise<DashboardInsights> => {
+    const result = await apiFetch<unknown>(
+      `/api/dashboard/insights?username=${username}&language=${language}`,
+      {
+        method: 'GET',
+      }
+    );
 
-  const parsed = dashboardInsightsResponseSchema.parse(result);
-  return parsed.data;
-}
+    const parsed = dashboardInsightsResponseSchema.parse(result);
+    return parsed.data;
+  }
+);
 
 /**
  * Get goal insights (LLM-based, may take a few seconds)
