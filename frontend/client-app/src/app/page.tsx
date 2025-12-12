@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SpendingCategoryRadial } from '@/components/SpendingCategoryRadial';
 import { getDashboard } from '@/lib/services/dashboard';
@@ -5,15 +6,9 @@ import { getUser } from '@/lib/services/users';
 import { getCards } from '@/lib/services/cards';
 import { Badge } from '@/components/ui/badge';
 import { DashboardCards } from './dashboard/dashboard-cards';
+import { AIInsightsCard, AIInsightsCardSkeleton } from './dashboard/ai-insights-card';
 import { ErrorState } from '@/components/ui/error-state';
-import {
-  AlertTriangle,
-  ArrowDownRight,
-  ArrowUpRight,
-  Coins,
-  HeartPulse,
-  Sparkles,
-} from 'lucide-react';
+import { AlertTriangle, ArrowDownRight, ArrowUpRight, Coins, HeartPulse } from 'lucide-react';
 import { getTranslations, getLocale } from 'next-intl/server';
 
 function formatCurrency(amount: number) {
@@ -67,14 +62,7 @@ export default async function DashboardPage() {
     );
   }
 
-  const {
-    summary,
-    category_distribution,
-    previous_month_categories,
-    insights,
-    alerts,
-    health_score,
-  } = data;
+  const { summary, category_distribution, previous_month_categories, alerts, health_score } = data;
 
   const categories = Object.entries(category_distribution ?? {}).sort((a, b) => b[1] - a[1]);
 
@@ -87,7 +75,6 @@ export default async function DashboardPage() {
 
   const palette = makePalette(deltas.length || 1);
 
-  const monthLabel = new Date().toLocaleString(locale, { month: 'long', year: 'numeric' });
   const monthOnly = new Date().toLocaleString(locale, { month: 'long' });
 
   const healthTone = (health_score.color || '').toLowerCase();
@@ -205,7 +192,7 @@ export default async function DashboardPage() {
             <Card className="w-full lg:basis-[40%]">
               <CardHeader className="pb-2 sm:pb-4">
                 <CardTitle className="text-base sm:text-lg">
-                  {t('spendingIn', { month: monthLabel })}
+                  {t('spendingIn')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 sm:space-y-4">
@@ -264,28 +251,9 @@ export default async function DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="flex flex-col bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20 w-full lg:basis-[35%]">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-[var(--primary)]" />
-                  {t('aiInsights')}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {insights.length === 0 ? (
-                  <p className="text-sm text-zinc-500">{t('noInsights')}</p>
-                ) : (
-                  insights.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded-md border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/6 to-accent/10 p-3 text-sm text-foreground"
-                    >
-                      {item}
-                    </div>
-                  ))
-                )}
-              </CardContent>
-            </Card>
+            <Suspense fallback={<AIInsightsCardSkeleton />}>
+              <AIInsightsCard />
+            </Suspense>
 
             <Card className="flex flex-col w-full lg:basis-[25%]">
               <CardHeader className="flex items-center gap-2 pb-2">

@@ -8,27 +8,24 @@ export function GlobalLoader() {
   const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
+    const hideLoader = () => {
+      setIsFading(true);
+      // Use RAF to ensure the fade animation plays before unmounting
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setIsLoading(false));
+      });
+    };
+
     // Check if the page has already loaded (for client-side navigation)
     if (document.readyState === 'complete') {
-      // Small delay to ensure smooth transition
-      const timer = setTimeout(() => {
-        setIsFading(true);
-        setTimeout(() => setIsLoading(false), 100);
-      }, 100);
-      return () => clearTimeout(timer);
+      // Schedule the state update to avoid synchronous setState in effect
+      queueMicrotask(hideLoader);
+      return;
     }
 
     // Listen for the load event
-    const handleLoad = () => {
-      // Small delay to ensure content is painted
-      setTimeout(() => {
-        setIsFading(true);
-        setTimeout(() => setIsLoading(false), 100);
-      }, 100);
-    };
-
-    window.addEventListener('load', handleLoad);
-    return () => window.removeEventListener('load', handleLoad);
+    window.addEventListener('load', hideLoader);
+    return () => window.removeEventListener('load', hideLoader);
   }, []);
 
   // Don't render anything after loading is complete

@@ -33,7 +33,7 @@
     "savingsPotential": "Savings Potential",
     "afterSpendObligations": "After spend & obligations",
     "healthScore": "Health Score",
-    "spendingIn": "Spending in {month}",
+    "spendingIn": "Spending in last 30 days",
     "noCategoryData": "No category data yet.",
     "previousMonthFull": "Previous month",
     "aiInsights": "AI Insights",

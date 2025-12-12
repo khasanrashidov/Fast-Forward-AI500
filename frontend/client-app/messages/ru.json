@@ -33,7 +33,7 @@
     "savingsPotential": "Потенциал сбережений",
     "afterSpendObligations": "После расходов и обязательств",
     "healthScore": "Оценка здоровья",
-    "spendingIn": "Расходы за {month}",
+    "spendingIn": "Расходы за последние 30 дней",
     "noCategoryData": "Нет данных по категориям.",
     "previousMonthFull": "Прошлый месяц",
     "aiInsights": "AI Аналитика",

@@ -3,7 +3,7 @@ import { Inter, Outfit } from 'next/font/google';
 import './globals.css';
 import ClientLayout from '@/components/ClientLayout';
 import { Toaster } from '@/components/ui/sonner';
-import { GlobalLoader } from '@/components/GlobalLoader';
+// import { GlobalLoader } from '@/components/GlobalLoader';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 
@@ -39,7 +39,7 @@ export default async function RootLayout({
         className={`${inter.variable} ${outfit.variable} antialiased bg-white text-gray-900 font-sans`}
       >
         <NextIntlClientProvider messages={messages}>
-          <GlobalLoader />
+          {/* <GlobalLoader /> */}
           <ClientLayout>{children}</ClientLayout>
           <Toaster />
         </NextIntlClientProvider>

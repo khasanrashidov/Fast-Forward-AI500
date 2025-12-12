@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -5,14 +6,15 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getDashboard } from '@/lib/services/dashboard';
 import { getUser } from '@/lib/services/users';
-import { AlertTriangle, ArrowRight, ShieldCheck, ShoppingBag, Sparkles } from 'lucide-react';
+import { InsightsCard, InsightsCardSkeleton } from './insights-card';
+import { AlertTriangle, ArrowRight, ShieldCheck, ShoppingBag } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 export default async function InsightsPage() {
   const t = await getTranslations('insights');
   const [dashboard, user] = await Promise.all([getDashboard(), getUser()]);
-  const { insights, alerts, health_score } = dashboard;
+  const { alerts, health_score } = dashboard;
 
   const healthTone = (health_score.color || '').toLowerCase();
   const healthBadge =
@@ -83,28 +85,9 @@ export default async function InsightsPage() {
         </Card>
 
         {/* AI Insights - 6 cols */}
-        <Card className="md:col-span-6 flex flex-col bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-[var(--primary)]" />
-              {t('aiInsights')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 flex-1">
-            {insights.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t('noInsights')}</p>
-            ) : (
-              insights.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="rounded-md border border-primary/25 bg-white/80 p-3 text-sm text-foreground"
-                >
-                  {item}
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
+        <Suspense fallback={<InsightsCardSkeleton />}>
+          <InsightsCard />
+        </Suspense>
 
         {/* Alerts - 3 cols */}
         <Card className="md:col-span-3 flex flex-col">

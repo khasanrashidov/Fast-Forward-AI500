@@ -58,6 +58,7 @@ const timelineDataPointSchema = z.object({
   p90_pessimistic: z.number(),
 });
 
+// Timeline data (fast, no LLM)
 const goalTimelineSchema = z.object({
   goal: z
     .object({
@@ -81,8 +82,6 @@ const goalTimelineSchema = z.object({
   deterministic_months: z.number().optional(),
   success_probability: z.number().optional(),
   real_monthly_contribution: z.number().optional(),
-  ai_interpretation: z.string().optional(),
-  interpretation: z.string().optional(),
   timeline_data: z.array(timelineDataPointSchema),
 });
 
@@ -90,6 +89,18 @@ const goalTimelineResponseSchema = z.object({
   is_success: z.boolean(),
   message: z.string(),
   data: goalTimelineSchema,
+  errors: z.array(z.string()).optional().nullable(),
+});
+
+// Timeline interpretation (LLM-based, separate endpoint)
+const goalTimelineInterpretationSchema = z.object({
+  interpretation: z.string(),
+});
+
+const goalTimelineInterpretationResponseSchema = z.object({
+  is_success: z.boolean(),
+  message: z.string(),
+  data: goalTimelineInterpretationSchema,
   errors: z.array(z.string()).optional().nullable(),
 });
 
@@ -144,6 +155,7 @@ export type Goal = z.infer<typeof goalSchema>;
 export type CreateGoalBody = z.infer<typeof createGoalBodySchema>;
 export type UpdateGoalBody = z.infer<typeof updateGoalBodySchema>;
 export type GoalTimeline = z.infer<typeof goalTimelineSchema>;
+export type GoalTimelineInterpretation = z.infer<typeof goalTimelineInterpretationSchema>;
 export type GoalRecommendations = z.infer<typeof goalRecommendationsSchema>;
 export type SingleGoal = z.infer<typeof goalSchema>;
 
@@ -180,6 +192,10 @@ export async function createGoal(payload: CreateGoalBody): Promise<Goal> {
   return parsed.data;
 }
 
+/**
+ * Get goal timeline prediction (fast, no LLM)
+ * Uses Monte Carlo simulation to predict when a goal will be reached.
+ */
 export async function getGoalTimeline(
   goalId: string,
   username = DEFAULT_USERNAME
@@ -192,12 +208,37 @@ export async function getGoalTimeline(
   return parsed.data;
 }
 
+/**
+ * Get goal timeline interpretation (LLM-based, may take a few seconds)
+ * Returns AI-generated interpretation of the Monte Carlo simulation results.
+ */
+export async function getGoalTimelineInterpretation(
+  goalId: string,
+  username = DEFAULT_USERNAME,
+  language = 'en'
+): Promise<GoalTimelineInterpretation> {
+  const result = await apiFetch<unknown>(
+    `/api/goals/${goalId}/timeline/interpretation?username=${username}&language=${language}`,
+    {
+      method: 'GET',
+    }
+  );
+
+  const parsed = goalTimelineInterpretationResponseSchema.parse(result);
+  return parsed.data;
+}
+
+/**
+ * Get Agrobank product recommendations (LLM-based, may take a few seconds)
+ * Returns 0-3 relevant Agrobank products to help achieve the goal faster.
+ */
 export async function getGoalRecommendations(
   goalId: string,
-  username = DEFAULT_USERNAME
+  username = DEFAULT_USERNAME,
+  language = 'en'
 ): Promise<GoalRecommendations> {
   const result = await apiFetch<unknown>(
-    `/api/goals/${goalId}/recommendations?username=${username}`,
+    `/api/goals/${goalId}/recommendations?username=${username}&language=${language}`,
     {
       method: 'GET',
     }

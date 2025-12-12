@@ -1,14 +1,17 @@
+import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import { CheckCircle, Lightbulb, Sparkles, TrendingUp } from 'lucide-react';
+import { CheckCircle, Sparkles, TrendingUp } from 'lucide-react';
 import { getTranslations, getLocale } from 'next-intl/server';
 
-import { getGoalById, getGoalRecommendations, getGoalTimeline } from '@/lib/services/goals';
-import { getGoalInsights } from '@/lib/services/dashboard';
+import { getGoalById, getGoalTimeline } from '@/lib/services/goals';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { TimelineChart } from './timeline-chart';
 import { ErrorState } from '@/components/ui/error-state';
+import { GoalInsightsCard, GoalInsightsCardSkeleton } from './goal-insights-card';
+import { TimelineInterpretation, TimelineInterpretationSkeleton } from './timeline-interpretation';
+import { RecommendationsCard, RecommendationsCardSkeleton } from './recommendations-card';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,11 +38,33 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
     );
   }
 
+  // Fetch goal and timeline in parallel (both are fast, no LLM)
   let goal;
+  let timeline = null;
+
   try {
-    goal = await getGoalById(goalId);
+    const [goalResult, timelineResult] = await Promise.allSettled([
+      getGoalById(goalId),
+      getGoalTimeline(goalId),
+    ]);
+
+    if (goalResult.status === 'rejected') {
+      console.error('Failed to load goal:', goalResult.reason);
+      return (
+        <div className="p-4 sm:p-6">
+          <ErrorState title={t('failedToLoad')} description={t('tryAgain')} />
+        </div>
+      );
+    }
+
+    goal = goalResult.value;
+    timeline = timelineResult.status === 'fulfilled' ? timelineResult.value : null;
+
+    if (timelineResult.status === 'rejected') {
+      console.error('Failed to load timeline:', timelineResult.reason);
+    }
   } catch (error) {
-    console.error(error);
+    console.error('Unexpected error:', error);
     return (
       <div className="p-4 sm:p-6">
         <ErrorState title={t('failedToLoad')} description={t('tryAgain')} />
@@ -50,17 +75,6 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
   if (!goal) {
     notFound();
   }
-
-  const [insightsResult, recommendationsResult, timelineResult] = await Promise.allSettled([
-    getGoalInsights(goalId),
-    getGoalRecommendations(goalId),
-    getGoalTimeline(goalId),
-  ]);
-
-  const insights = insightsResult.status === 'fulfilled' ? insightsResult.value : null;
-  const recommendations =
-    recommendationsResult.status === 'fulfilled' ? recommendationsResult.value : null;
-  const timeline = timelineResult.status === 'fulfilled' ? timelineResult.value : null;
 
   const percent = goal.target_amount
     ? Math.min(100, Math.max(0, Math.round((goal.current_amount / goal.target_amount) * 100)))
@@ -192,27 +206,10 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
           </CardContent>
         </Card>
 
-        {/* AI Insights Card */}
-        <Card className="bg-gradient-to-br from-primary/5 via-primary/8 to-accent/10 border-primary/20">
-          <CardHeader className="flex items-center gap-2 pb-3">
-            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-            <CardTitle className="text-base sm:text-lg">{t('aiInsights')}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {insights?.insights?.length ? (
-              insights.insights.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="rounded-md border border-primary/25 bg-gradient-to-r from-primary/10 via-primary/6 to-accent/10 p-2.5 sm:p-3 text-xs sm:text-sm text-foreground"
-                >
-                  {item}
-                </div>
-              ))
-            ) : (
-              <p className="text-xs sm:text-sm text-muted-foreground">{t('noInsights')}</p>
-            )}
-          </CardContent>
-        </Card>
+        {/* AI Insights Card - LLM-based, loads separately */}
+        <Suspense fallback={<GoalInsightsCardSkeleton />}>
+          <GoalInsightsCard goalId={goalId} />
+        </Suspense>
       </div>
 
       {/* Timeline + Recommendations */}
@@ -246,99 +243,17 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
               </div>
             </div>
 
-            {/* AI Interpretation */}
-            {timeline?.ai_interpretation || timeline?.interpretation ? (
-              <div className="rounded border bg-muted/40 p-2 sm:p-3 text-[10px] sm:text-xs text-foreground leading-relaxed">
-                {timeline.ai_interpretation ?? timeline.interpretation}
-              </div>
-            ) : null}
+            {/* AI Interpretation - LLM-based, loads separately */}
+            <Suspense fallback={<TimelineInterpretationSkeleton />}>
+              <TimelineInterpretation goalId={goalId} />
+            </Suspense>
           </CardContent>
         </Card>
 
-        {/* Recommendations Card */}
-        <Card>
-          <CardHeader className="flex items-center gap-1.5 sm:gap-2 pb-2 sm:pb-3 px-3 sm:px-6 pt-3 sm:pt-6">
-            <Lightbulb className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
-            <CardTitle className="text-sm sm:text-lg">
-              <span className="hidden sm:inline">{t('agrobankRecommendations')}</span>
-              <span className="sm:hidden">{t('recommendations')}</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2 sm:space-y-3 px-3 sm:px-6 pb-3 sm:pb-6">
-            {recommendations?.recommendations?.length ? (
-              recommendations.recommendations.map((rec, idx) => (
-                <div
-                  key={idx}
-                  className="rounded border border-border/70 bg-muted/40 p-2.5 sm:p-3 text-xs sm:text-sm space-y-1.5 sm:space-y-2"
-                >
-                  {/* Product name + ID */}
-                  <div className="flex items-start justify-between gap-1.5">
-                    <div className="font-semibold text-foreground text-sm sm:text-base leading-tight">
-                      {rec.product_name}
-                    </div>
-                    {rec.product_id ? (
-                      <span className="text-[10px] sm:text-[11px] text-muted-foreground shrink-0">
-                        {rec.product_id}
-                      </span>
-                    ) : null}
-                  </div>
-
-                  {/* Category/Type badges */}
-                  {(rec.category || rec.type) && (
-                    <div className="flex flex-wrap gap-1 text-[10px] sm:text-xs text-muted-foreground">
-                      {rec.category ? (
-                        <span className="rounded border border-border/60 px-1.5 py-0.5">
-                          {rec.category}
-                        </span>
-                      ) : null}
-                      {rec.type ? (
-                        <span className="rounded border border-border/60 px-1.5 py-0.5">
-                          {rec.type}
-                        </span>
-                      ) : null}
-                    </div>
-                  )}
-
-                  {/* Description - hidden on mobile, shown on desktop */}
-                  {rec.description ? (
-                    <div className="hidden sm:block text-foreground text-sm leading-relaxed">
-                      {rec.description}
-                    </div>
-                  ) : null}
-
-                  {/* Reason - truncated on mobile */}
-                  {rec.reason ? (
-                    <div className="text-muted-foreground text-xs sm:text-xs line-clamp-2 sm:line-clamp-none">
-                      <span className="font-semibold text-primary">{t('why')}</span> {rec.reason}
-                    </div>
-                  ) : null}
-
-                  {/* Benefit - hidden on mobile */}
-                  {rec.benefit ? (
-                    <div className="hidden sm:block text-muted-foreground text-xs">
-                      <span className="font-semibold text-primary">{t('benefit')}</span>{' '}
-                      {rec.benefit}
-                    </div>
-                  ) : null}
-
-                  {/* Link */}
-                  {rec.link ? (
-                    <a
-                      href={rec.link}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-block text-primary text-xs sm:text-xs underline underline-offset-2"
-                    >
-                      {t('learnMore')}
-                    </a>
-                  ) : null}
-                </div>
-              ))
-            ) : (
-              <p className="text-xs sm:text-sm text-muted-foreground">{t('noRecommendations')}</p>
-            )}
-          </CardContent>
-        </Card>
+        {/* Recommendations Card - LLM-based, loads separately */}
+        <Suspense fallback={<RecommendationsCardSkeleton />}>
+          <RecommendationsCard goalId={goalId} />
+        </Suspense>
       </div>
     </div>
   );
