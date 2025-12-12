@@ -233,6 +233,12 @@
     "aiShopDescription": "AI tavsiyalari bilan mukammal mahsulotni toping. Agrobank Opencard orqali bo'lib to'lash variantlarini oling.",
     "tryAIShop": "AI Do'konni sinab ko'ring"
   },
+  "notFound": {
+    "title": "Sahifa topilmadi",
+    "description": "Kechirasiz, siz izlayotgan sahifani topa olmadik. U ko'chirilgan yoki mavjud emas bo'lishi mumkin.",
+    "backHome": "Bosh sahifaga",
+    "code": "404"
+  },
   "financialTips": {
     "title": "Moliyaviy maslahatlar",
     "subtitle": "Moliyangizni mustahkamlash uchun tezkor va amaliy ko'rsatmalar. Dialogda rasmlarni ko'ring.",

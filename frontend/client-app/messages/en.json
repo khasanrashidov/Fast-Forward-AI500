@@ -233,6 +233,12 @@
     "aiShopDescription": "Find the perfect product with AI-powered recommendations. Get installment options via Opencard by Agrobank.",
     "tryAIShop": "Try AI Shop"
   },
+  "notFound": {
+    "title": "Page not found",
+    "description": "Sorry, we couldn't find the page you're looking for. It may have been moved or doesn't exist.",
+    "backHome": "Back to Home",
+    "code": "404"
+  },
   "financialTips": {
     "title": "Financial Tips",
     "subtitle": "Quick, actionable guidance to strengthen your finances. Swipe through illustrations in the dialog.",

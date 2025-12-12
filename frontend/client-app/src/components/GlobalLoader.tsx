@@ -13,7 +13,7 @@ export function GlobalLoader() {
       // Small delay to ensure smooth transition
       const timer = setTimeout(() => {
         setIsFading(true);
-        setTimeout(() => setIsLoading(false), 300);
+        setTimeout(() => setIsLoading(false), 100);
       }, 100);
       return () => clearTimeout(timer);
     }
@@ -23,7 +23,7 @@ export function GlobalLoader() {
       // Small delay to ensure content is painted
       setTimeout(() => {
         setIsFading(true);
-        setTimeout(() => setIsLoading(false), 300);
+        setTimeout(() => setIsLoading(false), 100);
       }, 100);
     };
 

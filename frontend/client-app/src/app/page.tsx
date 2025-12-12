@@ -5,6 +5,7 @@ import { getUser } from '@/lib/services/users';
 import { getCards } from '@/lib/services/cards';
 import { Badge } from '@/components/ui/badge';
 import { DashboardCards } from './dashboard/dashboard-cards';
+import { ErrorState } from '@/components/ui/error-state';
 import {
   AlertTriangle,
   ArrowDownRight,
@@ -59,13 +60,9 @@ export default async function DashboardPage() {
     [data, user, cards] = await Promise.all([getDashboard(), getUser(), getCards()]);
   } catch {
     return (
-      <div className="p-6 space-y-4">
-        <h1 className="text-3xl font-bold tracking-tight">{t('welcome')}</h1>
-        <Card>
-          <CardContent className="py-6">
-            <p className="text-sm text-rose-600">{t('failedToLoad')}</p>
-          </CardContent>
-        </Card>
+      <div className="p-4 sm:p-6 space-y-4">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{t('welcome')}</h1>
+        <ErrorState title={t('failedToLoad')} />
       </div>
     );
   }

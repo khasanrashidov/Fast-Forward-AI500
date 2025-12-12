@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { CheckCircle, Info, Lightbulb, Sparkles, TrendingUp } from 'lucide-react';
+import { CheckCircle, Lightbulb, Sparkles, TrendingUp } from 'lucide-react';
 import { getTranslations, getLocale } from 'next-intl/server';
 
 import { getGoalById, getGoalRecommendations, getGoalTimeline } from '@/lib/services/goals';
@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { TimelineChart } from './timeline-chart';
+import { ErrorState } from '@/components/ui/error-state';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,15 +30,7 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
   if (!goalId || goalId === 'undefined') {
     return (
       <div className="p-4 sm:p-6">
-        <Card className="border-destructive/20">
-          <CardHeader className="flex items-center gap-2 text-destructive">
-            <Info className="h-4 w-4" />
-            <CardTitle>{t('goalNotFound')}</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">
-            {t('goalNotFoundDescription')}
-          </CardContent>
-        </Card>
+        <ErrorState title={t('goalNotFound')} description={t('goalNotFoundDescription')} />
       </div>
     );
   }
@@ -49,13 +42,7 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
     console.error(error);
     return (
       <div className="p-4 sm:p-6">
-        <Card className="border-destructive/20">
-          <CardHeader className="flex items-center gap-2 text-destructive">
-            <Info className="h-4 w-4" />
-            <CardTitle>{t('failedToLoad')}</CardTitle>
-          </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">{t('tryAgain')}</CardContent>
-        </Card>
+        <ErrorState title={t('failedToLoad')} description={t('tryAgain')} />
       </div>
     );
   }
