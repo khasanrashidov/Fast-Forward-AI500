@@ -221,7 +221,7 @@ export default async function GoalDetailPage({ params }: { params: Promise<{ goa
           </CardHeader>
           <CardContent className="space-y-2 sm:space-y-3 text-[11px] sm:text-sm text-muted-foreground px-3 sm:px-6 pb-3 sm:pb-6">
             {/* Stats row - compact on mobile */}
-            <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[10px] sm:text-xs">
+            <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-[14px] sm:text-[14px]">
               {deterministicMonths !== undefined ? (
                 <div className="flex items-center gap-1">
                   <span>{t('estimated')}</span>

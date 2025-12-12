@@ -83,14 +83,14 @@ export async function RecommendationsCard({ goalId }: Props) {
 
               {/* Reason - truncated on mobile */}
               {rec.reason ? (
-                <div className="text-muted-foreground line-clamp-2 sm:line-clamp-none">
+                <div className="text-muted-foreground text-base line-clamp-2 sm:line-clamp-none">
                   <span className="font-semibold text-primary">{t('why')}</span> {rec.reason}
                 </div>
               ) : null}
 
               {/* Benefit - hidden on mobile */}
               {rec.benefit ? (
-                <div className="hidden sm:block text-muted-foreground text-xs">
+                <div className="hidden sm:block text-muted-foreground text-base">
                   <span className="font-semibold text-primary">{t('benefit')}</span> {rec.benefit}
                 </div>
               ) : null}
