@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { ArrowUp, DollarSign, ExternalLink, ShoppingBag, Sparkles } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -29,6 +29,7 @@ const samplePrompts = [
 
 export default function AIShopPage() {
   const t = useTranslations('aiShop');
+  const locale = useLocale();
   const [query, setQuery] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isPending, startTransition] = useTransition();
@@ -64,7 +65,7 @@ export default function AIShopPage() {
 
     startTransition(async () => {
       try {
-        const data = await searchShop({ query: userQuery });
+        const data = await searchShop({ query: userQuery }, locale);
         setMessages((prev) => [...prev, { role: 'assistant', result: data }]);
       } catch (err) {
         console.error(err);

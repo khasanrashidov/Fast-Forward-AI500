@@ -44,10 +44,17 @@ export type ShopProduct = z.infer<typeof productSchema>;
 export type ShopSearchResult = z.infer<typeof shopSearchDataSchema>;
 export type ShopSearchBody = z.infer<typeof shopSearchBodySchema>;
 
-export async function searchShop(payload: ShopSearchBody): Promise<ShopSearchResult> {
+/**
+ * Search products using natural language.
+ * Returns relevant items, AI insights, and installment plans.
+ */
+export async function searchShop(
+  payload: ShopSearchBody,
+  language = 'en'
+): Promise<ShopSearchResult> {
   const body = shopSearchBodySchema.parse(payload);
 
-  const result = await apiFetch<unknown>('/api/shop/search', {
+  const result = await apiFetch<unknown>(`/api/shop/search?language=${language}`, {
     method: 'POST',
     body: JSON.stringify(body),
   });
