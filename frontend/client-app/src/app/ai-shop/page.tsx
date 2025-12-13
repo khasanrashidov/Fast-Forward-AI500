@@ -228,44 +228,46 @@ export default function AIShopPage() {
                                 {formatter(product.sale_price)}
                               </span>
                             </div>
-                            <TooltipProvider>
-                              <div className="flex items-center gap-1 flex-wrap">
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Image
-                                      src="https://mini-io-api.texnomart.uz/order/order/loan-system/14/7fa17d02-916a-4b3f-bc93-a58f93dc9bbb.png"
-                                      alt="Opencard"
-                                      width={20}
-                                      height={20}
-                                      className="shrink-0 cursor-help"
-                                      unoptimized
-                                    />
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>Opencard Muddatli to&apos;lov</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                                <Badge
-                                  variant="outline"
-                                  className="text-[11px] border-primary/30 text-[var(--primary)] shrink-0"
-                                >
-                                  {product.opencard_month_text}
-                                </Badge>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <span className="text-foreground font-semibold cursor-help whitespace-nowrap">
-                                      {formatter(product.opencard_monthly_payment)}
-                                    </span>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>
-                                      {t('total')} {formatter(product.opencard_total_price)}
-                                    </p>
-                                  </TooltipContent>
-                                </Tooltip>
-                                <span className="text-xs shrink-0">{t('perMonth')}</span>
-                              </div>
-                            </TooltipProvider>
+                            {!product.product_url.includes('chakana') && (
+                              <TooltipProvider>
+                                <div className="flex items-center gap-1 flex-wrap">
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Image
+                                        src="https://mini-io-api.texnomart.uz/order/order/loan-system/14/7fa17d02-916a-4b3f-bc93-a58f93dc9bbb.png"
+                                        alt="Opencard"
+                                        width={20}
+                                        height={20}
+                                        className="shrink-0 cursor-help"
+                                        unoptimized
+                                      />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>Opencard Muddatli to&apos;lov</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                  <Badge
+                                    variant="outline"
+                                    className="text-[11px] border-primary/30 text-[var(--primary)] shrink-0"
+                                  >
+                                    {product.opencard_month_text}
+                                  </Badge>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <span className="text-foreground font-semibold cursor-help whitespace-nowrap">
+                                        {formatter(product.opencard_monthly_payment)}
+                                      </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>
+                                        {t('total')} {formatter(product.opencard_total_price)}
+                                      </p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                  <span className="text-xs shrink-0">{t('perMonth')}</span>
+                                </div>
+                              </TooltipProvider>
+                            )}
                             <a
                               href={product.product_url}
                               target="_blank"
