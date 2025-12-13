@@ -12,6 +12,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TipsDialog, type TipSlide } from './tips-dialog';
+import { PersonalizedTips } from './personalized-tips';
 import { getTranslations } from 'next-intl/server';
 
 type Tip = {
@@ -139,6 +140,9 @@ export default async function FinancialTipsPage() {
         />
       </div>
 
+      <PersonalizedTips />
+
+      <h2 className="text-2xl font-semibold tracking-tight text-[var(--primary)]">All Tips</h2>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {tips.map((tip) => {
           const Icon = tip.icon;
