@@ -228,7 +228,21 @@ export default function AIShopPage() {
                                 {formatter(product.sale_price)}
                               </span>
                             </div>
-                            {!product.product_url.includes('chakana') && (
+                            {product.product_url.includes('chakana') ? (
+                              <div className="flex items-center gap-1 h-5">
+                                <Image
+                                  src="/chakana logo.png"
+                                  alt="Chakana"
+                                  width={80}
+                                  height={20}
+                                  className="shrink-0 object-contain h-full w-auto"
+                                  unoptimized
+                                />
+                                <span className="text-xs text-muted-foreground">
+                                  Marketpleys Chakana
+                                </span>
+                              </div>
+                            ) : (
                               <TooltipProvider>
                                 <div className="flex items-center gap-1 flex-wrap">
                                   <Tooltip>
