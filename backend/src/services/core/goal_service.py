@@ -348,13 +348,15 @@ class GoalService:
                 p90_contribution = real_contribution * 0.85  # 15% worse
                 p90_amount = goal.current_amount + (p90_contribution * month)
 
-                timeline_data.append({
-                    "month": month,
-                    "deterministic": round(deterministic_amount, 2),
-                    "p10_optimistic": round(p10_amount, 2),
-                    "p50_median": round(p50_amount, 2),
-                    "p90_pessimistic": round(p90_amount, 2),
-                })
+                timeline_data.append(
+                    {
+                        "month": month,
+                        "deterministic": round(deterministic_amount, 2),
+                        "p10_optimistic": round(p10_amount, 2),
+                        "p50_median": round(p50_amount, 2),
+                        "p90_pessimistic": round(p90_amount, 2),
+                    }
+                )
 
             # Build response with Monte Carlo results (no LLM interpretation).
             prediction = {
@@ -384,7 +386,9 @@ class GoalService:
             )
 
     @staticmethod
-    def get_timeline_interpretation(goal_id: str, username: str, language: str = "en") -> BaseResponse:
+    def get_timeline_interpretation(
+        goal_id: str, username: str, language: str = "en"
+    ) -> BaseResponse:
         """
         Get AI-generated interpretation for goal timeline (LLM-based, separate from main timeline).
 
@@ -472,7 +476,9 @@ class GoalService:
                 accumulated = goal.current_amount
                 max_months = 360
 
-                while accumulated < goal.target_amount and simulated_months < max_months:
+                while (
+                    accumulated < goal.target_amount and simulated_months < max_months
+                ):
                     sim_income = income * np.random.normal(1.0, 0.05)
                     sim_spending = monthly_spending * np.random.normal(1.0, 0.15)
                     unexpected = 0
@@ -508,10 +514,12 @@ class GoalService:
 
             for month in range(timeline_months + 1):
                 deterministic_amount = goal.current_amount + (real_contribution * month)
-                timeline_data.append({
-                    "month": month,
-                    "amount": round(deterministic_amount, 2),
-                })
+                timeline_data.append(
+                    {
+                        "month": month,
+                        "amount": round(deterministic_amount, 2),
+                    }
+                )
 
             # Prepare data for AI interpretation.
             goal_data = {
@@ -606,7 +614,9 @@ class GoalService:
             )
 
     @staticmethod
-    def get_product_recommendations(goal_id: str, username: str, language: str = "en") -> BaseResponse:
+    def get_product_recommendations(
+        goal_id: str, username: str, language: str = "en"
+    ) -> BaseResponse:
         """Get Agrobank product recommendations for a specific goal.
 
         Args:
@@ -642,7 +652,11 @@ class GoalService:
                 )
 
             # Load Agrobank products
-            products_path = Path(__file__).parent.parent.parent / "prompts" / "agro_bank_services.json"
+            products_path = (
+                Path(__file__).parent.parent.parent
+                / "prompts"
+                / "agro_bank_services.json"
+            )
             with open(products_path, "r", encoding="utf-8") as f:
                 products = json.load(f)
 
@@ -673,7 +687,9 @@ class GoalService:
                 .all()
             )
 
-            categories = {cat: amount for cat, amount in category_stats if cat != "Income"}
+            categories = {
+                cat: amount for cat, amount in category_stats if cat != "Income"
+            }
 
             # Prepare goal data
             remaining_amount = max(0, goal.target_amount - goal.current_amount)
@@ -692,7 +708,9 @@ class GoalService:
 
             income = user.salary or 0
             monthly_spending = total_spending
-            current_monthly_savings = max(0, income - monthly_spending) if income > 0 else 0
+            current_monthly_savings = (
+                max(0, income - monthly_spending) if income > 0 else 0
+            )
             savings_gap = required_monthly_savings - current_monthly_savings
 
             goal_data = {
@@ -740,4 +758,3 @@ class GoalService:
                 message="Failed to generate product recommendations.",
                 errors=[str(e)],
             )
-

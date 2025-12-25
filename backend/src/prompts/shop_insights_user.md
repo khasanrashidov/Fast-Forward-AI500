@@ -6,4 +6,4 @@ Found Products:
 Calculated Installments (approx):
 {installments}
 
-Provide your insight recommending the Open card.
+Provide your insight. REMEMBER: You MUST include the Open card recommendation in {language}.

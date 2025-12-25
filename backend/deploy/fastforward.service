@@ -1,0 +1,17 @@
+[Unit]
+Description=Fast Forward Flask API
+After=network.target
+
+[Service]
+User=khusanrashidov
+Group=www-data
+WorkingDirectory=/home/khusanrashidov/Fast-Forward/src
+Environment="PATH=/home/khusanrashidov/Fast-Forward/.venv/bin"
+EnvironmentFile=/home/khusanrashidov/Fast-Forward/.env
+ExecStart=/home/khusanrashidov/Fast-Forward/.venv/bin/gunicorn --workers 4 --bind 127.0.0.1:5000 --timeout 120 --access-logfile /var/log/gunicorn/access.log --error-logfile /var/log/gunicorn/error.log app:app
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+

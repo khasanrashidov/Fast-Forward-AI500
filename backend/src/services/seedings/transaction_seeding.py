@@ -7,8 +7,7 @@ from configurations.logging_config import get_logger
 from entities.card import Card
 from entities.transaction import Transaction
 from entities.user import User
-from enums import (TransactionDirectionEnum, TransactionStatusEnum,
-                   TransactionTypeEnum)
+from enums import TransactionDirectionEnum, TransactionStatusEnum, TransactionTypeEnum
 
 logger = get_logger(__name__)
 
@@ -54,7 +53,14 @@ class TransactionSeedingService:
 
             # Helper to create a transaction.
             def create_txn(
-                card, amount, merchant, category, direction, type_, date_offset_days, status=TransactionStatusEnum.APPROVED
+                card,
+                amount,
+                merchant,
+                category,
+                direction,
+                type_,
+                date_offset_days,
+                status=TransactionStatusEnum.APPROVED,
             ):
                 date = datetime.utcnow() - timedelta(days=date_offset_days)
                 return Transaction(
@@ -137,7 +143,13 @@ class TransactionSeedingService:
                 if uzcard:
                     food_chance = 0.4 if is_weekend else 0.1
                     if random.random() < food_chance:
-                        restaurants = ["Rayhon", "Osh Markazi", "Evos", "Meros", "Caffè Nero"]
+                        restaurants = [
+                            "Rayhon",
+                            "Osh Markazi",
+                            "Evos",
+                            "Meros",
+                            "Caffè Nero",
+                        ]
                         transactions.append(
                             create_txn(
                                 uzcard,
@@ -284,8 +296,9 @@ class TransactionSeedingService:
                         )
                     )
 
-            # Add one more salary for current month (December) since we're early in the month
-            # Salary for November 25 (most recent) - this ensures December has income
+            # Add December salary (25th of December is in the future, so use current month calculation)
+            # For December 12, 2025: we need a recent salary transaction
+            # Add November 25 salary (17 days ago from Dec 12)
             if uzcard:
                 transactions.append(
                     create_txn(
@@ -295,7 +308,7 @@ class TransactionSeedingService:
                         "Income",
                         TransactionDirectionEnum.INCOMING,
                         TransactionTypeEnum.P2P_TRANSFER,
-                        11,  # Nov 25 was 11 days ago from Dec 6
+                        18,  # Nov 25 was 18 days ago from Dec 12
                         TransactionStatusEnum.APPROVED,
                     )
                 )

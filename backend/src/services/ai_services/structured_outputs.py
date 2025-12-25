@@ -55,7 +55,7 @@ class GoalBasedInsights(BaseModel):
 
 class TimelineDataPoint(BaseModel):
     """Single data point for timeline visualization with multiple scenarios."""
-    
+
     month: int = Field(description="Month number from start (0-indexed)")
     deterministic: float = Field(description="Deterministic projection amount")
     p10_optimistic: float = Field(description="P10 optimistic scenario amount")
@@ -97,12 +97,14 @@ class ProductRecommendation(BaseModel):
 
     product_id: str = Field(description="Product ID from the services list")
     product_name: str = Field(description="Product name")
-    reason: str = Field(description="Very short explanation why recommended. Maximum 20 words. MUST be in the language specified in the system prompt.")
+    reason: str = Field(
+        description="Very short explanation why recommended. Maximum 20 words. MUST be in the language specified in the system prompt."
+    )
 
 
 class AgrobankProductRecommendations(BaseModel):
     """Model for Agrobank product recommendations."""
-    
+
     recommendations: List[ProductRecommendation] = Field(
         description="List of 0-3 relevant product recommendations. Only recommend when truly beneficial."
     )

@@ -5,9 +5,15 @@ from typing import Any, Dict, List, Optional
 from langchain_core.prompts import ChatPromptTemplate
 
 from configurations.logging_config import get_logger
-from models.shop_models import (FilteredProductList, Product, SearchResult,
-                                ShopInsight, ShopSearchParams)
+from models.shop_models import (
+    FilteredProductList,
+    Product,
+    SearchResult,
+    ShopInsight,
+    ShopSearchParams,
+)
 from services.ai_services.llm_client import LLMClient
+from services.shop_services.chakana_client import ChakanaClient
 from services.shop_services.texnomart_client import TexnomartClient
 
 logger = get_logger(__name__)
@@ -31,9 +37,10 @@ class ShopService:
 
     def __init__(self):
         self.texnomart_client = TexnomartClient()
+        self.chakana_client = ChakanaClient()
         self.llm_client = LLMClient()
 
-    def search_products(self, user_query: str) -> Dict[str, Any]:
+    def search_products(self, user_query: str, language: str = "en") -> Dict[str, Any]:
         """
         Orchestrate the search process:
         1. Extract params (query, limit, sort) via AI.
@@ -45,7 +52,7 @@ class ShopService:
         params = self._extract_search_params(user_query)
         logger.info(f"Extracted params: {params}")
 
-        # 2. Search API
+        # 2. Search Texnomart API
         search_result = self.texnomart_client.search(
             query=params.query, limit=params.limit
         )
@@ -55,42 +62,59 @@ class ShopService:
             or not search_result.data
             or not search_result.data.products
         ):
-            return {
-                "user_query": user_query,
-                "translated_query": params.query,
-                "products": [],
-                "insight": "Sorry, I couldn't find any products matching your request.",
-            }
+            # If Texnomart fails, try Chakana only
+            chakana_products = self.chakana_client.search(query=params.query, limit=5)
+            for p in chakana_products:
+                p.product_url = f"https://chakana.uz/product/{p.id}"
+            
+            if not chakana_products:
+                return {
+                    "user_query": user_query,
+                    "translated_query": params.query,
+                    "products": [],
+                    "insight": "Sorry, I couldn't find any products matching your request.",
+                }
+            filtered_products = chakana_products
+        else:
+            all_products = search_result.data.products
 
-        all_products = search_result.data.products
+            # 3. Filter results
+            valid_ids = self._filter_results(user_query, all_products)
+            filtered_products = [p for p in all_products if p.id in valid_ids]
 
-        # 3. Filter results
-        valid_ids = self._filter_results(user_query, all_products)
-        filtered_products = [p for p in all_products if p.id in valid_ids]
+            # If filtering removed everything (maybe too strict?), fall back to top 5 original
+            if not filtered_products and all_products:
+                logger.warning(
+                    "Filtering removed all products. Falling back to original results."
+                )
+                filtered_products = all_products[:5]
 
-        # If filtering removed everything (maybe too strict?), fall back to top 5 original
-        if not filtered_products and all_products:
-            logger.warning(
-                "Filtering removed all products. Falling back to original results."
-            )
-            filtered_products = all_products[:5]
+            # Calculate installments for all filtered Texnomart products
+            for p in filtered_products:
+                # Populate URL
+                p.product_url = f"https://texnomart.uz/product/detail/{p.id}"
 
-        # Calculate installments for all filtered products
-        # Calculate installments for all filtered products
-        for p in filtered_products:
-            # Populate URL
-            p.product_url = f"https://texnomart.uz/product/detail/{p.id}"
+                # Calculate Opencard (12 months, 1.45 coefficient)
+                if p.sale_price > 0:
+                    total = math.ceil((p.sale_price * 1.45) / 1000) * 1000
+                    monthly = math.ceil(total / 12)
+                    p.opencard_total_price = int(total)
+                    p.opencard_monthly_payment = int(monthly)
+                    p.opencard_month_text = "12 months"
 
-            # Calculate Opencard (12 months, 1.45 coefficient)
-            if p.sale_price > 0:
-                total = math.ceil((p.sale_price * 1.45) / 1000) * 1000
-                monthly = math.ceil(total / 12)
-                p.opencard_total_price = int(total)
-                p.opencard_monthly_payment = int(monthly)
-                p.opencard_month_text = "12 months"
+            # 3.5 Fetch Chakana results (top 5, no validation after fetch)
+            chakana_products = self.chakana_client.search(query=params.query, limit=5)
+            
+            # Set URL for Chakana products
+            for p in chakana_products:
+                p.product_url = f"https://chakana.uz/product/{p.id}"
+            
+            # Append Chakana products to filtered Texnomart products
+            filtered_products.extend(chakana_products)
+            logger.info(f"Added {len(chakana_products)} Chakana products to results")
 
         # 4. Generate Insight
-        insight = self._generate_insight(user_query, filtered_products)
+        insight = self._generate_insight(user_query, filtered_products, language)
 
         # 5. Format Response using ProductResponse
         # Note: We manually map or use dict comprehension to match the specific subset requested
@@ -119,7 +143,7 @@ class ShopService:
             "translated_query": params.query,
             "products": final_products,
             "insight": insight,
-            "total_found": len(all_products),
+            "total_found": len(filtered_products),
             "shown": len(filtered_products),
         }
 
@@ -176,7 +200,7 @@ class ShopService:
             # Return all IDs if fail
             return [p.id for p in products]
 
-    def _generate_insight(self, user_query: str, products: List[Product]) -> str:
+    def _generate_insight(self, user_query: str, products: List[Product], language: str) -> str:
         """Generate shopping insight."""
         try:
             if not products:
@@ -212,6 +236,7 @@ class ShopService:
                     "query": user_query,
                     "products": product_str,
                     "installments": installments_str,
+                    "language": language,
                 }
             )
             return response.insight_text

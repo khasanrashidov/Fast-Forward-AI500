@@ -1,5 +1,7 @@
 """Manual seeding script to populate database with test data."""
+
 from dotenv import load_dotenv
+
 from app import app
 from configurations.logging_config import get_logger
 from services.seedings.seeding_service import SeedingService

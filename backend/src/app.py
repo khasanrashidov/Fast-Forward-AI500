@@ -55,12 +55,6 @@ def hello_world():
         "version": "1.0.0",
     }
 
-
-@app.route("/health", methods=["GET"])
-def health_check():
-    return {"status": "healthy", "message": "API is running smoothly!"}
-
-
 # Seed default data on startup (skip during flask db commands).
 # This runs when the app is loaded, but we check if it's a migration command.
 if not any(arg in sys.argv for arg in ["db", "migrate", "upgrade", "downgrade"]):

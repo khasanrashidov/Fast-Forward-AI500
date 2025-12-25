@@ -8,12 +8,14 @@ from langchain_openai import ChatOpenAI
 from configurations.logging_config import get_logger
 from enums.transaction_category_enum import TransactionCategoryEnum
 from services.ai_services.llm_client import LLMClient
-from services.ai_services.structured_outputs import (FinancialInsights,
-                                                     GoalBasedInsights,
-                                                     GoalTimelinePrediction,
-                                                     SmartRecommendations,
-                                                     TransactionCategorization,
-                                                     AgrobankProductRecommendations)
+from services.ai_services.structured_outputs import (
+    AgrobankProductRecommendations,
+    FinancialInsights,
+    GoalBasedInsights,
+    GoalTimelinePrediction,
+    SmartRecommendations,
+    TransactionCategorization,
+)
 
 logger = get_logger(__name__)
 
@@ -236,7 +238,10 @@ class AIService:
 
     @staticmethod
     def generate_recommendations(
-        user_profile: Dict, spending_summary: Dict, goals: List[Dict], language: str = "en"
+        user_profile: Dict,
+        spending_summary: Dict,
+        goals: List[Dict],
+        language: str = "en",
     ) -> List[str]:
         """Generate smart recommendations based on user data and goals using LLM
 
@@ -425,7 +430,9 @@ class AIService:
         return {"score": final_score, "status": status, "color": color}
 
     @staticmethod
-    def generate_goal_insights(goal_data: Dict, spending_data: Dict, language: str = "en") -> Dict:
+    def generate_goal_insights(
+        goal_data: Dict, spending_data: Dict, language: str = "en"
+    ) -> Dict:
         """Generate goal-specific insights using LLM.
 
         Args:
@@ -560,7 +567,9 @@ class AIService:
                 }
             )
 
-            logger.info(f"Successfully generated goal timeline prediction via LLM in {language}.")
+            logger.info(
+                f"Successfully generated goal timeline prediction via LLM in {language}."
+            )
 
             return {
                 "deterministic_months": response.deterministic_months,
@@ -612,7 +621,9 @@ class AIService:
             language: Language code ('en', 'uz', 'ru'). Defaults to 'en'.
         """
         try:
-            logger.info(f"Generating Agrobank product recommendations via LLM in {language}.")
+            logger.info(
+                f"Generating Agrobank product recommendations via LLM in {language}."
+            )
 
             llm_client = _get_llm_client()
             structured_llm = llm_client.llm.with_structured_output(

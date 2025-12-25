@@ -813,6 +813,8 @@ language (string) - optional: "en", "uz", "ru" (default: "en")</pre>
                 </div>
                 <div class="desc"><strong>AI Product Search</strong></div>
                 <p>Search products using natural language. Returns relevant items, AI insights, and installment plans.</p>
+                <p class="section-title">Query Parameters:</p>
+                <pre>language (string) - optional: "en", "uz", "ru" (default: "en")</pre>
                 <p class="section-title">Request Body:</p>
                 <pre>{ "query": "I need to buy new galaxy s25 ultra" }</pre>
                 <p class="section-title">Response (200 OK):</p>

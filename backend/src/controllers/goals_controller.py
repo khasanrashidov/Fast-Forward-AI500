@@ -151,7 +151,9 @@ def get_timeline_interpretation(goal_id):
         return jsonify({"is_success": False, "message": "username is required"}), 400
 
     language = _get_language_from_request()
-    logger.info(f"Getting timeline interpretation for goal {goal_id}, user: {username}, language: {language}")
+    logger.info(
+        f"Getting timeline interpretation for goal {goal_id}, user: {username}, language: {language}"
+    )
     response = GoalService.get_timeline_interpretation(goal_id, username, language)
     return jsonify(response.dict()), 200 if response.is_success else 500
 
@@ -173,7 +175,9 @@ def get_product_recommendations(goal_id):
         return jsonify({"is_success": False, "message": "username is required"}), 400
 
     language = _get_language_from_request()
-    logger.info(f"Getting product recommendations for goal {goal_id}, user: {username}, language: {language}")
+    logger.info(
+        f"Getting product recommendations for goal {goal_id}, user: {username}, language: {language}"
+    )
     response = GoalService.get_product_recommendations(goal_id, username, language)
     return jsonify(response.dict()), 200 if response.is_success else 500
 
@@ -189,4 +193,3 @@ def get_goal_by_id(goal_id):
     logger.info(f"Getting goal {goal_id} for user: {username}")
     response = GoalService.get_goal_by_id(goal_id, username)
     return jsonify(response.dict()), 200 if response.is_success else 500
-

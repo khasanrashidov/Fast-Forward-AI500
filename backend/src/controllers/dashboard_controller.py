@@ -75,7 +75,9 @@ def get_dashboard_insights():
         return jsonify({"is_success": False, "message": "username is required"}), 400
 
     language = _get_language_from_request()
-    logger.info(f"Getting dashboard insights for user: {username} in language: {language}")
+    logger.info(
+        f"Getting dashboard insights for user: {username} in language: {language}"
+    )
     response = DashboardService.get_dashboard_insights(username, language)
     return jsonify(response.dict()), 200 if response.is_success else 500
 

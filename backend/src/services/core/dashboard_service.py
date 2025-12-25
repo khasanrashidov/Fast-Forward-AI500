@@ -81,7 +81,10 @@ class DashboardService:
                     .filter(Transaction.user_id == user_id)
                     .filter(Transaction.category == category)
                     .filter(Transaction.date >= week_start)
-                    .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                    .filter(
+                        Transaction.transaction_direction
+                        == TransactionDirectionEnum.OUTGOING
+                    )
                     .scalar()
                     or 0
                 )
@@ -93,7 +96,10 @@ class DashboardService:
                     .filter(Transaction.category == category)
                     .filter(Transaction.date >= two_weeks_ago)
                     .filter(Transaction.date < week_start)
-                    .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                    .filter(
+                        Transaction.transaction_direction
+                        == TransactionDirectionEnum.OUTGOING
+                    )
                     .scalar()
                     or 0
                 )
@@ -162,7 +168,10 @@ class DashboardService:
                 db.session.query(func.sum(Transaction.amount))
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= current_month_start)
-                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .filter(
+                    Transaction.transaction_direction
+                    == TransactionDirectionEnum.OUTGOING
+                )
                 .scalar()
                 or 0
             )
@@ -172,11 +181,16 @@ class DashboardService:
                 db.session.query(Transaction.category, func.sum(Transaction.amount))
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= current_month_start)
-                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .filter(
+                    Transaction.transaction_direction
+                    == TransactionDirectionEnum.OUTGOING
+                )
                 .group_by(Transaction.category)
                 .all()
             )
-            current_category_breakdown = {cat: amount for cat, amount in current_category_stats if cat != "Income"}
+            current_category_breakdown = {
+                cat: amount for cat, amount in current_category_stats if cat != "Income"
+            }
 
             # 5. Calculate previous month spending (OUTGOING only).
             previous_month_spending = (
@@ -184,7 +198,10 @@ class DashboardService:
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= previous_month_start)
                 .filter(Transaction.date <= previous_month_end)
-                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .filter(
+                    Transaction.transaction_direction
+                    == TransactionDirectionEnum.OUTGOING
+                )
                 .scalar()
                 or 0
             )
@@ -195,11 +212,18 @@ class DashboardService:
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= previous_month_start)
                 .filter(Transaction.date <= previous_month_end)
-                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .filter(
+                    Transaction.transaction_direction
+                    == TransactionDirectionEnum.OUTGOING
+                )
                 .group_by(Transaction.category)
                 .all()
             )
-            previous_category_breakdown = {cat: amount for cat, amount in previous_category_stats if cat != "Income"}
+            previous_category_breakdown = {
+                cat: amount
+                for cat, amount in previous_category_stats
+                if cat != "Income"
+            }
 
             # 7. Calculate month-over-month change percentage.
             if previous_month_spending > 0:
@@ -311,7 +335,10 @@ class DashboardService:
                 db.session.query(func.sum(Transaction.amount))
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= current_month_start)
-                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .filter(
+                    Transaction.transaction_direction
+                    == TransactionDirectionEnum.OUTGOING
+                )
                 .scalar()
                 or 0
             )
@@ -321,11 +348,16 @@ class DashboardService:
                 db.session.query(Transaction.category, func.sum(Transaction.amount))
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= current_month_start)
-                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .filter(
+                    Transaction.transaction_direction
+                    == TransactionDirectionEnum.OUTGOING
+                )
                 .group_by(Transaction.category)
                 .all()
             )
-            current_category_breakdown = {cat: amount for cat, amount in current_category_stats if cat != "Income"}
+            current_category_breakdown = {
+                cat: amount for cat, amount in current_category_stats if cat != "Income"
+            }
 
             # 5. Calculate previous month spending (OUTGOING only).
             previous_month_spending = (
@@ -333,7 +365,10 @@ class DashboardService:
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= previous_month_start)
                 .filter(Transaction.date <= previous_month_end)
-                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .filter(
+                    Transaction.transaction_direction
+                    == TransactionDirectionEnum.OUTGOING
+                )
                 .scalar()
                 or 0
             )
@@ -344,11 +379,18 @@ class DashboardService:
                 .filter(Transaction.user_id == user_id)
                 .filter(Transaction.date >= previous_month_start)
                 .filter(Transaction.date <= previous_month_end)
-                .filter(Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING)
+                .filter(
+                    Transaction.transaction_direction
+                    == TransactionDirectionEnum.OUTGOING
+                )
                 .group_by(Transaction.category)
                 .all()
             )
-            previous_category_breakdown = {cat: amount for cat, amount in previous_category_stats if cat != "Income"}
+            previous_category_breakdown = {
+                cat: amount
+                for cat, amount in previous_category_stats
+                if cat != "Income"
+            }
 
             # 7. Calculate month-over-month change percentage.
             if previous_month_spending > 0:
@@ -379,7 +421,9 @@ class DashboardService:
             user_profile_dict = user.to_dict()
 
             # 10. Generate insights via LLM.
-            insights = AIService.generate_insights(spending_summary, user_profile_dict, language)
+            insights = AIService.generate_insights(
+                spending_summary, user_profile_dict, language
+            )
 
             return BaseResponse(
                 is_success=True,
@@ -438,7 +482,8 @@ class DashboardService:
                 .filter(
                     Transaction.user_id == str(user.id),
                     Transaction.created_at >= thirty_days_ago,
-                    Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING
+                    Transaction.transaction_direction
+                    == TransactionDirectionEnum.OUTGOING,
                 )
                 .scalar()
                 or 0
@@ -449,13 +494,16 @@ class DashboardService:
                 .filter(
                     Transaction.user_id == str(user.id),
                     Transaction.created_at >= thirty_days_ago,
-                    Transaction.transaction_direction == TransactionDirectionEnum.OUTGOING
+                    Transaction.transaction_direction
+                    == TransactionDirectionEnum.OUTGOING,
                 )
                 .group_by(Transaction.category)
                 .all()
             )
 
-            categories = {cat: amount for cat, amount in category_stats if cat != "Income"}
+            categories = {
+                cat: amount for cat, amount in category_stats if cat != "Income"
+            }
 
             # Prepare goal data with calculations.
             remaining_amount = max(0, goal.target_amount - goal.current_amount)
@@ -526,7 +574,9 @@ class DashboardService:
             }
 
             # Generate insights.
-            insights = AIService.generate_goal_insights(goal_data, spending_data, language)
+            insights = AIService.generate_goal_insights(
+                goal_data, spending_data, language
+            )
 
             return BaseResponse(
                 is_success=True,

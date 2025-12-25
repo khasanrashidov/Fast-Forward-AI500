@@ -23,11 +23,12 @@ def search_products():
     try:
         data = request.get_json()
         query = data.get("query")
+        language = request.args.get("language", "en")
 
         if not query:
             return jsonify({"error": "Query is required"}), 400
 
-        result = shop_service.search_products(query)
+        result = shop_service.search_products(query, language)
 
         return jsonify({"status": "success", "data": result})
 

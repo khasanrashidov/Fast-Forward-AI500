@@ -2,8 +2,7 @@ import datetime
 import uuid
 
 from configurations.database_config import db
-from enums import (TransactionDirectionEnum, TransactionStatusEnum,
-                   TransactionTypeEnum)
+from enums import TransactionDirectionEnum, TransactionStatusEnum, TransactionTypeEnum
 
 
 class Transaction(db.Model):
