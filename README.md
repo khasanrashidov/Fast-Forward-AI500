@@ -264,4 +264,4 @@ This is a hackathon submission for Agrobank AI500. We welcome contributions and 
 
 **Status:** AI500 Hackathon Submission | December 2025
 
-For more information, visit the [landing page](frontend/landing) or check out our [GitHub organization](https://github.com)
+For more information, visit the [landing page](frontend/landing) or check out our [GitHub repository](https://github.com/khasanrashidov/Fast-Forward-AI500).
